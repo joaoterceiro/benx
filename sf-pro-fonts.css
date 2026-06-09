@@ -1,0 +1,55 @@
+/* ════════════════════════════════════════════════════════════════════
+   SF Pro no projeto Next.js (funciona em qualquer SO, não só Apple)
+
+   1. Baixe os arquivos da Apple: https://developer.apple.com/fonts/
+      (SF Pro Display e SF Pro Text). Converta os .otf para .woff2
+      com fonttools ou um conversor, para web (menor e mais rápido).
+   2. Coloque em /public/fonts/.
+   3. Importe este CSS no app (ex.: em app/globals.css ou layout).
+
+   Observação de licença: a SF Pro é licenciada pela Apple. Revise os
+   termos de uso da Apple antes de hospedar os arquivos em produção.
+   ════════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF-Pro-Text-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF-Pro-Text-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Tokens de fonte (use no :root do projeto) */
+:root {
+  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+  --font-body: "SF Pro Text", -apple-system, BlinkMacSystemFont, "SF Pro", "Inter", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}

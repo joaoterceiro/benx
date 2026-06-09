@@ -1,0 +1,80 @@
+
+=== IMPORT WP -> Postgres+MinIO  ===
+Empreendimentos a importar: 71
+
+  ✓ upd [benx_unicos] Vogel Moema (vogel-moema) · status=lancamento · plantas=11 · fachada=5 · areas=15
+  ✓ upd [benx_unicos] Arbórea Itaim (arborea-itaim) · status=pronto_para_morar · plantas=3 · fachada=4 · areas=14
+  ✓ upd [benx] Place Klabin Vie (place-klabin-residence) · status=pronto_para_morar · plantas=4 · fachada=4 · areas=8
+  ✓ upd [benx] Raro Perdizes (raro-perdizes) · status=pronto_para_morar · plantas=2 · fachada=8 · areas=11
+  ✓ upd [benx] LED Madá (led-mada) · status=em_construcao · plantas=2 · fachada=2 · areas=6
+  ✓ upd [benx] Brooklin Noventa Stay (brkln-90-stay) · status=em_construcao · plantas=1 · fachada=4 · areas=4
+  ✓ upd [benx] Soneto Casemiro (soneto-casemiro) · status=em_construcao · plantas=5 · fachada=6 · areas=34
+  ✓ upd [benx_unicos] J329 Itaim (j329-itaim) · status=lancamento · plantas=18 · fachada=7 · areas=22
+  ✓ upd [benx_unicos] 280 Art Boulevard (280-art-boulevard) · status=lancamento · plantas=0 · fachada=0 · areas=0
+  ✓ upd [benx] 1800 Oscar Pinheiros (1800-oscar-pinheiros) · status=em_construcao · plantas=14 · fachada=9 · areas=21
+  ✓ upd [vivabenx] Viva Benx - Vila Leopoldina III (viva-benx-vila-leopoldina-iii) · status=lancamento · plantas=2 · fachada=2 · areas=21
+  ✓ upd [vivabenx] Viva Benx - Estação Vila Mariana (viva-benx-estacao-vila-mariana) · status=lancamento · plantas=3 · fachada=3 · areas=21
+  ✓ upd [vivabenx] Viva Benx - Klabin (viva-benx-klabin) · status=em_construcao · plantas=2 · fachada=0 · areas=14
+  ✓ upd [vivabenx] Viva Benx - Estação Campo Belo (estacao-campo-belo) · status=em_construcao · plantas=5 · fachada=8 · areas=19
+  ✓ upd [benx_unicos] The Frame (the-frame) · status=pronto_para_morar · plantas=5 · fachada=4 · areas=8
+  ✓ upd [benx_unicos] Arbórea Vista Jardim Europa (arborea-vista-jardim-europa) · status=lancamento · plantas=2 · fachada=8 · areas=17
+  ✓ upd [benx] Lisbô Pinheiros (lisbo-pinheiros) · status=lancamento · plantas=13 · fachada=5 · areas=14
+  ✓ upd [benx_unicos] Autór Jardins (autorjardins) · status=lancamento · plantas=12 · fachada=5 · areas=18
+  ✓ upd [benx] LED Vila (led-vila) · status=em_construcao · plantas=4 · fachada=2 · areas=17
+  ✓ upd [benx] Brooklin Noventa Living (brooklin-90-living) · status=em_construcao · plantas=2 · fachada=2 · areas=13
+  ✓ upd [benx] Place Klabin Résidence (place-klabin-residence-2) · status=pronto_para_morar · plantas=6 · fachada=6 · areas=11
+  ✓ upd [vivabenx] Viva benx - Star Conceição (star-conceicao) · status=pronto_para_morar · plantas=9 · fachada=3 · areas=30
+  ✓ upd [vivabenx] Viva Benx - Butantã (butanta) · status=em_construcao · plantas=6 · fachada=3 · areas=17
+  ✓ upd [vivabenx] Viva Benx - Estilo Pompéia (estilo-pompeia) · status=pronto_para_morar · plantas=5 · fachada=2 · areas=22
+  ✓ upd [vivabenx] Viva Benx - Lapa (lapa) · status=entregue · plantas=3 · fachada=3 · areas=12
+  ✓ upd [vivabenx] Viva Benx - Vila Olímpia (vila-olimpia) · status=pronto_para_morar · plantas=3 · fachada=4 · areas=29
+  ✓ upd [vivabenx] Viva benx - Star Campo Belo (star-campo-belo) · status=em_construcao · plantas=3 · fachada=2 · areas=20
+  ✓ upd [benx_unicos] Parque Global - Torre Regent (parque-global-torre-regent) · status=em_construcao · plantas=9 · fachada=4 · areas=41
+  ✓ upd [benx_unicos] Parque Global - Torre Ibirapuera (6844-2) · status=em_construcao · plantas=9 · fachada=4 · areas=42
+  ✓ upd [benx_unicos] Parque Global - Torre Imperial (parque-global-torre-imperial) · status=em_construcao · plantas=16 · fachada=3 · areas=21
+  ✓ upd [benx_unicos] Parque Global - Torre Sempione (parque-imperial-torre-simpione) · status=em_construcao · plantas=9 · fachada=5 · areas=45
+  ✓ upd [benx_unicos] Parque - Global - Torre Prospect (parque-global-torre-prospect) · status=em_construcao · plantas=9 · fachada=0 · areas=43
+  ✓ upd [benx_unicos] Parque Global - PG Residences (parque-global-pg-residences) · status=em_construcao · plantas=23 · fachada=2 · areas=25
+  ✓ upd [vivabenx] Viva Benx - Jardim Marajoara I (viva-benx-jardim-marajoara-i) · status=pronto_para_morar · plantas=4 · fachada=2 · areas=13
+  ✓ upd [vivabenx] Viva Benx - Jardim Marajoara II (viva-benx-jardim-marajoara-ii) · status=pronto_para_morar · plantas=4 · fachada=1 · areas=21
+  ✓ upd [vivabenx] Viva Benx - Vila Mascote (viva-benx-vila-mascote) · status=pronto_para_morar · plantas=6 · fachada=2 · areas=16
+  ✓ upd [vivabenx] Viva Benx - Nações Unidas I (viva-benx-nacoes-unidas-i) · status=pronto_para_morar · plantas=3 · fachada=2 · areas=14
+  ✓ upd [vivabenx] Viva Benx - Nações Unidas II (viva-benx-nacoes-unidas-ii) · status=pronto_para_morar · plantas=3 · fachada=2 · areas=14
+  ✓ upd [vivabenx] Viva Benx - Leopoldina II (viva-benx-leopoldina-ii) · status=pronto_para_morar · plantas=2 · fachada=2 · areas=8
+  ✓ upd [vivabenx] Viva Benx - Cambuci I (viva-benx-cambuci-i) · status=pronto_para_morar · plantas=4 · fachada=4 · areas=13
+  ✓ upd [vivabenx] Viva Benx - Cambuci II (viva-benx-cambuci-ii) · status=pronto_para_morar · plantas=4 · fachada=2 · areas=14
+  ✓ upd [vivabenx] Viva Benx - Faria Lima (viva-benx-faria-lima) · status=pronto_para_morar · plantas=4 · fachada=2 · areas=14
+  ✓ upd [vivabenx] Viva Benx - Santana (viva-benx-santana) · status=pronto_para_morar · plantas=6 · fachada=2 · areas=15
+  ✓ upd [vivabenx] Viva Benx - Leopoldina I (viva-benx-leopoldina-i) · status=pronto_para_morar · plantas=2 · fachada=2 · areas=9
+  ✓ upd [vivabenx] Viva Benx - Tatuapé (7347-2) · status=pronto_para_morar · plantas=6 · fachada=1 · areas=15
+  ✓ upd [vivabenx] Viva Benx - Chácara Santo Antônio (viva-benx-chacara-santo-antonio) · status=pronto_para_morar · plantas=6 · fachada=4 · areas=26
+  ✓ upd [vivabenx] Viva Benx - Mooca (viva-benx-mooca) · status=pronto_para_morar · plantas=7 · fachada=2 · areas=18
+  ✓ upd [vivabenx] Viva Benx - Casa do Ator (viva-benx-casa-do-ator) · status=pronto_para_morar · plantas=9 · fachada=2 · areas=32
+  ✓ upd [benx_unicos] Corporate Garden Jardim Paulista (corporate-garden-jardim-paulista) · status=entregue · plantas=6 · fachada=3 · areas=5
+  ✓ upd [benx] JHA Corporate Boutique (jha-corporate-boutique) · status=em_construcao · plantas=14 · fachada=2 · areas=9
+  ✓ upd [benx] Pátio São Paulo (patio-sao-paulo) · status=em_construcao · plantas=4 · fachada=4 · areas=9
+  ✓ upd [benx_unicos] Espaço Empresarial Nações Unidas (espaco-empresarial-nacoes-unidas) · status=entregue · plantas=6 · fachada=2 · areas=3
+  ✓ upd [benx] Paddock I (papadoock-i) · status=pronto_para_morar · plantas=0 · fachada=0 · areas=5
+  ✓ upd [benx_unicos] Paddock II (papadoock-ii) · status=pronto_para_morar · plantas=0 · fachada=0 · areas=0
+  ✓ upd [benx] PVN Corporate Boutique (pvn-corporate-boutique) · status=pronto_para_morar · plantas=8 · fachada=4 · areas=6
+  ✓ upd [benx_unicos] Berrini New One (berrini-new-one) · status=em_construcao · plantas=0 · fachada=0 · areas=0
+  ✓ upd [benx_unicos] Berrini One (berrini-one) · status=entregue · plantas=2 · fachada=3 · areas=3
+  ✓ upd [benx] VB Pinheiros Offices (vb-pinheiros-offices) · status=pronto_para_morar · plantas=3 · fachada=3 · areas=4
+  ✓ upd [benx_unicos] Olimpíadas (olimpiadas) · status=pronto_para_morar · plantas=0 · fachada=0 · areas=0
+  ✓ upd [benx_unicos] Brooklin Skymark (brooklin-skymark) · status=pronto_para_morar · plantas=8 · fachada=2 · areas=8
+  ✓ upd [benx_unicos] Viz Ponte Estaiada (viz-ponte-estaiada) · status=pronto_para_morar · plantas=4 · fachada=4 · areas=11
+  ✓ upd [benx_unicos] Barra Vista (barra-vista) · status=pronto_para_morar · plantas=7 · fachada=3 · areas=10
+  ✓ upd [benx_unicos] Central da Barra (central-da-barra) · status=pronto_para_morar · plantas=5 · fachada=2 · areas=6
+  ✓ upd [benx_unicos] Ritmos da Barra (ritmos-da-barra) · status=pronto_para_morar · plantas=2 · fachada=1 · areas=9
+  ✓ upd [benx_unicos] Trix Santa Cecília (trix-santa-cecilia) · status=pronto_para_morar · plantas=13 · fachada=1 · areas=11
+  ✓ upd [benx_unicos] Marquês (marques) · status=pronto_para_morar · plantas=6 · fachada=0 · areas=0
+  ✓ upd [benx_unicos] Spot Ipiranga (spot-ipiranga) · status=pronto_para_morar · plantas=9 · fachada=1 · areas=12
+  ✓ upd [benx_unicos] Artsy Itaim (artsy-itaim) · status=pronto_para_morar · plantas=11 · fachada=3 · areas=15
+  ✓ upd [benx_unicos] Simmetria Campo Belo (simmetria-campo-belo) · status=pronto_para_morar · plantas=10 · fachada=3 · areas=12
+  ✓ upd [benx_unicos] Geometria Itaim (geometria-itaim) · status=pronto_para_morar · plantas=8 · fachada=4 · areas=12
+  ✓ upd [benx_unicos] Barra Viva (barra-viva) · status=pronto_para_morar · plantas=4 · fachada=1 · areas=2
+
+=== RESUMO ===
+  empreendimentos: 71/71 ok, 0 falha
+  plantas: 420 · imagens: 1751 enviadas, 0 ausente
+

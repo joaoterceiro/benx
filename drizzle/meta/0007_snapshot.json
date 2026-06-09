@@ -1,0 +1,1186 @@
+{
+  "id": "a88fdefc-8365-4462-8ebb-0709fb5919e8",
+  "prevId": "9b3baa3a-df0e-447b-886b-79c5cc07fc1a",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.bairros": {
+      "name": "bairros",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cidade_id": {
+          "name": "cidade_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bairros_cidade_id_cidades_id_fk": {
+          "name": "bairros_cidade_id_cidades_id_fk",
+          "tableFrom": "bairros",
+          "tableTo": "cidades",
+          "columnsFrom": [
+            "cidade_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "bairros_slug_unique": {
+          "name": "bairros_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.categorias": {
+      "name": "categorias",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "categorias_slug_unique": {
+          "name": "categorias_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.cidades": {
+      "name": "cidades",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estado": {
+          "name": "estado",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "cidades_slug_unique": {
+          "name": "cidades_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.configuracoes": {
+      "name": "configuracoes",
+      "schema": "",
+      "columns": {
+        "chave": {
+          "name": "chave",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "valor": {
+          "name": "valor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "atualizado_em": {
+          "name": "atualizado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.empreendimento_planta": {
+      "name": "empreendimento_planta",
+      "schema": "",
+      "columns": {
+        "empreendimento_id": {
+          "name": "empreendimento_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "planta_id": {
+          "name": "planta_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "empreendimento_planta_empreendimento_id_empreendimentos_id_fk": {
+          "name": "empreendimento_planta_empreendimento_id_empreendimentos_id_fk",
+          "tableFrom": "empreendimento_planta",
+          "tableTo": "empreendimentos",
+          "columnsFrom": [
+            "empreendimento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "empreendimento_planta_planta_id_plantas_id_fk": {
+          "name": "empreendimento_planta_planta_id_plantas_id_fk",
+          "tableFrom": "empreendimento_planta",
+          "tableTo": "plantas",
+          "columnsFrom": [
+            "planta_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "empreendimento_planta_empreendimento_id_planta_id_pk": {
+          "name": "empreendimento_planta_empreendimento_id_planta_id_pk",
+          "columns": [
+            "empreendimento_id",
+            "planta_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.empreendimentos": {
+      "name": "empreendimentos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subtitulo": {
+          "name": "subtitulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tipo_habitacao": {
+          "name": "tipo_habitacao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status_obra": {
+          "name": "status_obra",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'lancamento'"
+        },
+        "previsao_entrega": {
+          "name": "previsao_entrega",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "o_projeto": {
+          "name": "o_projeto",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arquitetura": {
+          "name": "arquitetura",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paisagismo": {
+          "name": "paisagismo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "interiores": {
+          "name": "interiores",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_unidades": {
+          "name": "total_unidades",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_andares": {
+          "name": "total_andares",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unidades_por_andar": {
+          "name": "unidades_por_andar",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numero_torres": {
+          "name": "numero_torres",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "area_terreno": {
+          "name": "area_terreno",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "area_construida_total": {
+          "name": "area_construida_total",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metragem_residencial": {
+          "name": "metragem_residencial",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metragem_nr": {
+          "name": "metragem_nr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quartos": {
+          "name": "quartos",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vagas": {
+          "name": "vagas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "texto_legal": {
+          "name": "texto_legal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endereco_parcial": {
+          "name": "endereco_parcial",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endereco_completo": {
+          "name": "endereco_completo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cep": {
+          "name": "cep",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endereco_vendas": {
+          "name": "endereco_vendas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stand_de_vendas": {
+          "name": "stand_de_vendas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "link_uber": {
+          "name": "link_uber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "link_maps": {
+          "name": "link_maps",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "link_waze": {
+          "name": "link_waze",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imagem_principal": {
+          "name": "imagem_principal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logotipo": {
+          "name": "logotipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url_video_principal": {
+          "name": "url_video_principal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "thumbnail_video": {
+          "name": "thumbnail_video",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url_tour_virtual": {
+          "name": "url_tour_virtual",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vistas_do_andar": {
+          "name": "vistas_do_andar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obra_fundacao": {
+          "name": "obra_fundacao",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obra_alvenaria": {
+          "name": "obra_alvenaria",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obra_acabamento": {
+          "name": "obra_acabamento",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obra_total": {
+          "name": "obra_total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obra_documentacao": {
+          "name": "obra_documentacao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obra_atualizada_em": {
+          "name": "obra_atualizada_em",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "redirecionar_para": {
+          "name": "redirecionar_para",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "visivel": {
+          "name": "visivel",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "exibir_obras": {
+          "name": "exibir_obras",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "exibir_plantas": {
+          "name": "exibir_plantas",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "exibir_localizacao": {
+          "name": "exibir_localizacao",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "modo_breve_lancamento": {
+          "name": "modo_breve_lancamento",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "diferenciais": {
+          "name": "diferenciais",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "areas_comuns": {
+          "name": "areas_comuns",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "certificacoes": {
+          "name": "certificacoes",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "detalhes_localizacao": {
+          "name": "detalhes_localizacao",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "tags_card": {
+          "name": "tags_card",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "relacionados": {
+          "name": "relacionados",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "cidade_id": {
+          "name": "cidade_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bairro_id": {
+          "name": "bairro_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "categoria_id": {
+          "name": "categoria_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "linha_produto_id": {
+          "name": "linha_produto_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "atualizado_em": {
+          "name": "atualizado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "empreendimentos_cidade_id_cidades_id_fk": {
+          "name": "empreendimentos_cidade_id_cidades_id_fk",
+          "tableFrom": "empreendimentos",
+          "tableTo": "cidades",
+          "columnsFrom": [
+            "cidade_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "empreendimentos_bairro_id_bairros_id_fk": {
+          "name": "empreendimentos_bairro_id_bairros_id_fk",
+          "tableFrom": "empreendimentos",
+          "tableTo": "bairros",
+          "columnsFrom": [
+            "bairro_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "empreendimentos_categoria_id_categorias_id_fk": {
+          "name": "empreendimentos_categoria_id_categorias_id_fk",
+          "tableFrom": "empreendimentos",
+          "tableTo": "categorias",
+          "columnsFrom": [
+            "categoria_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "empreendimentos_linha_produto_id_linhas_produto_id_fk": {
+          "name": "empreendimentos_linha_produto_id_linhas_produto_id_fk",
+          "tableFrom": "empreendimentos",
+          "tableTo": "linhas_produto",
+          "columnsFrom": [
+            "linha_produto_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "empreendimentos_slug_unique": {
+          "name": "empreendimentos_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.leads": {
+      "name": "leads",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "empreendimento_id": {
+          "name": "empreendimento_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telefone": {
+          "name": "telefone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mensagem": {
+          "name": "mensagem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "origem": {
+          "name": "origem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "status_lead",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'novo'"
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "leads_empreendimento_id_empreendimentos_id_fk": {
+          "name": "leads_empreendimento_id_empreendimentos_id_fk",
+          "tableFrom": "leads",
+          "tableTo": "empreendimentos",
+          "columnsFrom": [
+            "empreendimento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.linhas_produto": {
+      "name": "linhas_produto",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "linhas_produto_slug_unique": {
+          "name": "linhas_produto_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.menu_itens": {
+      "name": "menu_itens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "texto": {
+          "name": "texto",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ordem": {
+          "name": "ordem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ativo": {
+          "name": "ativo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.midias": {
+      "name": "midias",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "empreendimento_id": {
+          "name": "empreendimento_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chave": {
+          "name": "chave",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alt": {
+          "name": "alt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "tipo_midia",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'imagem'"
+        },
+        "ordem": {
+          "name": "ordem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "midias_empreendimento_id_empreendimentos_id_fk": {
+          "name": "midias_empreendimento_id_empreendimentos_id_fk",
+          "tableFrom": "midias",
+          "tableTo": "empreendimentos",
+          "columnsFrom": [
+            "empreendimento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.plantas": {
+      "name": "plantas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "metragem": {
+          "name": "metragem",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dormitorios": {
+          "name": "dormitorios",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "suites": {
+          "name": "suites",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vagas": {
+          "name": "vagas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imagem_planta": {
+          "name": "imagem_planta",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recursos": {
+          "name": "recursos",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "plantas_slug_unique": {
+          "name": "plantas_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sessoes": {
+      "name": "sessoes",
+      "schema": "",
+      "columns": {
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "usuario_id": {
+          "name": "usuario_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expira_em": {
+          "name": "expira_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "sessoes_usuario_id_usuarios_id_fk": {
+          "name": "sessoes_usuario_id_usuarios_id_fk",
+          "tableFrom": "sessoes",
+          "tableTo": "usuarios",
+          "columnsFrom": [
+            "usuario_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.usuarios": {
+      "name": "usuarios",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "senha_hash": {
+          "name": "senha_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "papel": {
+          "name": "papel",
+          "type": "papel",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'editor'"
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "usuarios_email_unique": {
+          "name": "usuarios_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.papel": {
+      "name": "papel",
+      "schema": "public",
+      "values": [
+        "admin",
+        "editor"
+      ]
+    },
+    "public.status_lead": {
+      "name": "status_lead",
+      "schema": "public",
+      "values": [
+        "novo",
+        "em_contato",
+        "qualificado",
+        "convertido",
+        "perdido"
+      ]
+    },
+    "public.tipo_midia": {
+      "name": "tipo_midia",
+      "schema": "public",
+      "values": [
+        "imagem",
+        "video",
+        "planta",
+        "fachada",
+        "area_comum",
+        "obra"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -1,0 +1,350 @@
+import Link from "next/link";
+import { CorretorForm } from "./corretor-form";
+import { WhatsAppContexto } from "@/components/public/whatsapp-float";
+import { MenuTrigger } from "@/components/public/menu-overlay";
+import { BuscaTrigger } from "@/components/public/busca-glass";
+import { SiteFooter } from "@/components/public/site-footer";
+import { AnchorNav, Carrossel, GaleriaCarrossel, PlantasLista, PontosCarrossel, Compartilhar, type PlantaItem } from "./interativos";
+
+// Paletas por marca. A página de produto é a mesma; só muda o tema.
+const TEMAS = {
+  benx:     { titulo: "#0a2a66", reserve: "#0A4DCC", contato: "#0a2a66", tour: "#0a2a66", verLink: "#0A4DCC" },
+  vivabenx: { titulo: "#1577C0", reserve: "#1577C0", contato: "#E0452A", tour: "#F47920", verLink: "#1577C0" },
+} as const;
+type Marca = keyof typeof TEMAS;
+
+// Largura da coluna de conteúdo do site.
+const COL = "mx-auto w-full max-w-site px-6";
+
+export interface ProdutoBenxDados {
+  nome: string;
+  subtitulo: string;
+  statusLabel: string;
+  oProjeto: string;
+  textoLegal: string;
+  specs: { label: string; valor: string }[];
+  heroUrl: string | null;
+  projetoUrl: string | null;
+  statementUrl: string | null;
+  galeria: { url: string; alt: string }[];
+  areasNomes: string[];
+  areasImagens: string[];
+  diferenciais: string[];
+  plantas: PlantaItem[];
+  tourUrl?: string;
+  videoUrl?: string;
+  localizacao: { endereco: string; regiao: string; pontos: { titulo: string; distancia: string }[]; uber: string; maps: string; waze: string; standDeVendas?: string };
+  contato: { empreendimentoId: string; origem: string };
+  relacionados: { href: string; nome: string; statusLabel: string; urlImagem: string | null }[];
+  /** Marca/tema da página. Default "benx". */
+  marca?: Marca;
+  /** Rótulo do tipo de habitação social (ex.: "HIS", "HIS e HMP"). Mostra o banner amarelo quando presente. */
+  his?: string;
+  selo?: string | null;
+  homeHref?: string;
+}
+
+const NAV = [
+  { id: "projeto", label: "O Projeto" },
+  { id: "galeria", label: "Galeria" },
+  { id: "areas", label: "Áreas Comuns" },
+  { id: "diferenciais", label: "Diferenciais" },
+  { id: "plantas", label: "Plantas" },
+  { id: "localizacao", label: "Localização" },
+  { id: "contato", label: "Contato" },
+];
+
+export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
+  const marca: Marca = d.marca ?? "benx";
+  const tema = TEMAS[marca];
+  const Heading = ({ children, center }: { children: React.ReactNode; center?: boolean }) => (
+    <h2 className={`text-[32px] font-normal leading-[1.08] sm:text-[50px] ${center ? "text-center" : ""}`} style={{ color: tema.titulo }}>
+      {children}
+    </h2>
+  );
+  const navItens = NAV.filter((n) =>
+    n.id === "projeto" ||
+    (n.id === "galeria" && d.galeria.length) ||
+    (n.id === "areas" && (d.areasImagens.length || d.areasNomes.length)) ||
+    (n.id === "diferenciais" && d.diferenciais.length) ||
+    (n.id === "plantas" && d.plantas.length) ||
+    (n.id === "localizacao" && d.localizacao.endereco) ||
+    n.id === "contato"
+  );
+  const mapaSrc = d.localizacao.endereco
+    ? `https://maps.google.com/maps?q=${encodeURIComponent(`${d.localizacao.endereco} ${d.localizacao.regiao}`)}&output=embed&hl=pt-BR&z=16`
+    : null;
+
+  return (
+    <div className="bg-white text-[#1a2230]">
+      <WhatsAppContexto nome={d.nome} />
+
+
+      {/* HERO */}
+      <header className="relative flex h-[56vh] min-h-[400px] flex-col justify-end overflow-hidden">
+        {d.heroUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={d.heroUrl} alt={d.nome} className="absolute inset-0 h-full w-full object-cover" />
+        ) : <div className="absolute inset-0" style={{ background: tema.titulo }} />}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/45" />
+
+        <div className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-black/90 via-black/55 to-transparent">
+          <div className="mx-auto flex max-w-site items-center justify-between px-6 py-4">
+            {marca === "vivabenx" ? (
+              <Link href={d.homeHref ?? "/"} aria-label="Viva Benx">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo-vivabenx-cor.svg" alt="Viva Benx" className="h-10 w-auto" />
+              </Link>
+            ) : (
+              <Link href={d.homeHref ?? "/"} aria-label="Benx">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo-benx-branco.png" alt="Benx" className="h-9 w-auto" />
+              </Link>
+            )}
+            <div className="flex items-center gap-3 text-white">
+              <BuscaTrigger className="h-11 w-11 hover:opacity-80" />
+              <MenuTrigger className="h-11 w-11 hover:opacity-80" />
+            </div>
+          </div>
+        </div>
+
+        {d.selo && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-28 z-10 hidden sm:block">
+            <div className={COL}>
+              <div className="flex justify-end">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={d.selo} alt="Selo Prefeitura de São Paulo - habitação de interesse social" className="h-[120px] w-auto drop-shadow-[0_8px_24px_rgba(0,0,0,.45)]" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className={`relative z-10 ${COL} pb-10`}>
+          {d.statusLabel && (
+            <span className="inline-block border border-white/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/90">
+              {d.statusLabel}
+            </span>
+          )}
+          <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
+            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-[40px]">{d.nome}</h1>
+            <Compartilhar />
+          </div>
+        </div>
+      </header>
+
+      <AnchorNav itens={navItens} />
+
+      {/* O PROJETO */}
+      <section id="projeto" className={`${COL} scroll-mt-[140px] py-16`}>
+        <div className="grid gap-x-12 gap-y-5 sm:grid-cols-2 sm:items-center">
+          <Heading>O Projeto</Heading>
+          {d.oProjeto && (
+            <p className="whitespace-pre-line text-[17px] leading-[1.7] sm:text-[19px]" style={{ color: "#3a4760" }}>{d.oProjeto}</p>
+          )}
+        </div>
+
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 sm:items-start">
+          {d.specs.length > 0 && (
+            <dl className="divide-y divide-black/10 border-y border-black/10">
+              {d.specs.map((s) => (
+                <div key={s.label} className="flex items-baseline justify-between gap-6 py-4">
+                  <dt className="shrink-0 text-[16px] sm:text-[18px]" style={{ color: "#5b6577" }}>{s.label}:</dt>
+                  <dd className="text-right text-[16px] sm:text-[18px]" style={{ color: tema.titulo }}>{s.valor}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          {d.projetoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={d.projetoUrl} alt={d.nome} className="aspect-[4/5] w-full object-cover" />
+          ) : null}
+        </div>
+      </section>
+
+      {/* GALERIA (full-bleed) */}
+      {d.galeria.length > 0 && (
+        <section id="galeria" className="scroll-mt-[140px] py-2">
+          <GaleriaCarrossel imagens={d.galeria} />
+        </section>
+      )}
+
+      {/* STATEMENT (subtítulo + imagem) */}
+      {(d.subtitulo || d.statementUrl) && (
+        <section className={`${COL} py-16`}>
+          <div className="grid items-center gap-8 sm:grid-cols-2">
+            <div>
+              {marca === "vivabenx" && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src="/logo-vivabenx.svg" alt="Viva Benx" className="mb-5 h-10 w-auto" />
+              )}
+              {d.subtitulo ? (
+                <p className="text-xl font-semibold leading-snug tracking-tight sm:text-2xl" style={{ color: tema.titulo }}>
+                  {d.subtitulo}
+                </p>
+              ) : null}
+            </div>
+            {d.statementUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={d.statementUrl} alt={d.nome} className="aspect-[4/3] w-full object-cover" />
+            ) : null}
+          </div>
+        </section>
+      )}
+
+      {/* ÁREAS COMUNS */}
+      {(d.areasImagens.length > 0 || d.areasNomes.length > 0) && (
+        <section id="areas" className="scroll-mt-[140px] bg-[#f6f7f9] py-16">
+          <div className={`${COL} grid gap-12 sm:grid-cols-2 sm:items-center`}>
+            {d.areasImagens.length > 0 ? (
+              <GaleriaCarrossel imagens={d.areasImagens.map((u) => ({ url: u, alt: "Área comum" }))} cols={1} aspect="4 / 5" />
+            ) : <div />}
+            <div>
+              <Heading>Áreas Comuns</Heading>
+              {d.areasNomes.length > 0 && (
+                <ul className="mt-6 grid grid-cols-1 border-t border-black/10 sm:grid-cols-2 sm:gap-x-10">
+                  {d.areasNomes.map((a, i) => (
+                    <li key={i} className="border-b border-black/10 py-3 text-[15px] sm:text-[16px]" style={{ color: "#3a4760" }}>{a}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* DIFERENCIAIS */}
+      {d.diferenciais.length > 0 && (
+        <section id="diferenciais" className={`${COL} scroll-mt-[140px] py-16`}>
+          <Heading>Diferenciais das áreas comuns</Heading>
+          <ul className="mt-8 border-t border-black/[0.12]">
+            {d.diferenciais.map((t, i) => (
+              <li key={i} className="border-b border-black/[0.12]">
+                <div className="flex items-center gap-5 py-6 pl-4 sm:pl-10">
+                  <span className="shrink-0 text-[22px] font-bold leading-none text-[#1a1a1a]" aria-hidden>+</span>
+                  <span className="text-[15px] text-[#333] sm:text-[16px]">{t}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* PLANTAS */}
+      {d.plantas.length > 0 && (
+        <section id="plantas" className={`${COL} scroll-mt-[140px] py-16`}>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Heading>Plantas</Heading>
+            <div className="flex flex-wrap gap-3">
+              <a href={d.tourUrl || "#galeria"} target={d.tourUrl ? "_blank" : undefined} rel="noopener noreferrer" className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:opacity-90" style={{ background: tema.tour }}>Tour Virtual</a>
+              <a href={d.videoUrl || "#galeria"} target={d.videoUrl ? "_blank" : undefined} rel="noopener noreferrer" className="border px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide transition hover:bg-black/[0.03]" style={{ borderColor: tema.titulo, color: tema.titulo }}>Vistas do Andar</a>
+            </div>
+          </div>
+          <div className="mt-6">
+            <PlantasLista plantas={d.plantas} />
+          </div>
+        </section>
+      )}
+
+      {/* LOCALIZAÇÃO */}
+      {(d.localizacao.endereco || d.localizacao.pontos.length > 0) && (
+        <section id="localizacao" className="scroll-mt-[140px] bg-white">
+          <div className={`${COL} flex flex-col py-16 lg:h-[600px] lg:flex-row lg:items-stretch lg:py-0`}>
+            {/* esquerda: título + pontos + apps */}
+            <div className="relative z-10 flex flex-col lg:w-[44%] lg:shrink-0 lg:py-12 lg:pr-6">
+              <div className="text-right">
+                <Heading>Localização</Heading>
+                {d.localizacao.endereco && <p className="mt-3 text-[14px] text-[#555]">{d.localizacao.endereco}</p>}
+                {d.localizacao.regiao && <p className="text-[14px] text-[#555]">{d.localizacao.regiao}</p>}
+              </div>
+              {d.localizacao.pontos.length > 0 && (
+                <div className="relative mt-7 lg:w-[140%]">
+                  <PontosCarrossel pontos={d.localizacao.pontos} />
+                </div>
+              )}
+              {d.localizacao.standDeVendas && (
+                <div className="mt-7 text-right">
+                  <h3 className="text-[24px] font-normal sm:text-[30px]" style={{ color: tema.titulo }}>Stand de Vendas</h3>
+                  <p className="mt-1 text-[14px] text-[#555]">{d.localizacao.standDeVendas}</p>
+                </div>
+              )}
+              <div className="mt-8 flex flex-wrap justify-end gap-4">
+                <AppIcon href={d.localizacao.uber} src="/apps/uber.svg" label="Uber" bg="#1a1a1a" />
+                <AppIcon href={d.localizacao.maps} src="/apps/maps.svg" label="Google Maps" bg="#ffffff" border />
+                <AppIcon href={d.localizacao.waze} src="/apps/waze.svg" label="Waze" bg="#33cccc" />
+              </div>
+            </div>
+            {/* direita: mapa */}
+            <div className="relative z-0 mt-8 h-[320px] flex-1 lg:mt-0 lg:h-auto lg:py-8">
+              {mapaSrc && (
+                <div className="h-full w-full overflow-hidden shadow-[0_6px_28px_rgba(0,0,0,0.12)]">
+                  <iframe title="Mapa" src={mapaSrc} className="h-full w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CONSULTE UM CORRETOR */}
+      <section id="contato" className="scroll-mt-[140px]" style={{ background: tema.contato }}>
+        <div className={`${COL} grid gap-10 py-16 sm:grid-cols-2 sm:items-center`}>
+          <div className="text-white">
+            <h2 className="text-[34px] font-normal leading-[1.1] sm:text-[44px]">Consulte um corretor</h2>
+            <p className="mt-5 max-w-sm text-[16px] leading-relaxed text-white/85 sm:text-[18px]">
+              Um time de especialistas à sua disposição. Conheça nossos imóveis
+            </p>
+          </div>
+          <CorretorForm empreendimentoId={d.contato.empreendimentoId} origem={d.contato.origem} />
+        </div>
+      </section>
+
+      {/* TEXTO LEGAL */}
+      {d.textoLegal && (
+        <section className={`${COL} py-10`}>
+          <p className="whitespace-pre-line text-[11px] leading-relaxed text-foreground-tertiary">{d.textoLegal}</p>
+        </section>
+      )}
+
+      {/* OUTROS DESTAQUES */}
+      {d.relacionados.length > 0 && (
+        <section className={`${COL} py-12`}>
+          <div className="grid gap-8 sm:grid-cols-[1fr_200px] sm:items-center">
+            <Carrossel>
+              {d.relacionados.map((r) => (
+                <Link key={r.href} href={r.href} className="group relative aspect-[3/4] w-[78%] shrink-0 snap-center overflow-hidden bg-black/10 sm:w-[46%]">
+                  {r.urlImagem ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={r.urlImagem} alt={r.nome} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  ) : null}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-black/15" />
+                  {r.statusLabel && (
+                    <span className="absolute right-5 top-5 whitespace-nowrap bg-black/60 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-white sm:text-[13px]">{r.statusLabel}</span>
+                  )}
+                  <h3 className="absolute bottom-6 left-6 right-6 text-[24px] font-bold leading-tight text-white sm:text-[28px]">{r.nome}</h3>
+                </Link>
+              ))}
+            </Carrossel>
+            <div className="sm:text-right">
+              <Heading>Outros Destaques</Heading>
+              <Link href="/" className="mt-3 inline-block text-[11px] font-semibold uppercase tracking-wide" style={{ color: tema.verLink }}>Ver empreendimentos →</Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <SiteFooter variant={marca === "vivabenx" ? "vivabenx" : "padrao"} />
+    </div>
+  );
+}
+
+function AppIcon({ href, src, label, bg, border }: { href: string; src: string; label: string; bg: string; border?: boolean }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="transition hover:-translate-y-0.5">
+      <span className="grid h-[68px] w-[68px] place-items-center overflow-hidden" style={{ background: bg, border: border ? "1px solid #e0e0e0" : undefined }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={label} className="h-full w-full object-contain" />
+      </span>
+    </a>
+  );
+}
+

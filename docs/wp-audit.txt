@@ -1,0 +1,19 @@
+
+========== AUDITORIA IMPORT WP x BANCO ==========
+Empreendimentos no WP (publicados): 71 | no banco: 71
+
+===== PROBLEMAS DE IMPORT (GAP/DIFERE) — 0 empreendimentos =====
+
+===== INCOMPLETO NA ORIGEM (vazio no WP também) =====
+  plantas: 5 → 280 Art Boulevard, Paddock I, Paddock II, Berrini New One, Olimpíadas
+  imagemPrincipal: 4 → Paddock I, Paddock II, Berrini New One, Olimpíadas
+
+===== CHAVES DO WP COM DADO, NÃO IMPORTADAS (campo existe no WP, sem destino no clone) =====
+   23 emps  vincular_outros_empreendimentos_vb
+   19 emps  _residencial
+   18 emps  vincular_outros_empreendimentos
+   13 emps  metragem_
+    3 emps  _residencial_nr
+
+===== TOTAIS ===== GAP=0 DIFERE=0 INCOMPLETO=9
+

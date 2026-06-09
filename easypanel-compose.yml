@@ -1,29 +1,27 @@
 # =====================================================================
 # Benx - Stack de produção para EasyPanel (tipo de serviço: Compose)
-# Cole este arquivo no EasyPanel: Project > + Service > Compose.
-# Aponte o "Source" para o repositório GitHub joaoterceiro/benx (branch main).
+# Serviços prefixados com "benx-" para conviver com outros no mesmo projeto.
+# Cole no EasyPanel: projeto cartorio > + > Compose. Source = repo
+# joaoterceiro/benx (branch main). Variáveis na aba "Environment".
 #
-# Variáveis: defina na aba "Environment" do serviço Compose do EasyPanel.
-# Os ${VAR:-default} permitem subir já funcionando, mas TROQUE os segredos.
-#
-# Domínios (aba "Domains" do EasyPanel):
-#   - app   -> porta 3000  (ex.: www.seudominio.com.br)
-#   - minio -> porta 9000  (ex.: midia.seudominio.com.br)  [obrigatório p/ mídia]
+# Domínios (aba "Domains"):
+#   - benx-app   porta 3000  (ex.: www.seudominio.com.br)
+#   - benx-minio porta 9000  (ex.: midia.seudominio.com.br)  [obrigatório p/ mídia]
 # Depois aponte S3_PUBLIC_ENDPOINT para a URL pública do MinIO (midia.*).
 # =====================================================================
 
 services:
-  app:
+  benx-app:
     build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgres://benx:${POSTGRES_PASSWORD:-trocar_senha_forte}@postgres:5432/benx
-      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgres://benx:${POSTGRES_PASSWORD:-trocar_senha_forte}@benx-postgres:5432/benx
+      REDIS_URL: redis://benx-redis:6379
       # URL PÚBLICA do MinIO (o link da mídia é assinado com este host):
-      S3_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-http://minio:9000}
+      S3_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-http://benx-minio:9000}
       S3_BUCKET: benx-midia
       S3_ACCESS_KEY: ${MINIO_USER:-benxminio}
       S3_SECRET_KEY: ${MINIO_PASSWORD:-trocar_senha_forte}
@@ -34,16 +32,16 @@ services:
       # Rode o seed só no 1º deploy: defina RUN_SEED=true, suba, depois remova.
       RUN_SEED: ${RUN_SEED:-false}
     depends_on:
-      postgres:
+      benx-postgres:
         condition: service_healthy
-      redis:
+      benx-redis:
         condition: service_healthy
-      minio:
+      benx-minio:
         condition: service_healthy
     expose:
       - "3000"
 
-  postgres:
+  benx-postgres:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
@@ -51,26 +49,26 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-trocar_senha_forte}
       POSTGRES_DB: benx
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - benx-pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U benx -d benx"]
       interval: 5s
       timeout: 5s
       retries: 10
 
-  redis:
+  benx-redis:
     image: redis:7-alpine
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - redisdata:/data
+      - benx-redisdata:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10
 
-  minio:
+  benx-minio:
     image: minio/minio:latest
     restart: unless-stopped
     command: server /data --console-address ":9001"
@@ -78,7 +76,7 @@ services:
       MINIO_ROOT_USER: ${MINIO_USER:-benxminio}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-trocar_senha_forte}
     volumes:
-      - miniodata:/data
+      - benx-miniodata:/data
     expose:
       - "9000"
       - "9001"
@@ -89,20 +87,20 @@ services:
       retries: 10
 
   # Cria o bucket público (download anônimo) no primeiro boot.
-  minio-init:
+  benx-minio-init:
     image: minio/mc:latest
     depends_on:
-      minio:
+      benx-minio:
         condition: service_healthy
     entrypoint: >
       /bin/sh -c "
-      mc alias set local http://minio:9000 ${MINIO_USER:-benxminio} ${MINIO_PASSWORD:-trocar_senha_forte} &&
+      mc alias set local http://benx-minio:9000 ${MINIO_USER:-benxminio} ${MINIO_PASSWORD:-trocar_senha_forte} &&
       mc mb --ignore-existing local/benx-midia &&
       mc anonymous set download local/benx-midia &&
       echo 'bucket benx-midia pronto'
       "
 
 volumes:
-  pgdata:
-  redisdata:
-  miniodata:
+  benx-pgdata:
+  benx-redisdata:
+  benx-miniodata:

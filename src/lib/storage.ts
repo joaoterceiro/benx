@@ -10,7 +10,11 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { logError, logWarn } from "@/lib/log-context";
 
 // Em produção, exige credenciais reais (evita subir com minioadmin/minioadmin).
-if (process.env.NODE_ENV === "production" && (!process.env.S3_ACCESS_KEY || !process.env.S3_SECRET_KEY || !process.env.S3_ENDPOINT)) {
+if (
+  process.env.NODE_ENV === "production" &&
+  process.env.NEXT_PHASE !== "phase-production-build" &&
+  (!process.env.S3_ACCESS_KEY || !process.env.S3_SECRET_KEY || !process.env.S3_ENDPOINT)
+) {
   throw new Error("S3_ENDPOINT/S3_ACCESS_KEY/S3_SECRET_KEY são obrigatórios em produção");
 }
 

@@ -12,6 +12,10 @@ import { CookieConsent } from "@/components/public/cookie-consent";
 import { CanaisVendas } from "@/components/public/canais-vendas";
 import { logWarn } from "@/lib/log-context";
 
+// Renderização dinâmica: o site lê config/menu/busca do banco; não pré-renderiza
+// no build (onde o Postgres/MinIO não existem). O cache Redis mantém rápido.
+export const dynamic = "force-dynamic";
+
 // Layout exclusivo do site público: menu, busca, WhatsApp e cookies/LGPD só
 // aparecem aqui (não no admin).
 export default async function PublicLayout({

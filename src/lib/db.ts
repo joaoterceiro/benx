@@ -3,7 +3,11 @@ import { Pool } from "pg";
 import * as schema from "@/db/schema";
 
 // Em produção, exige DATABASE_URL (evita subir com credenciais default).
-if (process.env.NODE_ENV === "production" && !process.env.DATABASE_URL) {
+if (
+  process.env.NODE_ENV === "production" &&
+  process.env.NEXT_PHASE !== "phase-production-build" &&
+  !process.env.DATABASE_URL
+) {
   throw new Error("DATABASE_URL é obrigatório em produção");
 }
 

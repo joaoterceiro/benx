@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Lint roda em dev (`npm run lint`); não bloqueia o build de produção.
+  eslint: { ignoreDuringBuilds: true },
   experimental: {
     // Uploads via Server Actions (vídeo da splash, mídias). Default é 1MB.
     serverActions: { bodySizeLimit: "70mb" },

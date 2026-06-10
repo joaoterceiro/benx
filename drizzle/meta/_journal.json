@@ -92,6 +92,13 @@
       "when": 1780600200000,
       "tag": "0012_splash_config",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1780600300000,
+      "tag": "0013_seed_hero_slides",
+      "breakpoints": true
     }
   ]
 }

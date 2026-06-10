@@ -76,7 +76,7 @@ services:
       MINIO_ROOT_USER: ${MINIO_USER:-benxminio}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-trocar_senha_forte}
     volumes:
-      - benx-miniodata:/data
+      - benx-miniodata-v2:/data
     expose:
       - "9000"
       - "9001"
@@ -103,4 +103,4 @@ services:
 volumes:
   benx-pgdata:
   benx-redisdata:
-  benx-miniodata:
+  benx-miniodata-v2:

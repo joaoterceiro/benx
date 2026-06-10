@@ -99,6 +99,13 @@
       "when": 1780600300000,
       "tag": "0013_seed_hero_slides",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1780600400000,
+      "tag": "0014_conteudo_completo",
+      "breakpoints": true
     }
   ]
 }

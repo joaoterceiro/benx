@@ -21,7 +21,7 @@ services:
       DATABASE_URL: postgres://benx:${POSTGRES_PASSWORD:-trocar_senha_forte}@benx-postgres:5432/benx
       REDIS_URL: redis://benx-redis:6379
       # URL PÚBLICA do MinIO (o link da mídia é assinado com este host):
-      S3_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-http://benx-minio:9000}
+      S3_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-https://midia-benx.imagenou.com}
       S3_BUCKET: benx-midia
       S3_ACCESS_KEY: ${MINIO_USER:-benxminio}
       S3_SECRET_KEY: ${MINIO_PASSWORD:-trocar_senha_forte}

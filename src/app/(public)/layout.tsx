@@ -12,9 +12,10 @@ import { CookieConsent } from "@/components/public/cookie-consent";
 import { CanaisVendas } from "@/components/public/canais-vendas";
 import { logWarn } from "@/lib/log-context";
 
-// Renderização dinâmica: o site lê config/menu/busca do banco; não pré-renderiza
-// no build (onde o Postgres/MinIO não existem). O cache Redis mantém rápido.
-export const dynamic = "force-dynamic";
+// ISR: páginas servidas do cache e revalidadas a cada 5 min (TTFB baixo). As
+// leituras de config/menu/legal são resilientes a banco ausente no build, então
+// não quebram o build; em runtime a 1ª revalidação traz os dados reais.
+export const revalidate = 300;
 
 // Layout exclusivo do site público: menu, busca, WhatsApp e cookies/LGPD só
 // aparecem aqui (não no admin).

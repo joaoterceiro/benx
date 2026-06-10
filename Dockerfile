@@ -13,6 +13,10 @@ RUN npm ci
 
 # ---- build ----
 FROM base AS build
+# URL pública usada em metadata/OG/sitemap/canonical. NEXT_PUBLIC_* é inlined no
+# build, então precisa estar definida AQUI (não basta no runtime do compose).
+ARG NEXT_PUBLIC_SITE_URL=https://benx-newsite.imagenou.com
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

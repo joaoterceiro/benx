@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db, pool } from "@/lib/db";
-import { linhasProduto, categorias, usuarios } from "@/db/schema";
+import { linhasProduto, categorias, usuarios, configuracoes } from "@/db/schema";
 import { listarVertentes } from "@/lib/ecossistema";
 import { hashSenha } from "@/lib/senha";
 
@@ -38,6 +38,25 @@ async function main() {
     console.log(`  admin criado: ${adminEmail} (senha: ${adminSenha})`);
   } else {
     console.log("  admin já existe, mantido.");
+  }
+
+  console.log("Semeando config da splash (home)...");
+  const splashBotoes = [
+    { label: "Icônicos", logoKey: "benx", href: "/iconicos", showLabel: true, subtitle: "Residenciais elevados\nao estado de arte", logoSize: 40 },
+    { label: "Benx", logoKey: "benx", href: "/benx", showLabel: false, subtitle: "Projetos de excelência em localizações privilegiadas", logoSize: 40 },
+    { label: "Viva Benx", logoKey: "viva", href: "/vivabenx", showLabel: false, subtitle: "A união entre mobilidade urbana e arquitetura inteligente", logoSize: 80 },
+    { label: "Parque Global", logoKey: "extra", href: "https://parqueglobal.com.br/", showLabel: false, subtitle: "Novo jeito de viver em São Paulo.", logoSize: 60 },
+  ];
+  const splashCfg: Record<string, string> = {
+    splash_home: "true",
+    splash_video: "/bg-hero.mp4",
+    splash_logo_benx: "/splash-benx.png",
+    splash_logo_viva: "/logo-vivabenx.svg",
+    splash_logo_extra: "/parque-global-logo.svg",
+    splash_botoes: JSON.stringify(splashBotoes),
+  };
+  for (const [chave, valor] of Object.entries(splashCfg)) {
+    await db.insert(configuracoes).values({ chave, valor }).onConflictDoNothing({ target: configuracoes.chave });
   }
 
   console.log("Seed concluído.");

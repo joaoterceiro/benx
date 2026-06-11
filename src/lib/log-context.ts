@@ -6,6 +6,9 @@ import { logger } from "@/lib/logger";
 // request (ex.: handlers globais), degrada para undefined sem quebrar.
 
 export async function getRequestId(): Promise<string | undefined> {
+  // No build (prerender sem request real) não chamar headers(): isso marcaria a
+  // rota como dinâmica e mataria o ISR. Em runtime funciona normalmente.
+  if (process.env.NEXT_PHASE === "phase-production-build") return undefined;
   try {
     const h = await headers();
     return h.get("x-request-id") ?? undefined;

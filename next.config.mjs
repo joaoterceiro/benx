@@ -13,6 +13,7 @@ const nextConfig = {
     // MinIO em dev. Em produção, ajustar para o domínio público de mídia.
     remotePatterns: [
       { protocol: "http", hostname: "localhost", port: "9000", pathname: "/**" },
+      { protocol: "https", hostname: "midia-benx.imagenou.com", pathname: "/**" },
       { protocol: "https", hostname: "img.youtube.com", pathname: "/**" },
     ],
   },

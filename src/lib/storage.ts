@@ -1,12 +1,10 @@
 import {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand,
   DeleteObjectCommand,
   HeadBucketCommand,
   CreateBucketCommand,
 } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { logError, logWarn } from "@/lib/log-context";
 
 // Em produção, exige credenciais reais (evita subir com minioadmin/minioadmin).
@@ -56,11 +54,13 @@ export async function uploadMidia(
   }
 }
 
-// Resolve uma URL assinada (default 1h) a partir da chave. Use na leitura.
-export async function getUrl(chave: string, expiraEm = 3600): Promise<string> {
-  return getSignedUrl(s3, new GetObjectCommand({ Bucket: bucket, Key: chave }), {
-    expiresIn: expiraEm,
-  });
+// Resolve a URL pública (path-style) a partir da chave. O bucket é anonymous
+// download, então não precisa assinar: a URL é estável e cacheável (next/image,
+// CDN, browser). Assinar geraria querystring variável e quebraria o cache.
+export async function getUrl(chave: string): Promise<string> {
+  const base = endpoint.replace(/\/+$/, "");
+  const key = chave.split("/").map(encodeURIComponent).join("/");
+  return `${base}/${bucket}/${key}`;
 }
 
 export async function deleteMidia(chave: string): Promise<void> {

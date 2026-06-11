@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
 export interface CardProps {
@@ -19,13 +20,13 @@ export function CardEmpreendimento(p: CardProps) {
       href={p.href}
       className="group relative block aspect-[3/4] overflow-hidden bg-neutral-800"
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={p.urlImagem || "/placeholder-card.jpg"}
         alt={p.nome}
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
         loading="lazy"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        className="object-cover transition duration-500 group-hover:scale-105"
       />
 
       {/* gradiente para legibilidade */}

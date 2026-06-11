@@ -49,7 +49,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-trocar_senha_forte}
       POSTGRES_DB: benx
     volumes:
-      - benx-pgdata:/var/lib/postgresql/data
+      - benx-pgdata-v2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U benx -d benx"]
       interval: 5s
@@ -101,6 +101,6 @@ services:
       "
 
 volumes:
-  benx-pgdata:
+  benx-pgdata-v2:
   benx-redisdata:
   benx-miniodata-v2:

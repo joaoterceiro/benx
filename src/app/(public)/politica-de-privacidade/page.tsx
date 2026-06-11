@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Saiba como a Benx coleta, utiliza e protege as informações dos usuários do site.",
 };
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function PoliticaDePrivacidadePage() {
   const { politica } = await lerLegal();

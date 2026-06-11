@@ -23,7 +23,7 @@ import { JornalCarrossel } from "@/components/public/vertente/jornal-carrossel";
 import { Reveal } from "@/components/public/reveal";
 import { SiteFooter } from "@/components/public/site-footer";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 const COL = "mx-auto w-full max-w-site px-6";
 

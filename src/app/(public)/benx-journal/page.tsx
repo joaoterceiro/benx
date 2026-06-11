@@ -4,7 +4,7 @@ import { listarPostsPublicos, categoriasJornal, type PostResolvido } from "@/db/
 import { JornalTopo } from "@/components/public/jornal/jornal-topo";
 import { SiteFooter } from "@/components/public/site-footer";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 const COL = "mx-auto w-full max-w-site px-6";
 const NAVY = "#0A2A66";

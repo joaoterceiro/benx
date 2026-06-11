@@ -12,10 +12,10 @@ import { CookieConsent } from "@/components/public/cookie-consent";
 import { CanaisVendas } from "@/components/public/canais-vendas";
 import { logWarn } from "@/lib/log-context";
 
-// ISR: páginas servidas do cache e revalidadas a cada 5 min (TTFB baixo). As
-// leituras de config/menu/legal são resilientes a banco ausente no build, então
-// não quebram o build; em runtime a 1ª revalidação traz os dados reais.
-export const revalidate = 300;
+// Render dinâmico: o site lê config/menu/empreendimentos do banco. Com ISR/estático
+// o build (sem banco) pré-renderizava o estado VAZIO e o cache servia isso ("estaca
+// zero"). Dinâmico garante os dados reais a cada request; o Redis mantém rápido.
+export const dynamic = "force-dynamic";
 
 // Layout exclusivo do site público: menu, busca, WhatsApp e cookies/LGPD só
 // aparecem aqui (não no admin).

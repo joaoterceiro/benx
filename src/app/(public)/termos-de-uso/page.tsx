@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Termos e condições de uso do website da Benx.",
 };
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function TermosDeUsoPage() {
   const { termos } = await lerLegal();

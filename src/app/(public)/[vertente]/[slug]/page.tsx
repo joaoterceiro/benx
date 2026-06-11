@@ -14,9 +14,7 @@ import { LeadForm } from "@/components/public/lead-form";
 import { CardEmpreendimento } from "@/components/public/card-empreendimento";
 import { ProdutoBenx, type ProdutoBenxDados } from "@/components/public/produto/produto-benx";
 
-// ISR: cacheia a página do produto e revalida a cada 10 min (URLs assinadas do
-// MinIO valem 1h, então continuam válidas dentro da janela de cache).
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ vertente: string; slug: string }> }): Promise<Metadata> {
   const { vertente, slug } = await params;

@@ -7,7 +7,7 @@ import { sanitizarHtml } from "@/lib/sanitize";
 import { JornalTopo } from "@/components/public/jornal/jornal-topo";
 import { SiteFooter } from "@/components/public/site-footer";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

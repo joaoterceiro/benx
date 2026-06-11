@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export interface JornalCard {
   slug: string;
@@ -61,8 +62,9 @@ export function JornalCarrossel({ posts }: { posts: JornalCard[] }) {
             </div>
             <div className="shrink-0 overflow-hidden">
               {p.imagemUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.imagemUrl} alt={p.titulo} className="h-[280px] w-[260px] max-w-[40vw] object-cover transition duration-500 group-hover:scale-[1.03]" />
+                <div className="relative h-[280px] w-[260px] max-w-[40vw] overflow-hidden">
+                  <Image src={p.imagemUrl} alt={p.titulo} fill sizes="(max-width: 640px) 40vw, 260px" loading="lazy" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+                </div>
               ) : <div className="h-[280px] w-[260px] bg-black/10" />}
             </div>
           </Link>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { postPublicadoPorSlug, postsRelacionados } from "@/db/queries";
@@ -64,11 +65,10 @@ export default async function MateriaPage({ params }: { params: Promise<{ slug: 
       {/* hero */}
       <section className={`${COL} pt-4`}>
         <div className="grid gap-8 lg:grid-cols-2">
-          <div className="relative overflow-hidden">
+          <div className="relative aspect-[4/3] w-full overflow-hidden">
             {post.imagemUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={post.imagemUrl} alt={post.titulo} className="aspect-[4/3] w-full object-cover" />
-            ) : <div className="aspect-[4/3] w-full bg-black/5" />}
+              <Image src={post.imagemUrl} alt={post.titulo} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+            ) : <div className="absolute inset-0 bg-black/5" />}
             {post.fonte && (
               <span className="absolute left-0 top-0 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-white" style={{ background: VERMELHO }}>
                 {post.fonte}
@@ -162,8 +162,9 @@ export default async function MateriaPage({ params }: { params: Promise<{ slug: 
                 <article key={r.id} className="flex gap-4">
                   <Link href={`/benx-journal/${r.slug}`} className="shrink-0 overflow-hidden">
                     {r.imagemUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={r.imagemUrl} alt={r.titulo} className="h-28 w-28 object-cover" />
+                      <div className="relative h-28 w-28 overflow-hidden">
+                        <Image src={r.imagemUrl} alt={r.titulo} fill sizes="112px" loading="lazy" className="object-cover" />
+                      </div>
                     ) : <div className="h-28 w-28 bg-black/10" />}
                   </Link>
                   <div className="min-w-0">

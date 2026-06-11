@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 const NAVY = "#0a2a66";
 const AZUL = "#0A4DCC";
@@ -154,8 +155,9 @@ export function GaleriaCarrossel({ imagens, cols, aspect = "16 / 10" }: { imagen
           {slides.map((g, k) => (
             <div key={k} className="group shrink-0 px-1.5" style={{ flex: `0 0 calc(100% / ${per})` }}>
               <button type="button" onClick={() => setLb(realDe(k))} className="block w-full cursor-zoom-in overflow-hidden" aria-label="Ampliar imagem">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={g.url} alt={g.alt} style={{ aspectRatio: aspect }} className="w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.04]" />
+                <div className="relative w-full overflow-hidden" style={{ aspectRatio: aspect }}>
+                  <Image src={g.url} alt={g.alt} fill sizes="(max-width: 640px) 100vw, 50vw" loading="lazy" className="object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.04]" />
+                </div>
               </button>
             </div>
           ))}

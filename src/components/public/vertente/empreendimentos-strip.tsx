@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export interface StripCard {
   href: string;
@@ -59,8 +60,7 @@ export function EmpreendimentosStrip({
             href={c.href}
             className={`group relative ${aspectClass} shrink-0 snap-start overflow-hidden ${cardWidthClass}`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={c.imagemUrl || "/placeholder-card.jpg"} alt={c.nome} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+            <Image src={c.imagemUrl || "/placeholder-card.jpg"} alt={c.nome} fill sizes="(max-width: 640px) 55vw, (max-width: 1024px) 38vw, 20vw" loading="lazy" className="object-cover transition duration-500 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
             {c.statusLabel && (
               <span className="absolute right-5 top-6 whitespace-nowrap border border-white/70 px-5 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CorretorForm } from "./corretor-form";
 import { WhatsAppContexto } from "@/components/public/whatsapp-float";
 import { MenuTrigger } from "@/components/public/menu-overlay";
@@ -83,8 +84,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
       {/* HERO */}
       <header className="relative flex h-[56vh] min-h-[400px] flex-col justify-end overflow-hidden">
         {d.heroUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={d.heroUrl} alt={d.nome} className="absolute inset-0 h-full w-full object-cover" />
+          <Image src={d.heroUrl} alt={d.nome} fill priority sizes="100vw" className="object-cover" />
         ) : <div className="absolute inset-0" style={{ background: tema.titulo }} />}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/45" />
 
@@ -155,8 +155,9 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
             </dl>
           )}
           {d.projetoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={d.projetoUrl} alt={d.nome} className="aspect-[4/5] w-full object-cover" />
+            <div className="relative aspect-[4/5] w-full overflow-hidden">
+              <Image src={d.projetoUrl} alt={d.nome} fill sizes="(max-width: 640px) 100vw, 50vw" loading="lazy" className="object-cover" />
+            </div>
           ) : null}
         </div>
       </section>
@@ -184,8 +185,9 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
               ) : null}
             </div>
             {d.statementUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={d.statementUrl} alt={d.nome} className="aspect-[4/3] w-full object-cover" />
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image src={d.statementUrl} alt={d.nome} fill sizes="(max-width: 640px) 100vw, 50vw" loading="lazy" className="object-cover" />
+              </div>
             ) : null}
           </div>
         </section>

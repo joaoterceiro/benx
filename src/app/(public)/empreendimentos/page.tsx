@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import {
   todosSlides,
@@ -95,8 +96,7 @@ export default async function EmpreendimentosPage({
                 className="group grid items-stretch overflow-hidden border border-black/[0.06] bg-[#f6f7f9] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-500 ease-premium hover:-translate-y-0.5 hover:shadow-[0_18px_44px_rgba(10,42,102,0.12)] sm:grid-cols-[1.8fr_1fr]"
               >
                 <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#e9edf3]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={e.img || "/placeholder-card.jpg"} alt={e.nome} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[800ms] ease-premium group-hover:scale-[1.06]" />
+                  <Image src={e.img || "/placeholder-card.jpg"} alt={e.nome} fill sizes="(max-width: 640px) 100vw, 64vw" loading="lazy" className="object-cover transition-transform duration-[800ms] ease-premium group-hover:scale-[1.06]" />
                   <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
                 <div className="flex flex-col justify-between px-8 py-9">

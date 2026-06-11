@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { listarPostsPublicos, categoriasJornal, type PostResolvido } from "@/db/queries";
 import { JornalTopo } from "@/components/public/jornal/jornal-topo";
@@ -51,8 +52,9 @@ export default async function BenxJournalPage({
           <article className="mt-10">
             <Link href={`/benx-journal/${destaque.slug}`} className="block overflow-hidden">
               {destaque.imagemUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={destaque.imagemUrl} alt={destaque.titulo} className="aspect-[16/7] w-full object-cover" />
+                <div className="relative aspect-[16/7] w-full overflow-hidden">
+                  <Image src={destaque.imagemUrl} alt={destaque.titulo} fill priority sizes="100vw" className="object-cover" />
+                </div>
               ) : <div className="aspect-[16/7] w-full bg-black/5" />}
             </Link>
             <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_280px]">
@@ -105,8 +107,9 @@ function CardJornal({ p }: { p: PostResolvido }) {
     <article>
       <Link href={`/benx-journal/${p.slug}`} className="block overflow-hidden">
         {p.imagemUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={p.imagemUrl} alt={p.titulo} className="aspect-[16/10] w-full object-cover transition duration-300 hover:scale-[1.03]" />
+          <div className="relative aspect-[16/10] w-full overflow-hidden">
+            <Image src={p.imagemUrl} alt={p.titulo} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" loading="lazy" className="object-cover transition duration-300 hover:scale-[1.03]" />
+          </div>
         ) : <div className="aspect-[16/10] w-full bg-black/5" />}
       </Link>
       <div className="mt-3 flex items-center gap-3 text-[11px] uppercase tracking-[0.12em]">

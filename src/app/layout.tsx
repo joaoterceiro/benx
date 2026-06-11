@@ -34,6 +34,22 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
+        {/* Dados estruturados da organização (SEO: Knowledge Panel / rich results). */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Benx",
+              url: SITE_URL,
+              logo: `${SITE_URL}/logo-benx.png`,
+              description:
+                "Incorporadora e construtora que desenvolve empreendimentos residenciais em São Paulo nas linhas Benx Icônicos, Benx e Viva Benx.",
+              areaServed: "São Paulo, SP",
+            }),
+          }}
+        />
         {children}
         {/* Widgets do site público (menu, busca, WhatsApp, cookies) ficam no
             layout do grupo (public). O Toaster é global (admin também usa). */}

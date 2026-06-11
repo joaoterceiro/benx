@@ -29,7 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ vertente:
   return {
     title: titulo,
     description: descricao,
-    openGraph: { title: titulo, description: descricao, type: "website", images: imagem ? [{ url: imagem }] : undefined },
+    alternates: { canonical: `/${vertente}/${slug}` },
+    openGraph: { title: titulo, description: descricao, type: "website", url: `/${vertente}/${slug}`, images: imagem ? [{ url: imagem }] : undefined },
     twitter: { card: imagem ? "summary_large_image" : "summary", title: titulo, description: descricao, images: imagem ? [imagem] : undefined },
   };
 }

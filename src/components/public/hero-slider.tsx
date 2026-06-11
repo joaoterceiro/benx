@@ -42,6 +42,9 @@ export function HeroSlider({ slides }: { slides: HeroSlideResolvido[] }) {
             <img
               src={s.imagemUrl}
               alt={s.titulo}
+              fetchPriority={idx === 0 ? "high" : "low"}
+              loading={idx === 0 ? "eager" : "lazy"}
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover will-change-transform"
               style={{ animation: idx === i ? "hero-zoom 8s ease-out forwards" : "none" }}
             />

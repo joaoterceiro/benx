@@ -19,10 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: { absolute: `${titulo} — Benx Journal` },
     description: descricao,
+    alternates: { canonical: `/benx-journal/${slug}` },
     openGraph: {
       title: titulo,
       description: descricao,
       type: "article",
+      url: `/benx-journal/${slug}`,
       images: imagem ? [{ url: imagem }] : undefined,
     },
     twitter: {

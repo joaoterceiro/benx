@@ -60,10 +60,12 @@ const NAV = [
 export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
   const marca: Marca = d.marca ?? "benx";
   const tema = TEMAS[marca];
-  // Destaque (subtítulo): 1ª frase em bold, restante em peso regular (o HTML
-  // <strong> do original some no import, então recriamos o padrão na exibição).
-  const subMatch = d.subtitulo.match(/^(.*?[.!?])\s+(.*)$/s);
-  const subLead = subMatch ? subMatch[1] : d.subtitulo;
+  // Destaque (subtítulo): garante espaço após pontuação (ex.: "distantes.Você")
+  // e separa a 1ª frase (bold) do restante (regular) — o <strong> do original
+  // some no import, então recriamos o padrão na exibição.
+  const subClean = d.subtitulo.replace(/([.!?])(?=\p{Lu})/gu, "$1 ");
+  const subMatch = subClean.match(/^(.*?[.!?])\s+(.*)$/s);
+  const subLead = subMatch ? subMatch[1] : subClean;
   const subResto = subMatch ? subMatch[2] : "";
   const Heading = ({ children, center }: { children: React.ReactNode; center?: boolean }) => (
     <h2 className={`text-[32px] font-normal leading-[1.08] sm:text-[50px] ${center ? "text-center" : ""}`} style={{ color: tema.titulo }}>

@@ -68,9 +68,9 @@ export function ContactLauncher({
         aria-label={aberto ? "Fechar atendimento" : "Abrir canais de atendimento"}
         aria-expanded={aberto}
         aria-haspopup="dialog"
-        className="group fixed bottom-5 right-5 z-[60] flex items-center gap-3 rounded-full bg-[#0a2a66] py-2 pl-2 pr-5 text-white shadow-[0_10px_30px_rgba(10,42,102,0.45)] ring-1 ring-white/10 transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#0a4dcc]"
+        className="group fixed bottom-5 right-5 z-[60] flex items-center gap-3 bg-[#0a2a66] py-2 pl-2 pr-5 text-white shadow-[0_10px_30px_rgba(10,42,102,0.45)] ring-1 ring-white/10 transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#0a4dcc]"
       >
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-white/10 transition-transform group-hover:scale-105">
+        <span className="grid h-11 w-11 place-items-center bg-white/10 transition-transform group-hover:scale-105">
           {aberto ? (
             <X size={22} />
           ) : (
@@ -102,7 +102,7 @@ export function ContactLauncher({
               aria-modal="true"
               aria-label="Canais de atendimento"
               onClick={(e) => e.stopPropagation()}
-              className={`fixed bottom-24 right-5 flex w-[380px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b1322] text-white shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-all duration-300 ease-[cubic-bezier(.32,.72,0,1)] ${aberto ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"}`}
+              className={`fixed bottom-24 right-5 flex w-[380px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden border border-white/10 bg-[#0b1322] text-white shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-all duration-300 ease-[cubic-bezier(.32,.72,0,1)] ${aberto ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"}`}
             >
               {/* Header */}
               <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 pb-5 pt-6">
@@ -119,7 +119,7 @@ export function ContactLauncher({
                   type="button"
                   onClick={() => setAberto(false)}
                   aria-label="Fechar"
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/15 bg-white/[0.06] text-white/70 transition hover:border-white/40 hover:bg-white/10 hover:text-white"
+                  className="grid h-9 w-9 shrink-0 place-items-center border border-white/15 bg-white/[0.06] text-white/70 transition hover:border-white/40 hover:bg-white/10 hover:text-white"
                 >
                   <X size={16} />
                 </button>
@@ -135,10 +135,10 @@ export function ContactLauncher({
                       href={c.href}
                       target={externo ? "_blank" : undefined}
                       rel={externo ? "noopener noreferrer" : undefined}
-                      className="group flex items-center gap-4 rounded-xl px-3 py-2.5 transition-colors duration-200 hover:bg-white/[0.05]"
+                      className="group flex items-center gap-4 px-3 py-2.5 transition-colors duration-200 hover:bg-white/[0.05]"
                     >
                       <span
-                        className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl text-white shadow-[0_4px_14px_rgba(10,77,204,0.35)] transition-transform duration-300 group-hover:scale-105 ${c.icon === "whatsapp" ? "bg-[#25D366]" : "bg-[#0a4dcc]"}`}
+                        className={`grid h-12 w-12 shrink-0 place-items-center text-white shadow-[0_4px_14px_rgba(10,77,204,0.35)] transition-transform duration-300 group-hover:scale-105 ${c.icon === "whatsapp" ? "bg-[#25D366]" : "bg-[#0a4dcc]"}`}
                       >
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                           <path d={PATHS[c.icon]} />

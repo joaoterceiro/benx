@@ -346,6 +346,13 @@ export interface PlantaItem {
 }
 export function PlantasLista({ plantas, tourUrl, videoUrl }: { plantas: PlantaItem[]; tourUrl?: string; videoUrl?: string }) {
   const [aberto, setAberto] = useState<number | null>(0);
+  const [lbUrl, setLbUrl] = useState<string | null>(null); // planta aberta no lightbox
+  useEffect(() => {
+    if (!lbUrl) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLbUrl(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lbUrl]);
   return (
     <div>
       {(tourUrl || videoUrl) && (
@@ -375,10 +382,12 @@ export function PlantasLista({ plantas, tourUrl, videoUrl }: { plantas: PlantaIt
               {aberto === i ? (
                 <div className="grid gap-5 pb-6 sm:grid-cols-[1.1fr_1fr]">
                   {p.url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={p.url} alt={p.nome} className="w-full border border-black/10 object-contain" />
+                    <button type="button" onClick={() => setLbUrl(p.url)} className="group block w-full cursor-zoom-in self-start overflow-hidden border border-black/10" aria-label="Ampliar planta">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.url} alt={p.nome} className="w-full object-contain transition duration-500 group-hover:scale-[1.02]" />
+                    </button>
                   ) : <div className="grid aspect-[4/3] place-items-center bg-black/5 text-[12px] text-foreground-tertiary">Sem planta</div>}
-                  <div>
+                  <div className="sm:max-h-[440px] sm:self-start sm:overflow-y-auto sm:pr-3">
                     {specs.length > 0 && <p className="text-[14px] font-medium text-foreground">{specs.join(" · ")}</p>}
                     {p.recursos.length > 0 && (
                       <ul className="mt-4 grid gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -397,6 +406,27 @@ export function PlantasLista({ plantas, tourUrl, videoUrl }: { plantas: PlantaIt
           );
         })}
       </ul>
+
+      {lbUrl && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Planta ampliada"
+          onClick={() => setLbUrl(null)}
+          className="fixed inset-0 z-[100] grid place-items-center bg-black/85 p-4 sm:p-10"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={lbUrl} alt="Planta ampliada" onClick={(e) => e.stopPropagation()} className="max-h-[90vh] max-w-[94vw] cursor-zoom-out bg-white object-contain" />
+          <button
+            type="button"
+            onClick={() => setLbUrl(null)}
+            aria-label="Fechar"
+            className="absolute right-5 top-5 grid h-11 w-11 place-items-center border border-white/30 bg-white/10 text-white transition hover:bg-white/20"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

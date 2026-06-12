@@ -5,11 +5,11 @@ import { dadosBusca } from "@/db/queries";
 import { lerBuscaConfig } from "@/lib/busca-config";
 import { lerLegal } from "@/lib/legal";
 import { sanitizarHtml } from "@/lib/sanitize";
-import { WhatsAppFloat, BackToTop } from "@/components/public/whatsapp-float";
+import { BackToTop } from "@/components/public/whatsapp-float";
 import { MenuOverlay } from "@/components/public/menu-overlay";
 import { BuscaGlass } from "@/components/public/busca-glass";
 import { CookieConsent } from "@/components/public/cookie-consent";
-import { CanaisVendas } from "@/components/public/canais-vendas";
+import { ContactLauncher } from "@/components/public/contact-launcher";
 import { logWarn } from "@/lib/log-context";
 
 // Render dinâmico: o site lê config/menu/empreendimentos do banco. Com ISR/estático
@@ -35,14 +35,28 @@ export default async function PublicLayout({
   } catch (err) { await logWarn({ err, action: "carregar_dados_busca" }, "dados de busca indisponíveis no boot"); }
   const legal = await unstable_cache(lerLegal, ["pub-legal"], { revalidate: 300, tags: ["config", "legal"] })();
 
+  // WhatsApp do launcher: número/mensagem reais da config (fallback p/ o número de marca).
+  const waDigits = (cfg.whatsappNumero || "5511944431066").replace(/\D/g, "");
+  const waMsg = cfg.whatsappMensagem?.replace(/\s*\{empreendimento\}/gi, "").trim() || "Olá, vi o Portal Benx e gostaria de mais informações.";
+  const waHref = `https://wa.me/${waDigits}?text=${encodeURIComponent(waMsg)}`;
+
   return (
     <>
       {children}
       <MenuOverlay itens={menu.itens} config={menu.config} />
       {buscaDados && <BuscaGlass dados={buscaDados} config={buscaConfig} />}
       <BackToTop />
-      <CanaisVendas />
-      <WhatsAppFloat numero={cfg.whatsappNumero} texto={cfg.whatsappTexto} mensagem={cfg.whatsappMensagem} ativo={cfg.whatsappAtivo} />
+      <ContactLauncher
+        channels={[
+          { id: "whatsapp", sup: "Vendas via", main: "WhatsApp", icon: "whatsapp", href: waHref },
+          { id: "phone", sup: "Central de vendas", main: "0800 729 1981", icon: "phone", href: "tel:08007291981" },
+          { id: "email", sup: "Vendas por", main: "E-mail", icon: "mail", href: "mailto:vendas@benx.com.br" },
+        ]}
+        phone2="4003-8503"
+        phone2Label="Canal de Atendimento"
+        phone2Hours="Seg - Sex · 9:00 às 17:00"
+        statusText="Online · Equipe disponível agora"
+      />
       <CookieConsent cookiesTexto={legal.cookiesTexto} politicaHtml={sanitizarHtml(legal.politica)} />
     </>
   );

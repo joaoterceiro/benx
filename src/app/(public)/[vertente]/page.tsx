@@ -17,7 +17,6 @@ import { CardEmpreendimento } from "@/components/public/card-empreendimento";
 import { HeroSlider } from "@/components/public/hero-slider";
 import { JornalTopo } from "@/components/public/jornal/jornal-topo";
 import { EmpreendimentosStrip } from "@/components/public/vertente/empreendimentos-strip";
-import { BuscaBar } from "@/components/public/vertente/busca-bar";
 import { HomeEditorial } from "@/components/public/vertente/home-editorial";
 import { JornalCarrossel } from "@/components/public/vertente/jornal-carrossel";
 import { Reveal } from "@/components/public/reveal";
@@ -97,17 +96,6 @@ export default async function HomeVertentePage({
         <section id="empreendimentos" className="bg-white pt-12 pb-12">
           <EmpreendimentosStrip cards={stripCards} autoplay />
         </section>
-      )}
-
-      {/* barra de busca azul (não existe na home Viva Benx) */}
-      {!ehViva && (
-        <BuscaBar
-          action={`/${info.slug}`}
-          status={sp.status}
-          bairro={sp.bairro}
-          statusOpts={statusFacet}
-          bairroOpts={bairros.map((b) => ({ value: b.slug, label: b.nome }))}
-        />
       )}
 
       {temFiltro && busca ? (

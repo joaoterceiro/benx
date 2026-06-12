@@ -358,10 +358,10 @@ export function PlantasLista({ plantas, tourUrl, videoUrl }: { plantas: PlantaIt
       {(tourUrl || videoUrl) && (
         <div className="mb-5 flex flex-wrap justify-end gap-2">
           {tourUrl && (
-            <a href={tourUrl} target="_blank" rel="noopener noreferrer" className="rounded-md px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-white" style={{ background: NAVY }}>Tour virtual</a>
+            <a href={tourUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-white" style={{ background: NAVY }}>Tour virtual</a>
           )}
           {videoUrl && (
-            <a href={videoUrl} target="_blank" rel="noopener noreferrer" className="rounded-md border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wide" style={{ borderColor: NAVY, color: NAVY }}>Vídeo do andar</a>
+            <a href={videoUrl} target="_blank" rel="noopener noreferrer" className="border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wide" style={{ borderColor: NAVY, color: NAVY }}>Vídeo do andar</a>
           )}
         </div>
       )}

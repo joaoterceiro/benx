@@ -60,6 +60,11 @@ const NAV = [
 export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
   const marca: Marca = d.marca ?? "benx";
   const tema = TEMAS[marca];
+  // Destaque (subtítulo): 1ª frase em bold, restante em peso regular (o HTML
+  // <strong> do original some no import, então recriamos o padrão na exibição).
+  const subMatch = d.subtitulo.match(/^(.*?[.!?])\s+(.*)$/s);
+  const subLead = subMatch ? subMatch[1] : d.subtitulo;
+  const subResto = subMatch ? subMatch[2] : "";
   const Heading = ({ children, center }: { children: React.ReactNode; center?: boolean }) => (
     <h2 className={`text-[32px] font-normal leading-[1.08] sm:text-[50px] ${center ? "text-center" : ""}`} style={{ color: tema.titulo }}>
       {children}
@@ -163,8 +168,9 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
                 <img src="/logo-vivabenx.svg" alt="Viva Benx" className="mb-5 h-10 w-auto" />
               )}
               {d.subtitulo ? (
-                <p className="text-xl font-semibold leading-snug tracking-tight sm:text-2xl" style={{ color: tema.titulo }}>
-                  {d.subtitulo}
+                <p className="text-[26px] leading-[1.18] tracking-tight sm:text-[34px]">
+                  <strong className="font-bold text-[#262626]">{subLead}</strong>
+                  {subResto ? <span className="font-normal text-[#5b5b5b]"> {subResto}</span> : null}
                 </p>
               ) : null}
             </div>

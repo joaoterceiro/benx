@@ -12,7 +12,6 @@ import {
   midias,
   postsJornal,
   heroSlides,
-  configuracoes,
 } from "@/db/schema";
 import { cacheGet, cacheSet } from "@/lib/cache";
 import { getUrl } from "@/lib/storage";
@@ -37,7 +36,7 @@ export async function listarCidades(): Promise<Cidade[]> {
   return db.select().from(cidades).orderBy(cidades.nome);
 }
 
-async function linhaIdPorValue(value: string): Promise<string | null> {
+export async function linhaIdPorValue(value: string): Promise<string | null> {
   const linha = await db.query.linhasProduto.findFirst({
     where: eq(linhasProduto.slug, value),
   });
@@ -354,25 +353,8 @@ export interface CardVertente {
   logotipoUrl: string | null;
 }
 
-// Todos os empreendimentos visíveis da vertente (para o carrossel da home).
-// Modo de ordenação da faixa por home: 'manual' (ordem_home) ou 'aleatorio' (random).
-export async function modoHome(value: VertenteValue): Promise<"manual" | "aleatorio"> {
-  const [row] = await db
-    .select({ valor: configuracoes.valor })
-    .from(configuracoes)
-    .where(eq(configuracoes.chave, `home_ordem_modo_${value}`))
-    .limit(1);
-  return row?.valor === "aleatorio" ? "aleatorio" : "manual";
-}
-
-export async function lerModosHome(): Promise<Record<VertenteValue, "manual" | "aleatorio">> {
-  const out = {} as Record<VertenteValue, "manual" | "aleatorio">;
-  await Promise.all(listarVertentes().map(async (v) => { out[v.value] = await modoHome(v.value); }));
-  return out;
-}
-
 export interface EmpOrdenacao { id: string; nome: string; ordemHome: number; statusObra: string }
-// Empreendimentos visíveis agrupados por vertente, para a tela de ordenação no admin.
+// Empreendimentos visíveis agrupados por vertente, para a tela de destaques no admin.
 export async function empreendimentosOrdenacao(): Promise<
   { value: VertenteValue; label: string; slug: string; items: EmpOrdenacao[] }[]
 > {
@@ -382,7 +364,7 @@ export async function empreendimentosOrdenacao(): Promise<
       const rows = linhaId
         ? await db.query.empreendimentos.findMany({
             where: and(eq(empreendimentos.linhaProdutoId, linhaId), eq(empreendimentos.visivel, true)),
-            orderBy: [asc(empreendimentos.ordemHome), desc(empreendimentos.criadoEm)],
+            orderBy: [asc(empreendimentos.nome)],
             columns: { id: true, nome: true, ordemHome: true, statusObra: true },
           })
         : [];
@@ -391,14 +373,15 @@ export async function empreendimentosOrdenacao(): Promise<
   );
 }
 
+// Faixa da home: os fixados (ordem_home > 0) primeiro, na ordem definida; o
+// restante (ordem_home = 0) em ordem aleatória, reembaralhada a cada load.
 export async function cardsVertente(value: VertenteValue): Promise<CardVertente[]> {
   const linhaId = await linhaIdPorValue(value);
   if (!linhaId) return [];
-  const modo = await modoHome(value);
   const rows = await db.query.empreendimentos.findMany({
     where: and(eq(empreendimentos.linhaProdutoId, linhaId), eq(empreendimentos.visivel, true)),
     with: { cidade: true, bairro: true },
-    orderBy: modo === "aleatorio" ? sql`random()` : [asc(empreendimentos.ordemHome), desc(empreendimentos.criadoEm)],
+    orderBy: sql`(${empreendimentos.ordemHome} = 0), ${empreendimentos.ordemHome}, random()`,
   });
   return Promise.all(
     rows.map(async (e) => ({

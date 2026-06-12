@@ -24,24 +24,21 @@ export function AnchorNav({ itens }: { itens: { id: string; label: string }[] })
     return () => obs.disconnect();
   }, [itens]);
 
-  // Detecta quando a barra "gruda" (sticky) para reduzir a largura.
-  const [stuck, setStuck] = useState(false);
-  const sentinela = useRef<HTMLDivElement>(null);
+  // Ao passar do hero (mesmo threshold do header), a barra "docka": no desktop
+  // some (os itens vão para o header) e no mobile vira uma pílula flutuante.
+  const [docked, setDocked] = useState(false);
   useEffect(() => {
-    const el = sentinela.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => setStuck(!e.isIntersecting), { rootMargin: "-77px 0px 0px 0px", threshold: 0 });
-    obs.observe(el);
-    return () => obs.disconnect();
+    const onScroll = () => setDocked(window.scrollY > window.innerHeight * 0.5);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const glass = { background: "rgba(18,20,24,0.6)", backdropFilter: "blur(18px) saturate(140%)", WebkitBackdropFilter: "blur(18px) saturate(140%)" };
 
   return (
-    <>
-      <div ref={sentinela} aria-hidden className="h-px w-full" />
-      <nav className={`sticky top-[76px] z-30 transition-[padding] duration-300 ${stuck ? "px-4 pt-2" : "border-b border-white/10"}`} style={stuck ? undefined : glass}>
-        <div className={`mx-auto flex max-w-site items-center justify-between gap-2 overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${stuck ? "border border-white/10 shadow-[0_14px_34px_rgba(0,0,0,.45)]" : ""}`} style={stuck ? glass : undefined}>
+    <nav className={`sticky top-[76px] z-30 transition-[padding] duration-300 ${docked ? "px-4 pt-2 lg:hidden" : "border-b border-white/10"}`} style={docked ? undefined : glass}>
+      <div className={`mx-auto flex max-w-site items-center justify-between gap-2 overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${docked ? "rounded-2xl border border-white/10 shadow-[0_14px_34px_rgba(0,0,0,.45)]" : ""}`} style={docked ? glass : undefined}>
         {itens.map((it) => (
           <a
             key={it.id}
@@ -52,9 +49,8 @@ export function AnchorNav({ itens }: { itens: { id: string; label: string }[] })
             {it.label}
           </a>
         ))}
-        </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 }
 

@@ -2,9 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { CorretorForm } from "./corretor-form";
 import { WhatsAppContexto } from "@/components/public/whatsapp-float";
-import { MenuTrigger } from "@/components/public/menu-overlay";
-import { BuscaTrigger } from "@/components/public/busca-glass";
 import { SiteFooter } from "@/components/public/site-footer";
+import { ProdutoHeader } from "./produto-header";
 import { AnchorNav, Carrossel, GaleriaCarrossel, PlantasLista, PontosCarrossel, Compartilhar, type PlantaItem } from "./interativos";
 
 // Paletas por marca. A página de produto é a mesma; só muda o tema.
@@ -88,25 +87,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
         ) : <div className="absolute inset-0" style={{ background: tema.titulo }} />}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/45" />
 
-        <div className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-black/90 via-black/55 to-transparent">
-          <div className="mx-auto flex max-w-site items-center justify-between px-6 py-4">
-            {marca === "vivabenx" ? (
-              <Link href={d.homeHref ?? "/"} aria-label="Viva Benx">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-vivabenx-cor.svg" alt="Viva Benx" className="h-10 w-auto" />
-              </Link>
-            ) : (
-              <Link href={d.homeHref ?? "/"} aria-label="Benx">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-benx.svg" alt="Benx" className="h-9 w-auto" />
-              </Link>
-            )}
-            <div className="flex items-center gap-3 text-white">
-              <BuscaTrigger className="h-11 w-11 hover:opacity-80" />
-              <MenuTrigger className="h-11 w-11 hover:opacity-80" />
-            </div>
-          </div>
-        </div>
+        <ProdutoHeader marca={marca} homeHref={d.homeHref ?? "/"} navItens={navItens} />
 
         {d.selo && (
           <div className="pointer-events-none absolute inset-x-0 bottom-28 z-10 hidden sm:block">

@@ -11,21 +11,69 @@ export interface StripCard {
   imagemUrl: string | null;
 }
 
+export interface StripCols { mobile: number; tablet: number; desktop: number; wide: number }
+
+// Classes literais de flex-basis por nº de cards (1-6) e breakpoint. Precisam ser
+// literais para o Tailwind gerar todas. gap entre cards = 1rem (n cards descontam (n-1)rem).
+const BASIS_MOBILE: Record<number, string> = {
+  1: "basis-full",
+  2: "basis-[calc((100%_-_1rem)/2)]",
+  3: "basis-[calc((100%_-_2rem)/3)]",
+  4: "basis-[calc((100%_-_3rem)/4)]",
+  5: "basis-[calc((100%_-_4rem)/5)]",
+  6: "basis-[calc((100%_-_5rem)/6)]",
+};
+const BASIS_TABLET: Record<number, string> = {
+  1: "sm:basis-full",
+  2: "sm:basis-[calc((100%_-_1rem)/2)]",
+  3: "sm:basis-[calc((100%_-_2rem)/3)]",
+  4: "sm:basis-[calc((100%_-_3rem)/4)]",
+  5: "sm:basis-[calc((100%_-_4rem)/5)]",
+  6: "sm:basis-[calc((100%_-_5rem)/6)]",
+};
+const BASIS_DESKTOP: Record<number, string> = {
+  1: "lg:basis-full",
+  2: "lg:basis-[calc((100%_-_1rem)/2)]",
+  3: "lg:basis-[calc((100%_-_2rem)/3)]",
+  4: "lg:basis-[calc((100%_-_3rem)/4)]",
+  5: "lg:basis-[calc((100%_-_4rem)/5)]",
+  6: "lg:basis-[calc((100%_-_5rem)/6)]",
+};
+const BASIS_WIDE: Record<number, string> = {
+  1: "xl:basis-full",
+  2: "xl:basis-[calc((100%_-_1rem)/2)]",
+  3: "xl:basis-[calc((100%_-_2rem)/3)]",
+  4: "xl:basis-[calc((100%_-_3rem)/4)]",
+  5: "xl:basis-[calc((100%_-_4rem)/5)]",
+  6: "xl:basis-[calc((100%_-_5rem)/6)]",
+};
+const COLS_PADRAO: StripCols = { mobile: 2, tablet: 3, desktop: 4, wide: 5 };
+function basisDe(cols: StripCols): string {
+  return [
+    BASIS_MOBILE[cols.mobile] ?? BASIS_MOBILE[2],
+    BASIS_TABLET[cols.tablet] ?? BASIS_TABLET[3],
+    BASIS_DESKTOP[cols.desktop] ?? BASIS_DESKTOP[4],
+    BASIS_WIDE[cols.wide] ?? BASIS_WIDE[5],
+  ].join(" ");
+}
+
 export function EmpreendimentosStrip({
   cards,
-  // Largura por flex-basis calculada para caber um nº inteiro de cards IGUAIS
-  // (descontando os gaps de 1rem): 2 no mobile, 3 no sm, 4 no lg. Sem corte.
-  cardWidthClass = "basis-[calc((100%_-_1rem)/2)] sm:basis-[calc((100%_-_2rem)/3)] lg:basis-[calc((100%_-_3rem)/4)]",
+  cols,
+  cardWidthClass,
   aspectClass = "aspect-[3/4]",
   autoplay = false,
   intervalo = 4500,
 }: {
   cards: StripCard[];
+  cols?: StripCols;
   cardWidthClass?: string;
   aspectClass?: string;
   autoplay?: boolean;
   intervalo?: number;
 }) {
+  // Largura: override explícito (cardWidthClass) > config por breakpoint (cols) > padrão.
+  const widthClass = cardWidthClass ?? basisDe(cols ?? COLS_PADRAO);
   const ref = useRef<HTMLDivElement>(null);
   const pausado = useRef(false);
 
@@ -60,7 +108,7 @@ export function EmpreendimentosStrip({
           <Link
             key={c.href}
             href={c.href}
-            className={`group relative ${aspectClass} shrink-0 snap-start overflow-hidden ${cardWidthClass}`}
+            className={`group relative ${aspectClass} shrink-0 snap-start overflow-hidden ${widthClass}`}
           >
             <Image src={c.imagemUrl || "/placeholder-card.jpg"} alt={c.nome} fill sizes="(max-width: 640px) 55vw, (max-width: 1024px) 38vw, 20vw" loading="lazy" className="object-cover transition duration-500 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />

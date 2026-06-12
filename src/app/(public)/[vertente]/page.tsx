@@ -12,6 +12,7 @@ import {
   type FiltrosBusca,
 } from "@/db/queries";
 import { getUrl } from "@/lib/storage";
+import { lerStripConfig } from "@/lib/strip-config";
 import { statusObraLabel } from "@/lib/labels";
 import { CardEmpreendimento } from "@/components/public/card-empreendimento";
 import { HeroSlider } from "@/components/public/hero-slider";
@@ -57,7 +58,7 @@ export default async function HomeVertentePage({
   const promoValue = PROMO[info.value] ?? "benx";
   const promoInfo = vertentePorValue(promoValue);
 
-  const [slides, cards, promoCards, bairros, statusPresentes, busca, posts] = await Promise.all([
+  const [slides, cards, promoCards, bairros, statusPresentes, busca, posts, stripCfg] = await Promise.all([
     slidesDaVertente(info.value),
     cardsVertente(info.value),
     cardsVertente(promoValue),
@@ -65,6 +66,7 @@ export default async function HomeVertentePage({
     listarStatusObra(info.value),
     temFiltro ? buscarEmpreendimentos(info.value, filtros) : Promise.resolve(null),
     listarPostsPublicos(),
+    lerStripConfig(info.value),
   ]);
 
   // Só os valores REALMENTE presentes no banco (evita opções com value que não casa).
@@ -94,7 +96,7 @@ export default async function HomeVertentePage({
       {/* faixa de empreendimentos */}
       {stripCards.length > 0 && (
         <section id="empreendimentos" className="bg-white pt-12 pb-12">
-          <EmpreendimentosStrip cards={stripCards} autoplay />
+          <EmpreendimentosStrip cards={stripCards} autoplay cols={stripCfg.cols} />
         </section>
       )}
 

@@ -1,5 +1,5 @@
 import "server-only";
-import { eq, and, or, ilike, sql, asc, desc, inArray } from "drizzle-orm";
+import { eq, and, or, ilike, sql, asc, desc, inArray, type SQL } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   empreendimentos,
@@ -16,6 +16,7 @@ import {
 import { cacheGet, cacheSet } from "@/lib/cache";
 import { getUrl } from "@/lib/storage";
 import { vertentePorValue, listarVertentes, type VertenteValue } from "@/lib/ecossistema";
+import { lerStripConfig, type StripConfig } from "@/lib/strip-config";
 import { statusObraLabel, tipoHabitacaoLabel } from "@/lib/labels";
 import type {
   Empreendimento,
@@ -373,15 +374,35 @@ export async function empreendimentosOrdenacao(): Promise<
   );
 }
 
-// Faixa da home: os fixados (ordem_home > 0) primeiro, na ordem definida; o
-// restante (ordem_home = 0) em ordem aleatória, reembaralhada a cada load.
+// Monta o ORDER BY da faixa conforme o modo configurado no admin:
+//  - fixados (ordem_home>0) primeiro, na ordem definida (exceto modo "so_tags");
+//  - depois pela sequência de tags (status), se o modo usar tags;
+//  - desempate aleatório ou por mais recentes.
+function orderByStrip(cfg: StripConfig): SQL {
+  const usaFixados = cfg.modo !== "so_tags";
+  const usaTags = cfg.modo !== "fixados_aleatorio";
+  const aleatorio = cfg.modo === "fixados_aleatorio" || cfg.modo === "fixados_tags_aleatorio";
+  const partes: SQL[] = [];
+  if (usaFixados) {
+    partes.push(sql`(${empreendimentos.ordemHome} = 0)`);
+    partes.push(sql`${empreendimentos.ordemHome}`);
+  }
+  if (usaTags) {
+    const casos = cfg.tags.map((t, i) => sql`WHEN ${t} THEN ${i}`);
+    partes.push(sql`CASE ${empreendimentos.statusObra} ${sql.join(casos, sql` `)} ELSE 999 END`);
+  }
+  partes.push(aleatorio ? sql`random()` : sql`${empreendimentos.criadoEm} DESC`);
+  return sql.join(partes, sql`, `);
+}
+
 export async function cardsVertente(value: VertenteValue): Promise<CardVertente[]> {
   const linhaId = await linhaIdPorValue(value);
   if (!linhaId) return [];
+  const cfg = await lerStripConfig(value);
   const rows = await db.query.empreendimentos.findMany({
     where: and(eq(empreendimentos.linhaProdutoId, linhaId), eq(empreendimentos.visivel, true)),
     with: { cidade: true, bairro: true },
-    orderBy: sql`(${empreendimentos.ordemHome} = 0), ${empreendimentos.ordemHome}, random()`,
+    orderBy: orderByStrip(cfg),
   });
   return Promise.all(
     rows.map(async (e) => ({

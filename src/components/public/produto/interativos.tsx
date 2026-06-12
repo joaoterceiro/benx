@@ -54,6 +54,60 @@ export function AnchorNav({ itens }: { itens: { id: string; label: string }[] })
   );
 }
 
+// ── Vídeo (facade: poster + play; carrega o embed só ao clicar) ───────────
+function ytId(url: string): string | null {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/);
+  return m?.[1] ?? null;
+}
+function vimeoId(url: string): string | null {
+  const m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  return m?.[1] ?? null;
+}
+function embedUrl(url: string): string | null {
+  const y = ytId(url);
+  if (y) return `https://www.youtube.com/embed/${y}?autoplay=1&rel=0`;
+  const v = vimeoId(url);
+  if (v) return `https://player.vimeo.com/video/${v}?autoplay=1`;
+  return null;
+}
+
+// Ocupa o pai (que deve ser relative + ter dimensão/aspecto).
+export function VideoFacade({ url, poster, titulo }: { url: string; poster?: string | null; titulo?: string }) {
+  const [tocando, setTocando] = useState(false);
+  const embed = embedUrl(url);
+  const y = ytId(url);
+  const thumb = poster || (y ? `https://img.youtube.com/vi/${y}/hqdefault.jpg` : null);
+
+  if (!embed) {
+    // Arquivo de vídeo direto (mp4/webm).
+    return <video src={url} poster={poster ?? undefined} controls playsInline className="absolute inset-0 h-full w-full bg-black object-cover" />;
+  }
+  if (tocando) {
+    return (
+      <iframe
+        src={embed}
+        title={titulo ?? "Vídeo"}
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+        className="absolute inset-0 h-full w-full"
+      />
+    );
+  }
+  return (
+    <button type="button" onClick={() => setTocando(true)} aria-label="Reproduzir vídeo" className="group absolute inset-0 h-full w-full bg-black">
+      {thumb && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={thumb} alt={titulo ?? ""} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
+      )}
+      <span className="absolute inset-0 grid place-items-center bg-black/15 transition group-hover:bg-black/25">
+        <span className="grid h-16 w-16 place-items-center rounded-full bg-white/90 shadow-[0_8px_28px_rgba(0,0,0,0.35)] transition group-hover:scale-105">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#111" aria-hidden><path d="M8 5v14l11-7z" /></svg>
+        </span>
+      </span>
+    </button>
+  );
+}
+
 // ── Carrossel horizontal (galeria, destaques) ─────────────────────────────
 export function Carrossel({ children, className = "", autoplay = false, intervalMs = 3500 }: { children: React.ReactNode; className?: string; autoplay?: boolean; intervalMs?: number }) {
   const ref = useRef<HTMLDivElement>(null);

@@ -4,7 +4,7 @@ import { CorretorForm } from "./corretor-form";
 import { WhatsAppContexto } from "@/components/public/whatsapp-float";
 import { SiteFooter } from "@/components/public/site-footer";
 import { ProdutoHeader } from "./produto-header";
-import { AnchorNav, Carrossel, GaleriaCarrossel, PlantasLista, PontosCarrossel, Compartilhar, type PlantaItem } from "./interativos";
+import { AnchorNav, Carrossel, GaleriaCarrossel, PlantasLista, PontosCarrossel, Compartilhar, VideoFacade, type PlantaItem } from "./interativos";
 
 // Paletas por marca. A página de produto é a mesma; só muda o tema.
 const TEMAS = {
@@ -33,6 +33,9 @@ export interface ProdutoBenxDados {
   plantas: PlantaItem[];
   tourUrl?: string;
   videoUrl?: string;
+  /** Vídeo principal (YouTube/Vimeo) exibido na seção de destaque. */
+  videoPrincipal?: string | null;
+  videoThumb?: string | null;
   localizacao: { endereco: string; regiao: string; pontos: { titulo: string; distancia: string }[]; uber: string; maps: string; waze: string; standDeVendas?: string };
   contato: { empreendimentoId: string; origem: string };
   relacionados: { href: string; nome: string; statusLabel: string; urlImagem: string | null }[];
@@ -150,9 +153,9 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
         </section>
       )}
 
-      {/* STATEMENT (subtítulo + imagem) */}
-      {(d.subtitulo || d.statementUrl) && (
-        <section className={`${COL} py-16`}>
+      {/* STATEMENT (subtítulo + vídeo ou imagem) */}
+      {(d.subtitulo || d.videoPrincipal || d.statementUrl) && (
+        <section id="video" className={`${COL} scroll-mt-[140px] py-16`}>
           <div className="grid items-center gap-8 sm:grid-cols-2">
             <div>
               {marca === "vivabenx" && (
@@ -165,7 +168,11 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
                 </p>
               ) : null}
             </div>
-            {d.statementUrl ? (
+            {d.videoPrincipal ? (
+              <div className="relative aspect-video w-full overflow-hidden">
+                <VideoFacade url={d.videoPrincipal} poster={d.videoThumb} titulo={d.nome} />
+              </div>
+            ) : d.statementUrl ? (
               <div className="relative aspect-[4/3] w-full overflow-hidden">
                 <Image src={d.statementUrl} alt={d.nome} fill sizes="(max-width: 640px) 100vw, 50vw" loading="lazy" className="object-cover" />
               </div>

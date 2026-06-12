@@ -149,6 +149,8 @@ export default async function EmpreendimentoPage({
       plantas: plantasBenx,
       tourUrl: e.urlTourVirtual || undefined,
       videoUrl: e.vistasDoAndar || e.urlVideoPrincipal || undefined,
+      videoPrincipal: e.urlVideoPrincipal || null,
+      videoThumb: e.thumbnailVideo ? await getUrl(e.thumbnailVideo) : null,
       localizacao: {
         endereco: e.enderecoParcial || e.enderecoCompleto || "",
         regiao: [e.bairro?.nome, e.cidade ? `${e.cidade.nome}${e.cidade.estado ? `/${e.cidade.estado}` : ""}` : ""].filter(Boolean).join(" "),

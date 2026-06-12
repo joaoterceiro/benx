@@ -87,6 +87,7 @@ export const empreendimentos = pgTable("empreendimentos", {
   tipoHabitacao: text("tipo_habitacao"),
   statusObra: text("status_obra").notNull().default("lancamento"),
   previsaoEntrega: date("previsao_entrega"),
+  ordemHome: integer("ordem_home").notNull().default(0), // posição na faixa da home (menor = primeiro)
 
   // Projeto
   oProjeto: text("o_projeto"),

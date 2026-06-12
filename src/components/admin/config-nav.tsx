@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MessageCircle, Menu, Search, MonitorPlay, Users, GalleryHorizontalEnd, PanelBottom, ScrollText } from "lucide-react";
+import { MessageCircle, Menu, Search, MonitorPlay, Users, GalleryHorizontalEnd, PanelBottom, ScrollText, ListOrdered } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Seções de configuração. Para adicionar uma nova, crie a sub-rota em
@@ -13,6 +13,7 @@ const SECOES = [
   { href: "/admin/configuracoes/busca", label: "Busca", icon: Search },
   { href: "/admin/configuracoes/splash", label: "Splash / Home", icon: MonitorPlay },
   { href: "/admin/configuracoes/slider", label: "Hero Slider", icon: GalleryHorizontalEnd },
+  { href: "/admin/configuracoes/home-cards", label: "Cards da Home", icon: ListOrdered },
   { href: "/admin/configuracoes/footer", label: "Footer", icon: PanelBottom },
   { href: "/admin/configuracoes/legal", label: "Privacidade e Termos", icon: ScrollText },
   { href: "/admin/configuracoes/usuarios", label: "Usuários", icon: Users },

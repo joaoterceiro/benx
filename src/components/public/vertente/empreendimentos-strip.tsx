@@ -13,7 +13,9 @@ export interface StripCard {
 
 export function EmpreendimentosStrip({
   cards,
-  cardWidthClass = "w-[55%] sm:w-[38%] lg:w-[20%]",
+  // Largura por flex-basis calculada para caber um nº inteiro de cards IGUAIS
+  // (descontando os gaps de 1rem): 2 no mobile, 3 no sm, 4 no lg. Sem corte.
+  cardWidthClass = "basis-[calc((100%_-_1rem)/2)] sm:basis-[calc((100%_-_2rem)/3)] lg:basis-[calc((100%_-_3rem)/4)]",
   aspectClass = "aspect-[3/4]",
   autoplay = false,
   intervalo = 4500,

@@ -6,7 +6,7 @@ const COL = "mx-auto w-full max-w-site px-6";
 
 // Header padrão do site: faixa transparente com gradiente escuro no topo
 // (logo branca + busca + menu). Fica sobreposto ao hero em todas as páginas.
-export function SiteHeader({ logo = "/logo-benx-branco.png", homeHref = "/benx" }: { logo?: string; homeHref?: string }) {
+export function SiteHeader({ logo = "/logo-benx.svg", homeHref = "/benx" }: { logo?: string; homeHref?: string }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-black/90 via-black/55 to-transparent">
       <div className={`${COL} flex items-center justify-between py-4`}>

@@ -15,7 +15,7 @@ export function JornalTopo({ marca = "benx", homeHref = "/" }: { marca?: "benx" 
         ) : (
           <Link href={homeHref} aria-label="Benx">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-benx-branco.png" alt="Benx" className="h-9 w-auto" />
+            <img src="/logo-benx.svg" alt="Benx" className="h-9 w-auto" />
           </Link>
         )}
         <div className="flex items-center gap-3 text-white">

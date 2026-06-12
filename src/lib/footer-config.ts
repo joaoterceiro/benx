@@ -27,7 +27,7 @@ export interface FooterConfig {
 }
 
 export const FOOTER_DEFAULTS: FooterConfig = {
-  logo: "/logo-benx-branco.png",
+  logo: "/logo-benx.svg",
   bgUrl: "/footer-bg.jpg",
   frase: "Transformar cidades e\nmudar a vida das pessoas",
   sobreUrl: "/origem-proposito",

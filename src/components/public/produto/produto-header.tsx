@@ -47,11 +47,20 @@ export function ProdutoHeader({
   return (
     <div
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300 ${
-        scrolled ? "border-b border-white/10" : "border-b border-transparent bg-gradient-to-b from-black/90 via-black/55 to-transparent"
+        scrolled ? "border-b border-white/10" : "border-b border-transparent"
       }`}
       style={scrolled ? GLASS : undefined}
     >
-      <div className="mx-auto flex max-w-site items-center gap-4 px-6 py-4">
+      {/* Vinheta alta no topo (mantém logo/ícones legíveis sobre o hero). O fade
+          longo (180px) evita a "linha" que o gradiente curto criava na borda.
+          Some ao rolar, quando o header vira sólido. */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-black/85 via-black/35 to-transparent transition-opacity duration-300 ${
+          scrolled ? "opacity-0" : "opacity-100"
+        }`}
+      />
+      <div className="relative mx-auto flex max-w-site items-center gap-4 px-6 py-4">
         <Link href={homeHref} aria-label={marca === "vivabenx" ? "Viva Benx" : "Benx"} className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           {marca === "vivabenx" ? (

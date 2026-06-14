@@ -155,14 +155,14 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
 
       {/* GALERIA (full-bleed) */}
       {d.galeria.length > 0 && (
-        <section id="galeria" className="scroll-mt-[140px] py-2">
+        <section id="galeria" data-reveal className="scroll-mt-[140px] py-2">
           <GaleriaCarrossel imagens={d.galeria} />
         </section>
       )}
 
       {/* STATEMENT (subtítulo + vídeo ou imagem) */}
       {(d.subtitulo || d.videoPrincipal || d.statementUrl) && (
-        <section id="video" className={`${COL} scroll-mt-[140px] py-16`}>
+        <section id="video" data-reveal className={`${COL} scroll-mt-[140px] py-16`}>
           <div className="grid items-center gap-8 sm:grid-cols-2">
             <div>
               {marca === "vivabenx" && (
@@ -191,7 +191,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
 
       {/* ÁREAS COMUNS */}
       {(d.areasImagens.length > 0 || d.areasNomes.length > 0) && (
-        <section id="areas" className="scroll-mt-[140px] bg-[#f6f7f9] py-16">
+        <section id="areas" data-reveal className="scroll-mt-[140px] bg-[#f6f7f9] py-16">
           <div className={`${COL} grid gap-12 sm:grid-cols-2 sm:items-center`}>
             {d.areasImagens.length > 0 ? (
               <GaleriaCarrossel imagens={d.areasImagens.map((u) => ({ url: u, alt: "Área comum" }))} cols={1} aspect="4 / 5" />
@@ -212,7 +212,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
 
       {/* DIFERENCIAIS */}
       {d.diferenciais.length > 0 && (
-        <section id="diferenciais" className={`${COL} scroll-mt-[140px] py-16`}>
+        <section id="diferenciais" data-reveal className={`${COL} scroll-mt-[140px] py-16`}>
           <Heading>Diferenciais das áreas comuns</Heading>
           <ul className="mt-8 border-t border-black/[0.12]">
             {d.diferenciais.map((t, i) => (
@@ -229,7 +229,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
 
       {/* PLANTAS */}
       {d.plantas.length > 0 && (
-        <section id="plantas" className={`${COL} scroll-mt-[140px] py-16`}>
+        <section id="plantas" data-reveal className={`${COL} scroll-mt-[140px] py-16`}>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Heading>Plantas</Heading>
             {/* Botões só aparecem quando há a URL no admin (sem link vazio). */}
@@ -252,7 +252,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
 
       {/* LOCALIZAÇÃO */}
       {(d.localizacao.endereco || d.localizacao.pontos.length > 0) && (
-        <section id="localizacao" className="scroll-mt-[140px] bg-white">
+        <section id="localizacao" data-reveal className="scroll-mt-[140px] bg-white">
           <div className={`${COL} flex flex-col py-16 lg:h-[600px] lg:flex-row lg:items-stretch lg:py-0`}>
             {/* esquerda: título + pontos + apps */}
             <div className="relative z-10 flex flex-col lg:w-[44%] lg:shrink-0 lg:py-12 lg:pr-6">
@@ -291,7 +291,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
       )}
 
       {/* CONSULTE UM CORRETOR */}
-      <section id="contato" className="scroll-mt-[140px]" style={{ background: tema.contato }}>
+      <section id="contato" data-reveal className="scroll-mt-[140px]" style={{ background: tema.contato }}>
         <div className={`${COL} grid gap-10 py-16 sm:grid-cols-2 sm:items-center`}>
           <div className="text-white">
             <h2 className="text-[34px] font-normal leading-[1.1] sm:text-[44px]">Consulte um corretor</h2>

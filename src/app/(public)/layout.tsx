@@ -10,6 +10,7 @@ import { MenuOverlay } from "@/components/public/menu-overlay";
 import { BuscaGlass } from "@/components/public/busca-glass";
 import { CookieConsent } from "@/components/public/cookie-consent";
 import { ContactLauncher } from "@/components/public/contact-launcher";
+import { ScrollReveal } from "@/components/public/scroll-reveal";
 import { logWarn } from "@/lib/log-context";
 
 // Render dinâmico: o site lê config/menu/empreendimentos do banco. Com ISR/estático
@@ -43,6 +44,7 @@ export default async function PublicLayout({
   return (
     <>
       {children}
+      <ScrollReveal />
       <MenuOverlay itens={menu.itens} config={menu.config} />
       {buscaDados && <BuscaGlass dados={buscaDados} config={buscaConfig} />}
       <BackToTop />

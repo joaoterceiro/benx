@@ -95,7 +95,7 @@ export default async function HomeVertentePage({
 
       {/* faixa de empreendimentos */}
       {stripCards.length > 0 && (
-        <section id="empreendimentos" className="bg-white pt-12 pb-12">
+        <section id="empreendimentos" data-reveal className="bg-white pt-12 pb-12">
           <EmpreendimentosStrip cards={stripCards} autoplay cols={stripCfg.cols} />
         </section>
       )}

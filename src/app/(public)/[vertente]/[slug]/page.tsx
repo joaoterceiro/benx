@@ -148,7 +148,7 @@ export default async function EmpreendimentoPage({
       diferenciais: e.diferenciais ?? [],
       plantas: plantasBenx,
       tourUrl: e.urlTourVirtual || undefined,
-      videoUrl: e.vistasDoAndar || e.urlVideoPrincipal || undefined,
+      videoUrl: e.vistasDoAndar || undefined, // botão "Vistas do Andar" (o vídeo principal tem seção própria)
       videoPrincipal: e.urlVideoPrincipal || null,
       videoThumb: e.thumbnailVideo ? await getUrl(e.thumbnailVideo) : null,
       localizacao: {

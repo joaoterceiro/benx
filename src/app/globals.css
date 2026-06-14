@@ -199,18 +199,18 @@ html:has(.theme-zen)::-webkit-scrollbar-button {
   to { width: 100%; }
 }
 
-/* Revelação ao rolar: o elemento sobe + fade ao entrar na viewport.
-   O JS (ScrollReveal) adiciona .is-in. Transform é só visual (sem layout shift). */
+/* Revelação ao rolar (fail-open): o conteúdo é VISÍVEL por padrão. O JS
+   (ScrollReveal) só adiciona .reveal-hidden no que está abaixo da dobra e remove
+   ao entrar na viewport. Sem JS / JS com erro = conteúdo visível. Transform é só
+   visual (sem layout shift). */
 [data-reveal] {
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-reveal].reveal-hidden {
   opacity: 0;
   transform: translateY(22px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
-[data-reveal].is-in {
-  opacity: 1;
-  transform: none;
-}
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal] { opacity: 1; transform: none; transition: none; }
+  [data-reveal].reveal-hidden { opacity: 1; transform: none; }
 }

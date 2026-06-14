@@ -45,6 +45,8 @@ export async function uploadMidia(
         Key: chave,
         Body: corpo,
         ContentType: contentType,
+        // Cache longo no browser/CDN (a chave é única por upload).
+        CacheControl: "public, max-age=2592000, immutable",
       })
     );
     return chave;

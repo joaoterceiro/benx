@@ -8,6 +8,16 @@ const AZUL = "#0A4DCC";
 const LARANJA = "#ED6B1F";
 
 // ── Navegação por âncoras com scrollspy ───────────────────────────────────
+// Ícone +/− animado: a barra vertical recolhe ao abrir (transição suave).
+function ToggleIcon({ aberto, className = "" }: { aberto: boolean; className?: string }) {
+  return (
+    <span className={`relative inline-block h-4 w-4 shrink-0 ${className}`} aria-hidden>
+      <span className="absolute left-1/2 top-1/2 h-[1.5px] w-3.5 -translate-x-1/2 -translate-y-1/2 bg-current" />
+      <span className={`absolute left-1/2 top-1/2 h-3.5 w-[1.5px] -translate-x-1/2 -translate-y-1/2 bg-current transition-transform duration-300 ease-out ${aberto ? "scale-y-0" : "scale-y-100"}`} />
+    </span>
+  );
+}
+
 export function AnchorNav({ itens }: { itens: { id: string; label: string }[] }) {
   const [ativo, setAtivo] = useState(itens[0]?.id ?? "");
   useEffect(() => {
@@ -302,7 +312,7 @@ export function Accordion({ itens }: { itens: { titulo: string; descricao?: stri
             className="flex w-full items-center gap-5 px-7 py-5 text-left text-[17px] font-medium text-white transition-colors sm:text-[19px]"
             style={{ background: aberto === i ? AZUL : NAVY }}
           >
-            <span className="w-6 shrink-0 text-center text-2xl font-light leading-none opacity-90">{aberto === i ? "−" : "+"}</span>
+            <ToggleIcon aberto={aberto === i} className="opacity-90" />
             <span>{it.titulo}</span>
           </button>
           {aberto === i && it.descricao ? (
@@ -375,9 +385,9 @@ export function PlantasLista({ plantas, tourUrl, videoUrl }: { plantas: PlantaIt
           ].filter(Boolean);
           return (
             <li key={i} className="border-b border-black/10">
-              <button onClick={() => setAberto(aberto === i ? null : i)} className="flex w-full items-center justify-between gap-4 py-5 text-left">
-                <span className="text-[15px] font-semibold uppercase tracking-[0.04em] sm:text-[16px]" style={{ color: NAVY }}>{p.nome}</span>
-                <span className="text-2xl font-light leading-none text-foreground-tertiary">{aberto === i ? "−" : "+"}</span>
+              <button onClick={() => setAberto(aberto === i ? null : i)} className="group flex w-full items-center justify-between gap-4 py-5 text-left">
+                <span className="text-[15px] font-semibold uppercase tracking-[0.04em] transition-opacity group-hover:opacity-70 sm:text-[16px]" style={{ color: NAVY }}>{p.nome}</span>
+                <ToggleIcon aberto={aberto === i} className="text-foreground-tertiary transition-transform duration-300 group-hover:scale-110" />
               </button>
               {aberto === i ? (
                 <div className="grid gap-5 pb-6 sm:grid-cols-[1.1fr_1fr]">

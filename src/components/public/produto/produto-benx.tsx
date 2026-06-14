@@ -236,10 +236,10 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
             {(d.tourUrl || d.videoUrl) && (
               <div className="flex flex-wrap gap-3">
                 {d.tourUrl && (
-                  <a href={d.tourUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:opacity-90" style={{ background: tema.tour }}>Tour Virtual</a>
+                  <a href={d.tourUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:opacity-90 active:scale-[0.98]" style={{ background: tema.tour }}>Tour Virtual</a>
                 )}
                 {d.videoUrl && (
-                  <a href={d.videoUrl} target="_blank" rel="noopener noreferrer" className="border px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide transition hover:bg-black/[0.03]" style={{ borderColor: tema.titulo, color: tema.titulo }}>Vistas do Andar</a>
+                  <a href={d.videoUrl} target="_blank" rel="noopener noreferrer" className="border px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide transition hover:bg-black/[0.03] active:scale-[0.98]" style={{ borderColor: tema.titulo, color: tema.titulo }}>Vistas do Andar</a>
                 )}
               </div>
             )}

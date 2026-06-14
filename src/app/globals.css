@@ -214,3 +214,14 @@ html:has(.theme-zen)::-webkit-scrollbar-button {
 @media (prefers-reduced-motion: reduce) {
   [data-reveal].reveal-hidden { opacity: 1; transform: none; }
 }
+
+/* Ken Burns: zoom lento e sutil no hero (entra em cena com vida, depois assenta).
+   Requer overflow-hidden no container. Respeita prefers-reduced-motion. */
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.07); }
+}
+.kenburns { animation: kenburns 16s ease-out both; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .kenburns { animation: none; }
+}

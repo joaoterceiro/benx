@@ -93,7 +93,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
       {/* HERO */}
       <header className="relative flex h-[56vh] min-h-[400px] flex-col justify-end overflow-hidden">
         {d.heroUrl ? (
-          <Image src={d.heroUrl} alt={d.nome} fill priority sizes="100vw" className="object-cover" />
+          <Image src={d.heroUrl} alt={d.nome} fill priority sizes="100vw" className="object-cover kenburns" />
         ) : <div className="absolute inset-0" style={{ background: tema.titulo }} />}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/45" />
 

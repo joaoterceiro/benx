@@ -232,10 +232,17 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
         <section id="plantas" className={`${COL} scroll-mt-[140px] py-16`}>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Heading>Plantas</Heading>
-            <div className="flex flex-wrap gap-3">
-              <a href={d.tourUrl || "#galeria"} target={d.tourUrl ? "_blank" : undefined} rel="noopener noreferrer" className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:opacity-90" style={{ background: tema.tour }}>Tour Virtual</a>
-              <a href={d.videoUrl || "#galeria"} target={d.videoUrl ? "_blank" : undefined} rel="noopener noreferrer" className="border px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide transition hover:bg-black/[0.03]" style={{ borderColor: tema.titulo, color: tema.titulo }}>Vistas do Andar</a>
-            </div>
+            {/* Botões só aparecem quando há a URL no admin (sem link vazio). */}
+            {(d.tourUrl || d.videoUrl) && (
+              <div className="flex flex-wrap gap-3">
+                {d.tourUrl && (
+                  <a href={d.tourUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:opacity-90" style={{ background: tema.tour }}>Tour Virtual</a>
+                )}
+                {d.videoUrl && (
+                  <a href={d.videoUrl} target="_blank" rel="noopener noreferrer" className="border px-8 py-3.5 text-[13px] font-semibold uppercase tracking-wide transition hover:bg-black/[0.03]" style={{ borderColor: tema.titulo, color: tema.titulo }}>Vistas do Andar</a>
+                )}
+              </div>
+            )}
           </div>
           <div className="mt-6">
             <PlantasLista plantas={d.plantas} />

@@ -10,6 +10,9 @@ const nextConfig = {
   images: {
     // Serve AVIF/WebP automaticamente (next/image).
     formats: ["image/avif", "image/webp"],
+    // Cacheia as imagens otimizadas por 30 dias (padrão era 60s -> recarregava à
+    // toa). As fontes (MinIO) raramente mudam, então o cache longo é seguro.
+    minimumCacheTTL: 2592000,
     // MinIO em dev. Em produção, ajustar para o domínio público de mídia.
     remotePatterns: [
       { protocol: "http", hostname: "localhost", port: "9000", pathname: "/**" },

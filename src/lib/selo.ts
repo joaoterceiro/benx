@@ -41,3 +41,13 @@ export function seloPosClasses(p: SeloPosicao): string {
     default: return "left-0 top-0";
   }
 }
+
+// Posições inferiores: nesses casos o selo é empilhado ACIMA do título do card
+// (em vez de sobrepor). Helpers para esse modo.
+export function isSeloBottom(p: SeloPosicao): boolean {
+  return p === "bottom-left" || p === "bottom-right";
+}
+// Alinhamento horizontal do selo dentro do container do título (flex column).
+export function seloAlignSelf(p: SeloPosicao): string {
+  return p === "bottom-right" || p === "top-right" ? "self-end" : "self-start";
+}

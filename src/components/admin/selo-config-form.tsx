@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { salvarSeloConfig } from "@/actions/selo";
-import { SELO_POSICOES, seloPosClasses, type SeloConfig } from "@/lib/selo";
+import { SELO_POSICOES, seloPosClasses, isSeloBottom, seloAlignSelf, type SeloConfig } from "@/lib/selo";
 
 const SELO_PREVIEW = "/selos/his-hmp.jpg";
 
@@ -118,16 +118,28 @@ export function SeloConfigForm({ inicial }: { inicial: SeloConfig }) {
           <div className="relative aspect-[3/4] w-[280px] overflow-hidden bg-neutral-800">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/placeholder-card.jpg" alt="" className="h-full w-full object-cover" />
-            {/* selo posicionado com a config atual */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={SELO_PREVIEW}
-              alt="Selo de habitação"
-              className={`pointer-events-none absolute z-20 h-auto ${seloPosClasses(cfg.posicao)}`}
-              style={{ width: `${cfg.tamanho}%`, margin: `${cfg.margem}px`, opacity: cfg.opacidade / 100 }}
-            />
+            {/* posições superiores: selo absoluto sobre a foto */}
+            {!isSeloBottom(cfg.posicao) && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={SELO_PREVIEW}
+                alt="Selo de habitação"
+                className={`pointer-events-none absolute z-20 h-auto ${seloPosClasses(cfg.posicao)}`}
+                style={{ width: `${cfg.tamanho}%`, margin: `${cfg.margem}px`, opacity: cfg.opacidade / 100 }}
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
-            <div className="absolute inset-x-0 bottom-0 p-4">
+            {/* posições inferiores: selo empilha ACIMA do título, com margem */}
+            <div className="absolute inset-x-0 bottom-0 flex flex-col p-4">
+              {isSeloBottom(cfg.posicao) && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={SELO_PREVIEW}
+                  alt="Selo de habitação"
+                  className={`pointer-events-none h-auto ${seloAlignSelf(cfg.posicao)}`}
+                  style={{ width: `${cfg.tamanho}%`, marginBottom: `${cfg.margem}px`, opacity: cfg.opacidade / 100 }}
+                />
+              )}
               <p className="text-[18px] font-bold leading-tight tracking-tight text-white drop-shadow">Exemplo</p>
             </div>
           </div>

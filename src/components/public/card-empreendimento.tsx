@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { SeloTag } from "@/components/public/selo-tag";
-import type { SeloConfig } from "@/lib/selo";
+import { isSeloBottom, seloAlignSelf, type SeloConfig } from "@/lib/selo";
 
 export interface CardProps {
   href: string;
@@ -33,7 +33,8 @@ export function CardEmpreendimento(p: CardProps) {
         className="object-cover transition duration-500 group-hover:scale-105"
       />
 
-      {p.seloUrl && p.seloConfig && <SeloTag url={p.seloUrl} config={p.seloConfig} />}
+      {/* selo no topo (posições superiores) */}
+      {p.seloUrl && p.seloConfig && !isSeloBottom(p.seloConfig.posicao) && <SeloTag url={p.seloUrl} config={p.seloConfig} />}
 
       {/* gradiente para legibilidade */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
@@ -45,8 +46,12 @@ export function CardEmpreendimento(p: CardProps) {
         </span>
       ) : null}
 
-      {/* título grande embaixo */}
-      <div className="absolute inset-x-0 bottom-0 p-6">
+      {/* título embaixo; selo (posições inferiores) empilha ACIMA do título */}
+      <div className="absolute inset-x-0 bottom-0 flex flex-col p-6">
+        {p.seloUrl && p.seloConfig && isSeloBottom(p.seloConfig.posicao) && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={p.seloUrl} alt="Selo Prefeitura de São Paulo" className={`h-auto ${seloAlignSelf(p.seloConfig.posicao)}`} style={{ width: `${p.seloConfig.tamanho}%`, marginBottom: `${p.seloConfig.margem}px`, opacity: p.seloConfig.opacidade / 100 }} />
+        )}
         <h3 className="text-[26px] font-bold leading-tight tracking-tight text-white drop-shadow sm:text-[30px]">{p.nome}</h3>
         {p.cidade ? <p className="mt-1 text-[13px] text-white/75">{p.cidade}</p> : null}
       </div>

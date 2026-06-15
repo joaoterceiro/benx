@@ -160,6 +160,7 @@ export default async function EmpreendimentoPage({
       relacionados: relCards.map((r) => ({ href: r.href, nome: r.nome, statusLabel: r.statusLabel, urlImagem: r.urlImagem })),
       marca: ehViva ? "vivabenx" : "benx",
       his: hisLabel,
+      tipoHabitacao: ehViva ? e.tipoHabitacao : null,
       selo,
       homeHref: `/${vertente}`,
     };

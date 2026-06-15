@@ -5,6 +5,7 @@ import { WhatsAppContexto } from "@/components/public/whatsapp-float";
 import { SiteFooter } from "@/components/public/site-footer";
 import { ProdutoHeader } from "./produto-header";
 import { AnchorNav, Carrossel, GaleriaCarrossel, PlantasLista, PontosCarrossel, Compartilhar, VideoFacade, type PlantaItem } from "./interativos";
+import { InfoHabitacao } from "./info-habitacao";
 
 // Paletas por marca. A página de produto é a mesma; só muda o tema.
 const TEMAS = {
@@ -43,6 +44,8 @@ export interface ProdutoBenxDados {
   marca?: Marca;
   /** Rótulo do tipo de habitação social (ex.: "HIS", "HIS e HMP"). Mostra o banner amarelo quando presente. */
   his?: string;
+  /** Tipo de habitação cru (his/his_2/hmp/his_e_hmp) para as Informações importantes. */
+  tipoHabitacao?: string | null;
   selo?: string | null;
   homeHref?: string;
 }
@@ -309,6 +312,9 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
           <p className="whitespace-pre-line text-[11px] leading-relaxed text-foreground-tertiary">{d.textoLegal}</p>
         </section>
       )}
+
+      {/* INFORMAÇÕES IMPORTANTES (HIS/HMP) — colapsável, conforme o tipo */}
+      <InfoHabitacao tipo={d.tipoHabitacao} cor={tema.titulo} />
 
       {/* OUTROS DESTAQUES */}
       {d.relacionados.length > 0 && (

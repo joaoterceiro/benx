@@ -11,8 +11,10 @@ import {
   listarPostsPublicos,
   type FiltrosBusca,
 } from "@/db/queries";
+import { seloUrlPorTipo } from "@/lib/selo";
 import { getUrl } from "@/lib/storage";
 import { lerStripConfig } from "@/lib/strip-config";
+import { lerSeloConfig } from "@/lib/config";
 import { statusObraLabel } from "@/lib/labels";
 import { CardEmpreendimento } from "@/components/public/card-empreendimento";
 import { HeroSlider } from "@/components/public/hero-slider";
@@ -58,7 +60,7 @@ export default async function HomeVertentePage({
   const promoValue = PROMO[info.value] ?? "benx";
   const promoInfo = vertentePorValue(promoValue);
 
-  const [slides, cards, promoCards, bairros, statusPresentes, busca, posts, stripCfg] = await Promise.all([
+  const [slides, cards, promoCards, bairros, statusPresentes, busca, posts, stripCfg, seloCfg] = await Promise.all([
     slidesDaVertente(info.value),
     cardsVertente(info.value),
     cardsVertente(promoValue),
@@ -67,6 +69,7 @@ export default async function HomeVertentePage({
     temFiltro ? buscarEmpreendimentos(info.value, filtros) : Promise.resolve(null),
     listarPostsPublicos(),
     lerStripConfig(info.value),
+    lerSeloConfig(),
   ]);
 
   // Só os valores REALMENTE presentes no banco (evita opções com value que não casa).
@@ -79,6 +82,7 @@ export default async function HomeVertentePage({
     nome: c.nome,
     statusLabel: statusObraLabel(c.statusObra),
     imagemUrl: c.imagemUrl,
+    seloUrl: c.seloUrl,
   }));
 
   return (
@@ -96,7 +100,7 @@ export default async function HomeVertentePage({
       {/* faixa de empreendimentos */}
       {stripCards.length > 0 && (
         <section id="empreendimentos" data-reveal className="bg-white pt-12 pb-12">
-          <EmpreendimentosStrip cards={stripCards} autoplay cols={stripCfg.cols} />
+          <EmpreendimentosStrip cards={stripCards} autoplay cols={stripCfg.cols} seloConfig={seloCfg} />
         </section>
       )}
 
@@ -126,6 +130,8 @@ export default async function HomeVertentePage({
                     vertenteCor={info.cor}
                     vertenteBg={info.bg}
                     urlImagem={e.imagemPrincipal ? await getUrl(e.imagemPrincipal) : null}
+                    seloUrl={ehViva ? seloUrlPorTipo(e.tipoHabitacao) : null}
+                    seloConfig={seloCfg}
                   />
                 ))
               )}
@@ -234,11 +240,13 @@ export default async function HomeVertentePage({
                 <EmpreendimentosStrip
                   autoplay
                   cardWidthClass="w-full sm:w-[calc(50%-0.5rem)]"
+                  seloConfig={seloCfg}
                   cards={promoCards.map((c) => ({
                     href: `/${promoInfo.slug}/${c.slug}`,
                     nome: c.nome,
                     statusLabel: statusObraLabel(c.statusObra),
                     imagemUrl: c.imagemUrl,
+                    seloUrl: c.seloUrl,
                   }))}
                 />
               </Reveal>

@@ -9,6 +9,7 @@ export const STATUS_OBRA_LABEL: Record<string, string> = {
 
 export const TIPO_HABITACAO_LABEL: Record<string, string> = {
   his: "HIS",
+  his_2: "HIS-2",
   hmp: "HMP",
   his_e_hmp: "HIS e HMP",
 };

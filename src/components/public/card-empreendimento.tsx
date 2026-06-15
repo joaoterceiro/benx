@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { SeloTag } from "@/components/public/selo-tag";
+import type { SeloConfig } from "@/lib/selo";
 
 export interface CardProps {
   href: string;
@@ -12,6 +14,8 @@ export interface CardProps {
   vertenteCor: string;
   vertenteBg: string;
   urlImagem: string | null;
+  seloUrl?: string | null;
+  seloConfig?: SeloConfig;
 }
 
 export function CardEmpreendimento(p: CardProps) {
@@ -28,6 +32,8 @@ export function CardEmpreendimento(p: CardProps) {
         loading="lazy"
         className="object-cover transition duration-500 group-hover:scale-105"
       />
+
+      {p.seloUrl && p.seloConfig && <SeloTag url={p.seloUrl} config={p.seloConfig} />}
 
       {/* gradiente para legibilidade */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />

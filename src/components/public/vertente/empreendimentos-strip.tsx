@@ -3,12 +3,15 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { SeloTag } from "@/components/public/selo-tag";
+import type { SeloConfig } from "@/lib/selo";
 
 export interface StripCard {
   href: string;
   nome: string;
   statusLabel: string;
   imagemUrl: string | null;
+  seloUrl?: string | null;
 }
 
 export interface StripCols { mobile: number; tablet: number; desktop: number; wide: number }
@@ -64,6 +67,7 @@ export function EmpreendimentosStrip({
   aspectClass = "aspect-[3/4]",
   autoplay = false,
   intervalo = 4500,
+  seloConfig,
 }: {
   cards: StripCard[];
   cols?: StripCols;
@@ -71,6 +75,7 @@ export function EmpreendimentosStrip({
   aspectClass?: string;
   autoplay?: boolean;
   intervalo?: number;
+  seloConfig?: SeloConfig;
 }) {
   // Largura: override explícito (cardWidthClass) > config por breakpoint (cols) > padrão.
   const widthClass = cardWidthClass ?? basisDe(cols ?? COLS_PADRAO);
@@ -111,6 +116,7 @@ export function EmpreendimentosStrip({
             className={`group relative ${aspectClass} shrink-0 snap-start overflow-hidden ${widthClass}`}
           >
             <Image src={c.imagemUrl || "/placeholder-card.jpg"} alt={c.nome} fill sizes="(max-width: 640px) 55vw, (max-width: 1024px) 38vw, 20vw" loading="lazy" className="object-cover transition duration-500 group-hover:scale-105" />
+            {c.seloUrl && seloConfig && <SeloTag url={c.seloUrl} config={seloConfig} />}
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
             {c.statusLabel && (
               <span className="absolute right-5 top-6 whitespace-nowrap border border-white/70 px-5 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">

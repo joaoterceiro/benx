@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { configuracoes } from "@/db/schema";
 import { logger } from "@/lib/logger";
+import { SELO_CONFIG_PADRAO, type SeloConfig, type SeloPosicao } from "@/lib/selo";
 
 // Configurações globais do site, editáveis no admin (tabela key-value).
 export interface SiteConfig {
@@ -43,5 +44,27 @@ export async function lerConfiguracoes(): Promise<SiteConfig> {
     atendEmail: map["atend_email"] ?? ATEND_EMAIL_PADRAO,
     atendCanal: map["atend_canal"] ?? ATEND_CANAL_PADRAO,
     atendCanalHorario: map["atend_canal_horario"] ?? ATEND_HORARIO_PADRAO,
+  };
+}
+
+// Config global do selo de habitação nas cards (posição/tamanho/margem/opacidade).
+export async function lerSeloConfig(): Promise<SeloConfig> {
+  let map: Record<string, string> = {};
+  try {
+    const rows = await db.select().from(configuracoes);
+    map = Object.fromEntries(rows.map((r) => [r.chave, r.valor ?? ""]));
+  } catch (err) {
+    logger.warn({ err, action: "ler_selo_config" }, "usando config de selo padrão");
+  }
+  const posicoes: SeloPosicao[] = ["top-left", "top-right", "bottom-left", "bottom-right"];
+  const num = (v: string | undefined, d: number, min: number, max: number) => {
+    const n = Math.round(Number(v));
+    return Number.isFinite(n) && v !== "" && v != null ? Math.min(max, Math.max(min, n)) : d;
+  };
+  return {
+    posicao: posicoes.includes(map["selo_posicao"] as SeloPosicao) ? (map["selo_posicao"] as SeloPosicao) : SELO_CONFIG_PADRAO.posicao,
+    tamanho: num(map["selo_tamanho"], SELO_CONFIG_PADRAO.tamanho, 10, 80),
+    margem: num(map["selo_margem"], SELO_CONFIG_PADRAO.margem, 0, 40),
+    opacidade: num(map["selo_opacidade"], SELO_CONFIG_PADRAO.opacidade, 20, 100),
   };
 }

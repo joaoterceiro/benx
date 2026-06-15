@@ -18,6 +18,7 @@ import { getUrl } from "@/lib/storage";
 import { vertentePorValue, listarVertentes, type VertenteValue } from "@/lib/ecossistema";
 import { lerStripConfig, type StripConfig } from "@/lib/strip-config";
 import { statusObraLabel, tipoHabitacaoLabel } from "@/lib/labels";
+import { seloUrlPorTipo } from "@/lib/selo";
 import type {
   Empreendimento,
   EmpreendimentoComRelacoes,
@@ -352,6 +353,7 @@ export interface CardVertente {
   cidade: string;
   imagemUrl: string | null;
   logotipoUrl: string | null;
+  seloUrl: string | null;
 }
 
 export interface EmpOrdenacao { id: string; nome: string; ordemHome: number; statusObra: string }
@@ -413,6 +415,7 @@ export async function cardsVertente(value: VertenteValue): Promise<CardVertente[
       cidade: e.cidade?.nome ?? "",
       imagemUrl: e.imagemPrincipal ? await getUrl(e.imagemPrincipal) : null,
       logotipoUrl: e.logotipo ? await getUrl(e.logotipo) : null,
+      seloUrl: value === "vivabenx" ? seloUrlPorTipo(e.tipoHabitacao) : null,
     }))
   );
 }
@@ -665,6 +668,7 @@ export interface BuscaItem {
   bairro: string;
   tipo: string;
   status: string;
+  seloUrl: string | null;
 }
 export interface BuscaFiltros {
   q?: string;
@@ -701,6 +705,7 @@ async function paraItem(e: EmpComRel): Promise<BuscaItem> {
     bairro: e.bairro?.nome ?? "",
     tipo: tipoHabitacaoLabel(e.tipoHabitacao),
     status: statusObraLabel(e.statusObra),
+    seloUrl: e.linhaProduto?.slug === "vivabenx" ? seloUrlPorTipo(e.tipoHabitacao) : null,
   };
 }
 

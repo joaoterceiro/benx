@@ -9,10 +9,12 @@ import {
   listarCategorias,
   type BuscaFiltros,
 } from "@/db/queries";
+import { lerSeloConfig } from "@/lib/config";
 import { JornalTopo } from "@/components/public/jornal/jornal-topo";
 import { HeroSlider } from "@/components/public/hero-slider";
 import { EmpreendimentosStrip } from "@/components/public/vertente/empreendimentos-strip";
 import { CatalogoFiltros } from "@/components/public/empreendimentos/catalogo-filtros";
+import { SeloTag } from "@/components/public/selo-tag";
 import { SiteFooter } from "@/components/public/site-footer";
 
 export const metadata: Metadata = {
@@ -43,12 +45,13 @@ export default async function EmpreendimentosPage({
     categoria: sp.tipo || undefined,
   };
 
-  const [slides, todos, lista, bairros, categorias] = await Promise.all([
+  const [slides, todos, lista, bairros, categorias, seloCfg] = await Promise.all([
     todosSlides(),
     buscarGlass({}),
     buscarGlass(filtros),
     listarBairros(),
     listarCategorias(),
+    lerSeloConfig(),
   ]);
 
   return (
@@ -97,6 +100,7 @@ export default async function EmpreendimentosPage({
               >
                 <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#e9edf3]">
                   <Image src={e.img || "/placeholder-card.jpg"} alt={e.nome} fill sizes="(max-width: 640px) 100vw, 64vw" loading="lazy" className="object-cover transition-transform duration-[800ms] ease-premium group-hover:scale-[1.06]" />
+                  {e.seloUrl && <SeloTag url={e.seloUrl} config={seloCfg} />}
                   <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
                 <div className="flex flex-col justify-between px-8 py-9">

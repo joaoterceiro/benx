@@ -10,6 +10,7 @@ import {
 } from "@/db/queries";
 import { getUrl } from "@/lib/storage";
 import { statusObraLabel, tipoHabitacaoLabel } from "@/lib/labels";
+import { seloUrlPorTipo } from "@/lib/selo";
 import { LeadForm } from "@/components/public/lead-form";
 import { CardEmpreendimento } from "@/components/public/card-empreendimento";
 import { ProdutoBenx, type ProdutoBenxDados } from "@/components/public/produto/produto-benx";
@@ -125,12 +126,7 @@ export default async function EmpreendimentoPage({
       : undefined;
 
     // Selo Prefeitura de SP conforme a classificação do imóvel (Viva Benx).
-    const SELO_POR_TIPO: Record<string, string> = {
-      his: "/selos/his.jpg",
-      hmp: "/selos/hmp.jpg",
-      his_e_hmp: "/selos/his-hmp.jpg",
-    };
-    const selo = ehViva && e.tipoHabitacao ? SELO_POR_TIPO[e.tipoHabitacao] ?? null : null;
+    const selo = ehViva ? seloUrlPorTipo(e.tipoHabitacao) : null;
 
     const dados: ProdutoBenxDados = {
       nome: e.nome,

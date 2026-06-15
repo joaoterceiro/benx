@@ -25,7 +25,7 @@ export const STATUS_OBRA_BASE = [
   "pronto_para_morar",
   "entregue",
 ] as const;
-export const TIPO_HABITACAO_BASE = ["his", "hmp", "his_e_hmp"] as const;
+export const TIPO_HABITACAO_BASE = ["his", "his_2", "hmp", "his_e_hmp"] as const;
 
 export const tipoMidiaEnum = pgEnum("tipo_midia", [
   "imagem",

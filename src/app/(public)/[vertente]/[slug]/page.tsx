@@ -11,6 +11,8 @@ import {
 import { getUrl } from "@/lib/storage";
 import { statusObraLabel, tipoHabitacaoLabel } from "@/lib/labels";
 import { seloUrlPorTipo } from "@/lib/selo";
+import { lerInfoHabitacao } from "@/lib/config";
+import { chaveInfoPorTipo } from "@/lib/info-habitacao";
 import { LeadForm } from "@/components/public/lead-form";
 import { CardEmpreendimento } from "@/components/public/card-empreendimento";
 import { ProdutoBenx, type ProdutoBenxDados } from "@/components/public/produto/produto-benx";
@@ -128,6 +130,10 @@ export default async function EmpreendimentoPage({
     // Selo Prefeitura de SP conforme a classificação do imóvel (Viva Benx).
     const selo = ehViva ? seloUrlPorTipo(e.tipoHabitacao) : null;
 
+    // Informações importantes (HIS/HMP), editáveis no admin (fallback nos defaults).
+    const chaveInfo = ehViva ? chaveInfoPorTipo(e.tipoHabitacao) : null;
+    const infoHabitacao = chaveInfo ? (await lerInfoHabitacao())[chaveInfo] : null;
+
     const dados: ProdutoBenxDados = {
       nome: e.nome,
       subtitulo: limpar(e.subtitulo),
@@ -160,7 +166,7 @@ export default async function EmpreendimentoPage({
       relacionados: relCards.map((r) => ({ href: r.href, nome: r.nome, statusLabel: r.statusLabel, urlImagem: r.urlImagem })),
       marca: ehViva ? "vivabenx" : "benx",
       his: hisLabel,
-      tipoHabitacao: ehViva ? e.tipoHabitacao : null,
+      infoHabitacao,
       selo,
       homeHref: `/${vertente}`,
     };

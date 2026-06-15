@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { infoHabitacaoPorTipo } from "@/lib/info-habitacao";
+import type { VarianteInfo } from "@/lib/info-habitacao";
 
-// Seção colapsável com as "Informações importantes" sobre HIS/HMP, conforme o
-// tipo de habitação do empreendimento (Viva Benx). Cada pergunta é um acordeão.
-export function InfoHabitacao({ tipo, cor = "#0a2a66" }: { tipo?: string | null; cor?: string }) {
-  const variante = infoHabitacaoPorTipo(tipo);
+// Seção colapsável com as "Informações importantes" sobre HIS/HMP (conteúdo já
+// resolvido pelo server). Cada pergunta é um acordeão.
+export function InfoHabitacao({ variante, cor = "#0a2a66" }: { variante?: VarianteInfo | null; cor?: string }) {
   const [aberto, setAberto] = useState<number | null>(null);
-  if (!variante) return null;
+  if (!variante || variante.secoes.length === 0) return null;
 
   return (
     <section className="mx-auto w-full max-w-site px-6 py-12">

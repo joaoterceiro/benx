@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { configuracoes } from "@/db/schema";
 import { logger } from "@/lib/logger";
 import { SELO_CONFIG_PADRAO, type SeloConfig, type SeloPosicao } from "@/lib/selo";
+import { INFO_DEFAULTS, INFO_CHAVES, type ChaveInfo, type VarianteInfo } from "@/lib/info-habitacao";
 
 // Configurações globais do site, editáveis no admin (tabela key-value).
 export interface SiteConfig {
@@ -67,4 +68,34 @@ export async function lerSeloConfig(): Promise<SeloConfig> {
     margem: num(map["selo_margem"], SELO_CONFIG_PADRAO.margem, 0, 40),
     opacidade: num(map["selo_opacidade"], SELO_CONFIG_PADRAO.opacidade, 20, 100),
   };
+}
+
+function parseVariante(raw?: string): VarianteInfo | null {
+  if (!raw) return null;
+  try {
+    const o = JSON.parse(raw) as { titulo?: unknown; secoes?: unknown };
+    if (typeof o?.titulo !== "string" || !Array.isArray(o.secoes)) return null;
+    const secoes = (o.secoes as unknown[])
+      .filter((s): s is { q: string; html: string } => !!s && typeof (s as { q?: unknown }).q === "string" && typeof (s as { html?: unknown }).html === "string")
+      .map((s) => ({ q: s.q, html: s.html }));
+    return { titulo: o.titulo, secoes };
+  } catch {
+    return null;
+  }
+}
+
+// Conteúdo "Informações importantes" (HIS/HMP) editável no admin; fallback nos defaults.
+export async function lerInfoHabitacao(): Promise<Record<ChaveInfo, VarianteInfo>> {
+  let map: Record<string, string> = {};
+  try {
+    const rows = await db.select().from(configuracoes);
+    map = Object.fromEntries(rows.map((r) => [r.chave, r.valor ?? ""]));
+  } catch (err) {
+    logger.warn({ err, action: "ler_info_habitacao" }, "usando info de habitação padrão");
+  }
+  const out = {} as Record<ChaveInfo, VarianteInfo>;
+  (Object.keys(INFO_CHAVES) as ChaveInfo[]).forEach((k) => {
+    out[k] = parseVariante(map[INFO_CHAVES[k]]) ?? INFO_DEFAULTS[k];
+  });
+  return out;
 }

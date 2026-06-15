@@ -80,13 +80,32 @@ const HMP: VarianteInfo = {
   ],
 };
 
+export type ChaveInfo = "his_hmp" | "his" | "hmp";
+
+// Conteúdo padrão (usado como fallback quando o admin não editou ainda).
+export const INFO_DEFAULTS: Record<ChaveInfo, VarianteInfo> = { his_hmp: HIS_HMP, his: HIS, hmp: HMP };
+
+// Chaves na tabela configuracoes (uma por variante).
+export const INFO_CHAVES: Record<ChaveInfo, string> = {
+  his_hmp: "info_habitacao_his_hmp",
+  his: "info_habitacao_his",
+  hmp: "info_habitacao_hmp",
+};
+
+// Rótulos das variantes (para o admin).
+export const INFO_VARIANTES: { chave: ChaveInfo; label: string }[] = [
+  { chave: "his_hmp", label: "HIS e HMP" },
+  { chave: "his", label: "HIS" },
+  { chave: "hmp", label: "HMP" },
+];
+
 // Mapeia o tipo de habitação do empreendimento para a variante de conteúdo.
-export function infoHabitacaoPorTipo(tipo?: string | null): VarianteInfo | null {
+export function chaveInfoPorTipo(tipo?: string | null): ChaveInfo | null {
   switch (tipo) {
-    case "his_e_hmp": return HIS_HMP;
+    case "his_e_hmp": return "his_hmp";
     case "his":
-    case "his_2": return HIS;
-    case "hmp": return HMP;
+    case "his_2": return "his";
+    case "hmp": return "hmp";
     default: return null;
   }
 }

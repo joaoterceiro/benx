@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/public/site-footer";
 import { ProdutoHeader } from "./produto-header";
 import { AnchorNav, Carrossel, GaleriaCarrossel, PlantasLista, PontosCarrossel, Compartilhar, VideoFacade, type PlantaItem } from "./interativos";
 import { InfoHabitacao } from "./info-habitacao";
+import type { VarianteInfo } from "@/lib/info-habitacao";
 
 // Paletas por marca. A página de produto é a mesma; só muda o tema.
 const TEMAS = {
@@ -44,8 +45,8 @@ export interface ProdutoBenxDados {
   marca?: Marca;
   /** Rótulo do tipo de habitação social (ex.: "HIS", "HIS e HMP"). Mostra o banner amarelo quando presente. */
   his?: string;
-  /** Tipo de habitação cru (his/his_2/hmp/his_e_hmp) para as Informações importantes. */
-  tipoHabitacao?: string | null;
+  /** Variante de "Informações importantes" (HIS/HMP) já resolvida pelo server. */
+  infoHabitacao?: VarianteInfo | null;
   selo?: string | null;
   homeHref?: string;
 }
@@ -314,7 +315,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
       )}
 
       {/* INFORMAÇÕES IMPORTANTES (HIS/HMP) — colapsável, conforme o tipo */}
-      <InfoHabitacao tipo={d.tipoHabitacao} cor={tema.titulo} />
+      <InfoHabitacao variante={d.infoHabitacao} cor={tema.titulo} />
 
       {/* OUTROS DESTAQUES */}
       {d.relacionados.length > 0 && (

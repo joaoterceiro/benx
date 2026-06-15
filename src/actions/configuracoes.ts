@@ -11,6 +11,11 @@ export interface ConfigInput {
   whatsappAtivo: boolean;
   whatsappTexto: string;
   whatsappMensagem: string;
+  atendStatus: string;
+  atendTelefone: string;
+  atendEmail: string;
+  atendCanal: string;
+  atendCanalHorario: string;
 }
 
 export async function salvarConfiguracoes(
@@ -23,6 +28,11 @@ export async function salvarConfiguracoes(
     ["whatsapp_ativo", input.whatsappAtivo ? "true" : "false"],
     ["whatsapp_texto", (input.whatsappTexto ?? "").trim()],
     ["whatsapp_mensagem", (input.whatsappMensagem ?? "").trim()],
+    ["atend_status", (input.atendStatus ?? "").trim()],
+    ["atend_telefone", (input.atendTelefone ?? "").trim()],
+    ["atend_email", (input.atendEmail ?? "").trim()],
+    ["atend_canal", (input.atendCanal ?? "").trim()],
+    ["atend_canal_horario", (input.atendCanalHorario ?? "").trim()],
   ];
   try {
     for (const [chave, valor] of pares) {

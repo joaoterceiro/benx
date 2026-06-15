@@ -9,7 +9,7 @@ import { BackToTop } from "@/components/public/whatsapp-float";
 import { MenuOverlay } from "@/components/public/menu-overlay";
 import { BuscaGlass } from "@/components/public/busca-glass";
 import { CookieConsent } from "@/components/public/cookie-consent";
-import { ContactLauncher } from "@/components/public/contact-launcher";
+import { ContactLauncher, type ContactChannel } from "@/components/public/contact-launcher";
 import { ScrollReveal } from "@/components/public/scroll-reveal";
 import { logWarn } from "@/lib/log-context";
 
@@ -36,10 +36,13 @@ export default async function PublicLayout({
   } catch (err) { await logWarn({ err, action: "carregar_dados_busca" }, "dados de busca indisponíveis no boot"); }
   const legal = await unstable_cache(lerLegal, ["pub-legal"], { revalidate: 300, tags: ["config", "legal"] })();
 
-  // WhatsApp do launcher: número/mensagem reais da config (fallback p/ o número de marca).
+  // Launcher de Atendimento: canais e textos vêm da config (admin → Atendimento).
   const waDigits = (cfg.whatsappNumero || "5511944431066").replace(/\D/g, "");
   const waMsg = cfg.whatsappMensagem?.replace(/\s*\{empreendimento\}/gi, "").trim() || "Olá, vi o Portal Benx e gostaria de mais informações.";
-  const waHref = `https://wa.me/${waDigits}?text=${encodeURIComponent(waMsg)}`;
+  const canais: ContactChannel[] = [];
+  if (waDigits) canais.push({ id: "whatsapp", sup: "Vendas via", main: "WhatsApp", icon: "whatsapp", href: `https://wa.me/${waDigits}?text=${encodeURIComponent(waMsg)}` });
+  if (cfg.atendTelefone.trim()) canais.push({ id: "phone", sup: "Central de vendas", main: cfg.atendTelefone.trim(), icon: "phone", href: `tel:${cfg.atendTelefone.replace(/\D/g, "")}` });
+  if (cfg.atendEmail.trim()) canais.push({ id: "email", sup: "Vendas por", main: "E-mail", icon: "mail", href: `mailto:${cfg.atendEmail.trim()}` });
 
   return (
     <>
@@ -48,17 +51,15 @@ export default async function PublicLayout({
       <MenuOverlay itens={menu.itens} config={menu.config} />
       {buscaDados && <BuscaGlass dados={buscaDados} config={buscaConfig} />}
       <BackToTop />
-      <ContactLauncher
-        channels={[
-          { id: "whatsapp", sup: "Vendas via", main: "WhatsApp", icon: "whatsapp", href: waHref },
-          { id: "phone", sup: "Central de vendas", main: "0800 729 1981", icon: "phone", href: "tel:08007291981" },
-          { id: "email", sup: "Vendas por", main: "E-mail", icon: "mail", href: "mailto:vendas@benx.com.br" },
-        ]}
-        phone2="4003-8503"
-        phone2Label="Canal de Atendimento"
-        phone2Hours="Seg - Sex · 9:00 às 17:00"
-        statusText="Online · Equipe disponível agora"
-      />
+      {cfg.whatsappAtivo && canais.length > 0 && (
+        <ContactLauncher
+          channels={canais}
+          phone2={cfg.atendCanal.trim() || undefined}
+          phone2Label="Canal de Atendimento"
+          phone2Hours={cfg.atendCanalHorario.trim() || undefined}
+          statusText={cfg.atendStatus}
+        />
+      )}
       <CookieConsent cookiesTexto={legal.cookiesTexto} politicaHtml={sanitizarHtml(legal.politica)} />
     </>
   );

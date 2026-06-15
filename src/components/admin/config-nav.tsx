@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 // Seções de configuração. Para adicionar uma nova, crie a sub-rota em
 // src/app/(admin)/admin/configuracoes/<slug>/page.tsx e some aqui.
 const SECOES = [
-  { href: "/admin/configuracoes/whatsapp", label: "WhatsApp", icon: MessageCircle },
+  { href: "/admin/configuracoes/whatsapp", label: "Atendimento", icon: MessageCircle },
   { href: "/admin/configuracoes/menu", label: "Menu", icon: Menu },
   { href: "/admin/configuracoes/busca", label: "Busca", icon: Search },
   { href: "/admin/configuracoes/splash", label: "Splash / Home", icon: MonitorPlay },

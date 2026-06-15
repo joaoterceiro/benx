@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { HeroSlideResolvido } from "@/db/queries";
+import { seloPosClasses, type SeloConfig } from "@/lib/selo";
 
 const COL = "mx-auto w-full max-w-site px-6";
 
-export function HeroSlider({ slides }: { slides: HeroSlideResolvido[] }) {
+export function HeroSlider({ slides, seloConfig }: { slides: HeroSlideResolvido[]; seloConfig?: SeloConfig }) {
   const [i, setI] = useState(0);
   const [pausado, setPausado] = useState(false);
   const total = slides.length;
@@ -50,6 +51,16 @@ export function HeroSlider({ slides }: { slides: HeroSlideResolvido[] }) {
             />
           ) : <div className="absolute inset-0 bg-neutral-800" />}
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/35" />
+          {/* selo de habitação (Viva Benx): canto conforme config; tamanho fixo no hero */}
+          {s.seloUrl && seloConfig && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={s.seloUrl}
+              alt="Selo Prefeitura de São Paulo"
+              className={`pointer-events-none absolute z-10 h-auto w-24 sm:w-32 ${seloPosClasses(seloConfig.posicao)}`}
+              style={{ margin: `${seloConfig.margem + 8}px`, opacity: seloConfig.opacidade / 100 }}
+            />
+          )}
         </div>
       ))}
 

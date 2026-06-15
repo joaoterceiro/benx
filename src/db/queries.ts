@@ -453,6 +453,7 @@ export interface HeroSlideResolvido {
   botaoTexto: string;
   tags: string[];
   duracao: number; // segundos
+  seloUrl: string | null; // selo de habitação (só Viva Benx), resolvido pelo empreendimento do slide
 }
 
 // Opções de empreendimento para autocomplete no cadastro de slide.
@@ -529,8 +530,10 @@ export async function slidesDaVertente(local: string): Promise<HeroSlideResolvid
     .orderBy(asc(heroSlides.ordem), asc(heroSlides.criadoEm));
   const rows = todos.filter((s) => (s.locais ?? []).includes(local));
 
-  // Mapa nome -> tags do empreendimento (status + bairro), para slides sem tags próprias.
+  // Mapas nome -> tags / selo do empreendimento, para enriquecer o slide pelo título.
   const tagsPorNome = new Map<string, string[]>();
+  const seloPorNome = new Map<string, string | null>();
+  const ehViva = local === "vivabenx";
   const linhaId = await linhaIdPorValue(local);
   if (linhaId) {
     const emps = await db.query.empreendimentos.findMany({
@@ -540,6 +543,7 @@ export async function slidesDaVertente(local: string): Promise<HeroSlideResolvid
     for (const e of emps) {
       const tags = [statusObraLabel(e.statusObra), e.bairro?.nome ?? ""].filter(Boolean);
       tagsPorNome.set(e.nome.trim().toLowerCase(), tags);
+      if (ehViva) seloPorNome.set(e.nome.trim().toLowerCase(), seloUrlPorTipo(e.tipoHabitacao));
     }
   }
 
@@ -553,6 +557,7 @@ export async function slidesDaVertente(local: string): Promise<HeroSlideResolvid
       botaoTexto: s.botaoTexto || "Conheça",
       tags: (s.tags && s.tags.length) ? s.tags : (tagsPorNome.get(s.titulo.trim().toLowerCase()) ?? []),
       duracao: s.duracao && s.duracao > 0 ? s.duracao : 6,
+      seloUrl: ehViva ? (seloPorNome.get(s.titulo.trim().toLowerCase()) ?? null) : null,
     }))
   );
 }
@@ -575,6 +580,7 @@ export async function todosSlides(): Promise<HeroSlideResolvido[]> {
       botaoTexto: s.botaoTexto || "Conheça",
       tags: s.tags ?? [],
       duracao: s.duracao && s.duracao > 0 ? s.duracao : 6,
+      seloUrl: null,
     }))
   );
 }

@@ -91,7 +91,7 @@ export default async function HomeVertentePage({
       <div className="relative">
         <JornalTopo marca={ehViva ? "vivabenx" : "benx"} homeHref={`/${vertente}`} />
         {slides.length > 0 ? (
-          <HeroSlider slides={slides} />
+          <HeroSlider slides={slides} seloConfig={ehViva ? seloCfg : undefined} />
         ) : (
           <div className="h-20 bg-[#0A2A66]" />
         )}

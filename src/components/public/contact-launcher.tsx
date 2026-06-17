@@ -74,9 +74,11 @@ export function ContactLauncher({
           {aberto ? (
             <X size={22} />
           ) : (
-            <svg width="24" height="24" viewBox="0 0 256 256" fill="none" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <path d="M224,200v8a32,32,0,0,1-32,32H136" />
-              <path d="M224,128H192a16,16,0,0,0-16,16v40a16,16,0,0,0,16,16h32V128a96,96,0,1,0-192,0v56a16,16,0,0,0,16,16H64a16,16,0,0,0,16-16V144a16,16,0,0,0-16-16H32" />
+            <svg width="24" height="24" viewBox="0 0 256 256" aria-hidden>
+              <circle cx="128" cy="128" r="12" fill="currentColor" />
+              <circle cx="84" cy="128" r="12" fill="currentColor" />
+              <circle cx="172" cy="128" r="12" fill="currentColor" />
+              <path d="M79.93,211.11a96,96,0,1,0-35-35h0L32.42,213.46a8,8,0,0,0,10.12,10.12l37.39-12.47Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16" />
             </svg>
           )}
         </span>

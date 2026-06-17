@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Copy, Eye, EyeOff, Trash2, Loader2, Building2, SearchX } from "lucide-react";
-import { excluirEmpreendimento, duplicarEmpreendimento, definirVisibilidadeEmLote, excluirEmLote } from "@/actions/empreendimentos";
+import { Copy, Eye, EyeOff, Trash2, Loader2, Building2, SearchX, ArrowLeftRight } from "lucide-react";
+import { excluirEmpreendimento, duplicarEmpreendimento, definirVisibilidadeEmLote, excluirEmLote, mudarVertenteEmLote } from "@/actions/empreendimentos";
+import { listarVertentes, type VertenteValue } from "@/lib/ecossistema";
 import { useConfirm } from "@/components/admin/confirm-dialog";
 import { EmptyState } from "@/components/admin/empty-state";
 import { StatusBadge, toneStatusLabel } from "@/components/admin/status-badge";
@@ -137,6 +138,19 @@ export function EmpreendimentosTable({ itens }: { itens: LinhaTabela[] }) {
       else toast.error(r.erro ?? "Falha.");
     });
   }
+  async function mudarVertente(vertente: VertenteValue) {
+    const alvo = listarVertentes().find((v) => v.value === vertente);
+    const ok = await confirmar({
+      titulo: `Mover ${selecionados.length} empreendimento(s) para ${alvo?.label}?`,
+      descricao: "Os selecionados passam a pertencer a esta vertente e deixam de aparecer na vertente atual. URL pública, listagens, busca e selo são atualizados.",
+    });
+    if (!ok) return;
+    startTransition(async () => {
+      const r = await mudarVertenteEmLote(selecionados, vertente);
+      if (r.ok) { setSel(new Set()); router.refresh(); toast.success(`Movido(s) para ${alvo?.label}.`); }
+      else toast.error(r.erro ?? "Falha ao mudar vertente.");
+    });
+  }
   async function excluirLote() {
     const ok = await confirmar({
       titulo: `Excluir ${selecionados.length} empreendimento(s)?`,
@@ -186,6 +200,19 @@ export function EmpreendimentosTable({ itens }: { itens: LinhaTabela[] }) {
           <span className="mx-1 h-4 w-px bg-border" />
           <button onClick={() => visibilidadeLote(true)} disabled={pending} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-[12px] font-medium transition hover:bg-muted disabled:opacity-40"><Eye size={14} /> Publicar</button>
           <button onClick={() => visibilidadeLote(false)} disabled={pending} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-[12px] font-medium transition hover:bg-muted disabled:opacity-40"><EyeOff size={14} /> Ocultar</button>
+          <label className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-[12px] font-medium transition focus-within:ring-1 focus-within:ring-accent hover:bg-muted has-[:disabled]:opacity-40">
+            <ArrowLeftRight size={14} />
+            <select
+              value=""
+              disabled={pending}
+              onChange={(e) => { const v = e.target.value as VertenteValue | ""; if (v) mudarVertente(v); }}
+              aria-label="Mudar vertente dos selecionados"
+              className="cursor-pointer bg-transparent pr-1 outline-none disabled:cursor-not-allowed [&>option]:bg-surface [&>option]:text-foreground"
+            >
+              <option value="" disabled>Mudar vertente…</option>
+              {listarVertentes().map((v) => <option key={v.value} value={v.value}>{v.label}</option>)}
+            </select>
+          </label>
           <button onClick={excluirLote} disabled={pending} className="inline-flex items-center gap-1.5 rounded-md border border-error/30 bg-surface px-2.5 py-1 text-[12px] font-medium text-error transition hover:bg-error/10 disabled:opacity-40"><Trash2 size={14} /> Excluir</button>
           <button onClick={() => setSel(new Set())} className="ml-auto text-[12px] font-medium text-accent hover:underline">Limpar seleção</button>
         </div>

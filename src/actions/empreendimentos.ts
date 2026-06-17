@@ -9,6 +9,8 @@ import { uploadMidia } from "@/lib/storage";
 import { getSessao } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
 import { logError } from "@/lib/log-context";
+import { linhaIdPorValue } from "@/db/queries";
+import { vertentePorValue, type VertenteValue } from "@/lib/ecossistema";
 import {
   persistirEmpreendimento,
   type SalvarPayload,
@@ -123,6 +125,49 @@ export async function definirVisibilidadeEmLote(ids: string[], visivel: boolean)
   } catch (err) {
     await logError({ err, action: "empreendimentos" }, "Falha ao atualizar");
     return { ok: false, erro: "Falha ao atualizar" };
+  }
+}
+
+// Ação em lote: muda a vertente (categoria) de vários empreendimentos.
+// Troca o linhaProdutoId: o empreendimento deixa de aparecer na vertente
+// antiga e passa a aparecer na nova (URL pública, listagens, busca e selo
+// derivam todos do linhaProdutoId). Revalida as rotas antiga e nova.
+export async function mudarVertenteEmLote(
+  ids: string[],
+  vertente: VertenteValue
+): Promise<{ ok: boolean; erro?: string }> {
+  if (!(await getSessao())) return { ok: false, erro: "Não autenticado" };
+  if (!ids.length) return { ok: true };
+  const destino = vertentePorValue(vertente);
+  if (!destino) return { ok: false, erro: "Vertente inválida" };
+  try {
+    const linhaId = await linhaIdPorValue(vertente);
+    if (!linhaId) return { ok: false, erro: "Vertente não encontrada" };
+
+    const { inArray } = await import("drizzle-orm");
+    // Rotas antigas (slug do empreendimento + vertente atual) para revalidar.
+    const afetados = await db.query.empreendimentos.findMany({
+      where: inArray(empreendimentos.id, ids),
+      columns: { slug: true },
+      with: { linhaProduto: { columns: { slug: true } } },
+    });
+
+    await db.update(empreendimentos).set({ linhaProdutoId: linhaId }).where(inArray(empreendimentos.id, ids));
+    await cacheInvalidate("busca:");
+    revalidatePath("/admin/empreendimentos");
+
+    const rota = (value: string) => vertentePorValue(value)?.slug ?? value;
+    const rotasTocadas = new Set<string>([destino.slug]);
+    for (const e of afetados) {
+      const antiga = rota(e.linhaProduto?.slug ?? "");
+      if (antiga) { rotasTocadas.add(antiga); revalidatePath(`/${antiga}/${e.slug}`); }
+      revalidatePath(`/${destino.slug}/${e.slug}`);
+    }
+    for (const r of rotasTocadas) revalidatePath(`/${r}`);
+    return { ok: true };
+  } catch (err) {
+    await logError({ err, action: "empreendimentos" }, "Falha ao mudar vertente");
+    return { ok: false, erro: "Falha ao mudar vertente" };
   }
 }
 

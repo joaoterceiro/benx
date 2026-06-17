@@ -8,11 +8,11 @@ type No = { texto: string; url: string; filhos?: { texto: string; url: string }[
 const ARVORE: No[] = [
   { texto: "Home", url: "/" },
   { texto: "Origem e Propósito", url: "/origem-proposito" },
-  { texto: "Cliente", url: "/portal-do-cliente" },
-  { texto: "Mentes Criativas", url: "/mentes-criativas" },
+  { texto: "Portal do Cliente", url: "/portal-do-cliente" },
+  { texto: "Arquitetos que inspiram", url: "/mentes-criativas" },
   { texto: "Parque Global", url: "/parque-global" },
   { texto: "Empreendimentos Benx", url: "/benx" },
-  { texto: "Ícones Benx", url: "/iconicos" },
+  { texto: "Benx Icônicos", url: "/iconicos" },
   { texto: "Viva Benx", url: "/vivabenx" },
   {
     texto: "Fale com a Benx", url: "#",

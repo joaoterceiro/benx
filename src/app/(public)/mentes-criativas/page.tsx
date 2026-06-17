@@ -7,7 +7,7 @@ import { Carrossel } from "@/components/public/produto/interativos";
 import { ArquitetosLista, type Arquiteto } from "@/components/public/mentes/arquitetos-lista";
 
 export const metadata: Metadata = {
-  title: "Mentes Criativas",
+  title: "Arquitetos que inspiram",
   description:
     "Arquitetos que inspiram. Conheça os arquitetos, designers e paisagistas por trás dos empreendimentos Benx: Jacobsen, Lissoni & Partners, Gensler, Triptyque e Enea.",
 };

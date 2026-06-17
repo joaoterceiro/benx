@@ -10,9 +10,11 @@ import { seloPosClasses, type SeloConfig } from "@/lib/selo";
 export function SeloTag({ url, config }: { url: string; config: SeloConfig }) {
   const [expandido, setExpandido] = useState(false);
 
-  // Reduzido para ~55% do tamanho configurado; expandido volta ao tamanho cheio.
+  // Reduzido para ~55% do tamanho configurado; expandido amplia bem (até 88% da
+  // largura da card) para leitura confortável.
   const larguraReduzida = Math.max(18, Math.round(config.tamanho * 0.55));
-  const largura = expandido ? config.tamanho : larguraReduzida;
+  const larguraExpandida = Math.min(88, Math.round(config.tamanho * 1.9));
+  const largura = expandido ? larguraExpandida : larguraReduzida;
 
   const alternar = (e: SyntheticEvent) => {
     e.preventDefault();

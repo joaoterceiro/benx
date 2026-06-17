@@ -143,6 +143,9 @@ export function EmpreendimentosTable({ itens }: { itens: LinhaTabela[] }) {
     const ok = await confirmar({
       titulo: `Mover ${selecionados.length} empreendimento(s) para ${alvo?.label}?`,
       descricao: "Os selecionados passam a pertencer a esta vertente e deixam de aparecer na vertente atual. URL pública, listagens, busca e selo são atualizados.",
+      digitar: false,
+      tom: "neutro",
+      confirmLabel: `Mover para ${alvo?.label}`,
     });
     if (!ok) return;
     startTransition(async () => {

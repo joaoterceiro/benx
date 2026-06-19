@@ -230,7 +230,7 @@ export default async function HomeVertentePage({
 
           {/* 2. Conheça nossa linha {X}: cross-promo para outra vertente */}
           {promoCards.length > 0 && promoInfo && (
-            <section className={`${COL} py-20`}>
+            <section className={`${COL} pt-12 pb-20`}>
               <Reveal className="grid items-center gap-10 lg:grid-cols-[1fr_1.5fr]">
                 <div>
                   <h2 className="text-[34px] font-light leading-[1.05] tracking-tight text-[#0A2A66] sm:text-[52px] lg:text-[60px]">

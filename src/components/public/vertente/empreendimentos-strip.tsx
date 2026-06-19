@@ -119,7 +119,7 @@ export function EmpreendimentosStrip({
             {c.seloUrl && seloConfig && !isSeloBottom(seloConfig.posicao) && <SeloTag url={c.seloUrl} config={seloConfig} />}
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
             {c.statusLabel && (
-              <span className="absolute right-5 top-6 whitespace-nowrap border border-white/70 px-5 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
+              <span className="absolute right-[clamp(10px,1.4vw,20px)] top-[clamp(12px,1.6vw,24px)] whitespace-nowrap border border-white/70 px-[clamp(10px,1.1vw,16px)] py-[clamp(4px,0.5vw,7px)] text-[clamp(9px,0.8vw,11px)] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm">
                 {c.statusLabel}
               </span>
             )}

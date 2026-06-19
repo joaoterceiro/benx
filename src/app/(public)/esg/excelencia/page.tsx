@@ -7,14 +7,6 @@ export const metadata: Metadata = {
   description: "Qualidade transversal, Sistema de Gestão Integrada (SGI) e certificações que reforçam o compromisso da Benx com a excelência.",
 };
 
-// Itens em volta do diagrama "Inovação / Otimização / Excelência".
-const DIAGRAMA = [
-  { titulo: "Qualidade", texto: "Normas, processos e conformidade técnica." },
-  { titulo: "Assistência técnica", texto: "Dados operacionais, pós-obra e manutenção." },
-  { titulo: "Gestão de clientes", texto: "Feedback, jornada e expectativas reais." },
-  { titulo: "Estratégia de personalização", texto: "Atender demandas específicas dos nossos clientes de alto padrão e luxo." },
-];
-
 // Certificações (logo + rótulo) em cards navy.
 const CERTS = [
   { nome: "AQUA-HQE™", logo: "/esg/aqua.png" },
@@ -26,7 +18,7 @@ const CERTS = [
 // Logos institucionais (norma / programa / sistema).
 const SELOS = [
   { src: "/esg/iso-45001.png", alt: "ISO 45001:2018" },
-  { src: "/esg/Group-1000006060.png", alt: "PBQP-H" },
+  { src: "/esg/pbqp-h.png", alt: "PBQP-H" },
   { src: "/esg/polit-sgi_ima-02.png", alt: "Sistema de Gestão Integrada (SGI)" },
 ];
 
@@ -78,24 +70,14 @@ export default function EsgExcelenciaPage() {
             </div>
           </div>
 
-          {/* diagrama: anel + itens */}
-          <div className="flex items-center justify-center gap-8 sm:gap-10">
-            <div className="relative grid h-44 w-44 shrink-0 place-items-center rounded-full border-[6px] border-[#dfe4ec] sm:h-52 sm:w-52">
-              <p className="text-center text-[12px] font-semibold uppercase leading-tight tracking-[0.06em] sm:text-[14px]" style={{ color: NAVY }}>
-                Inovação<br />Otimização<br />Excelência
-              </p>
-            </div>
-            <ul className="flex max-w-[260px] flex-col gap-5">
-              {DIAGRAMA.map((d) => (
-                <li key={d.titulo} className="flex gap-3">
-                  <span className="mt-[7px] h-2 w-2 shrink-0 rounded-full" style={{ background: NAVY }} />
-                  <div>
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.08em]" style={{ color: NAVY }}>{d.titulo}</p>
-                    <p className="mt-0.5 text-[13px] leading-snug text-[#5a6577]">{d.texto}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+          {/* diagrama (imagem pronta) */}
+          <div className="flex justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/esg/diagrama-excelencia.png"
+              alt="Inovação, otimização e excelência: qualidade, assistência técnica, gestão de clientes e estratégia de personalização"
+              className="h-auto w-full max-w-[540px]"
+            />
           </div>
         </Reveal>
       </section>

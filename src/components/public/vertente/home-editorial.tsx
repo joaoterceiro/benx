@@ -72,7 +72,7 @@ export function HomeEditorial() {
                     src={a.foto}
                     alt={a.nome}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-all duration-[700ms] ease-[cubic-bezier(.2,0,.2,1)] group-hover:scale-[1.04] group-hover:grayscale-0"
+                    className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[700ms] ease-[cubic-bezier(.2,0,.2,1)] group-hover:scale-[1.04]"
                   />
                   <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0f1218]/85 via-[#0f1218]/15 to-transparent opacity-0 transition-opacity duration-[450ms] group-hover:opacity-100" />
                   <div className="pointer-events-none absolute inset-x-[18px] bottom-[18px] translate-y-3 opacity-0 transition-all duration-[450ms] ease-out group-hover:translate-y-0 group-hover:opacity-100">

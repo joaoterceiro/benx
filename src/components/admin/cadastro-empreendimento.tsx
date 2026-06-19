@@ -6,6 +6,8 @@ import "./cadastro.css";
 import { salvarEmpreendimento, type SalvarPayload } from "@/actions/empreendimentos";
 import { enviarImagemComProgresso } from "@/lib/upload-client";
 import { humanizar } from "@/lib/labels";
+import { toast } from "sonner";
+import { AlertTriangle } from "lucide-react";
 
 // ════════════════════════════════════════════════════════════════════════
 // Cadastro de Empreendimento — porte fiel do protótipo, integrado ao backend.
@@ -257,22 +259,39 @@ export function CadastroEmpreendimento({
       if (errosPorTab.basico) setTab("basico");
       else if (errosPorTab.midias) setTab("midias");
       else if (errosPorTab.localizacao) setTab("localizacao");
-      setErroGeral(erros.galeriaFachada ? "Adicione no mínimo 3 imagens na galeria de Fachada para salvar." : "Revise os campos obrigatórios.");
+      const msg = erros.galeriaFachada
+        ? "Adicione no mínimo 3 imagens na galeria de Fachada para salvar."
+        : "Revise os campos obrigatórios destacados antes de salvar.";
+      setErroGeral(msg);
+      toast.error(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setEstado("salvando");
-    const r = await salvarEmpreendimento(empId, montarPayload());
-    if (r.ok) {
-      setEmpId(r.id);
-      setEstado("sucesso");
-      setDirty(false);
-      setSalvoUmaVez(true);
-      router.refresh();
-      setTimeout(() => setEstado("idle"), 2600);
-    } else {
+    try {
+      const r = await salvarEmpreendimento(empId, montarPayload());
+      if (r.ok) {
+        setEmpId(r.id);
+        setEstado("sucesso");
+        setDirty(false);
+        setSalvoUmaVez(true);
+        router.refresh();
+        toast.success("Empreendimento salvo.");
+        setTimeout(() => setEstado("idle"), 2600);
+      } else {
+        const msg = r.erro || "Não foi possível salvar. Tente novamente.";
+        setEstado("erro");
+        setErroGeral(msg);
+        toast.error(msg);
+        if (r.campos?.nome || r.campos?.linhaProduto) setTab("basico");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch (e) {
       setEstado("erro");
-      setErroGeral(r.erro);
-      if (r.campos?.nome || r.campos?.linhaProduto) setTab("basico");
+      setErroGeral("Erro inesperado ao salvar. Verifique a sua conexão e tente novamente.");
+      toast.error("Erro ao salvar. Tente novamente.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      console.error("Falha ao salvar empreendimento:", e);
     }
   }
 
@@ -324,7 +343,12 @@ export function CadastroEmpreendimento({
       <div className="bx-body">
         <main className="bx-form">
           <p className="bx-tab-desc">{TABS[idx]?.desc}</p>
-          {erroGeral ? <p className="bx-err" style={{ marginBottom: 12 }}>{erroGeral}</p> : null}
+          {erroGeral ? (
+            <div role="alert" style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 14, padding: "12px 14px", borderRadius: 10, background: "rgba(225,29,42,0.10)", border: "1px solid rgba(225,29,42,0.35)" }}>
+              <AlertTriangle size={18} style={{ flexShrink: 0, marginTop: 1, color: "#F2555A" }} />
+              <span style={{ fontSize: 13, lineHeight: 1.5, color: "#f3b0b3" }}>{erroGeral}</span>
+            </div>
+          ) : null}
           <div className="bx-card">
 
             {tab === "basico" && (
@@ -622,11 +646,11 @@ function CardPreview({ form, imagem, plantas, areas }: { form: Record<string, un
 }
 
 function BotaoSalvar({ estado, onClick }: { estado: string; onClick: () => void }) {
-  const salvando = estado === "salvando", sucesso = estado === "sucesso";
+  const salvando = estado === "salvando", sucesso = estado === "sucesso", erro = estado === "erro";
   return (
     <button onClick={onClick} disabled={salvando} className={`bx-save ${sucesso ? "is-ok" : ""}`}>
       {salvando && <span className="bx-spin" />}
-      {sucesso ? "Salvo ✓" : salvando ? "Salvando" : "Salvar"}
+      {sucesso ? "Salvo ✓" : salvando ? "Salvando" : erro ? "Tentar novamente" : "Salvar"}
     </button>
   );
 }

@@ -1,10 +1,18 @@
 import Link from "next/link";
-import { ArquitetosGrid } from "@/components/public/vertente/arquitetos-grid";
 import { Reveal } from "@/components/public/reveal";
 
 const COL = "mx-auto w-full max-w-site px-6";
 const NAVY = "#0A2A66";
 const VERMELHO = "#e11d2a";
+
+// Arquitetos em destaque (mesmas fotos da página /mentes-criativas).
+const ARQUITETOS = [
+  { nome: "Jacobsen Arquitetura", foto: "/mentes/arq-1.jpg" },
+  { nome: "Lissoni & Partners", foto: "/mentes/arq-2.jpg" },
+  { nome: "Gensler + Zien", foto: "/mentes/arq-3.jpg" },
+  { nome: "Triptyque Architecture", foto: "/mentes/arq-4.jpg" },
+  { nome: "Enea Landscape", foto: "/mentes/arq-5.jpg" },
+];
 
 // Blocos institucionais da home (iguais em todas as vertentes): Parque Global
 // e Arquitetos que inspiram.
@@ -47,19 +55,30 @@ export function HomeEditorial() {
             </p>
           </div>
 
-          <div className="mt-10">
-            <ArquitetosGrid />
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {ARQUITETOS.map((a) => (
+              <Link key={a.nome} href="/mentes-criativas" className="group block">
+                <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={a.foto}
+                    alt={a.nome}
+                    loading="lazy"
+                    className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
+                  />
+                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                </div>
+                <p className="mt-3 text-[13px] font-medium leading-tight tracking-tight text-[#1a2230] transition-colors group-hover:text-[#0A2A66] sm:text-[14px]">
+                  {a.nome}
+                </p>
+              </Link>
+            ))}
           </div>
 
-          <div className="mt-8 flex flex-col items-start gap-6 border-t border-black/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
-            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] font-medium uppercase tracking-[0.14em] text-black/45">
-              {["Jacobsen", "Lissoni & Partners", "Gensler + Zien", "Triptyque", "Enea"].map((nome) => (
-                <li key={nome}>{nome}</li>
-              ))}
-            </ul>
+          <div className="mt-10 flex justify-center sm:justify-end">
             <Link
               href="/mentes-criativas"
-              className="inline-block shrink-0 px-7 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg"
+              className="inline-block px-8 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg"
               style={{ background: VERMELHO }}
             >
               Conheça os arquitetos

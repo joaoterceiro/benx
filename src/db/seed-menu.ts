@@ -14,15 +14,7 @@ const ARVORE: No[] = [
   { texto: "Empreendimentos Benx", url: "/benx" },
   { texto: "Benx Icônicos", url: "/iconicos" },
   { texto: "Viva Benx", url: "/vivabenx" },
-  {
-    texto: "Fale com a Benx", url: "#",
-    filhos: [
-      { texto: "Atendimento", url: "/atendimento" },
-      { texto: "Vendas", url: "/vendas" },
-      { texto: "Corretores e Imobiliárias", url: "/corretores-e-imobiliarias" },
-      { texto: "Trabalhe Conosco", url: "/trabalhe-conosco" },
-    ],
-  },
+  { texto: "Fale com a Benx", url: "/atendimento" },
   { texto: "Benx Journal", url: "/benx-journal" },
   {
     texto: "Compromisso com o Futuro", url: "#",

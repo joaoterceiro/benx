@@ -58,6 +58,9 @@ export default async function MateriaPage({ params }: { params: Promise<{ slug: 
   // Sanitiza o HTML antes de renderizar (defesa contra XSS armazenado).
   const conteudo = ehHtml ? sanitizarHtml(conteudoBruto) : conteudoBruto;
   const paragrafos = conteudo.split(/\n+/).map((p) => p.trim()).filter(Boolean);
+  // Tempo de leitura: ~200 palavras/min sobre o texto puro (sem tags).
+  const palavras = conteudo.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+  const minutosLeitura = Math.max(1, Math.round(palavras / 200));
 
   return (
     <main className="min-h-screen bg-white text-[#1a1a1a]">
@@ -86,7 +89,7 @@ export default async function MateriaPage({ params }: { params: Promise<{ slug: 
             <h1 className="font-serif text-[30px] leading-[1.18] text-[#1a1a1a] sm:text-[40px]">{post.titulo}</h1>
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-black/10 pt-5">
               <div className="flex flex-col gap-1">
-                <span className="text-[12px] italic text-black/45">{dataBR(post.dataPublicacao)}</span>
+                <span className="text-[12px] italic text-black/45">{dataBR(post.dataPublicacao)} · {minutosLeitura} min de leitura</span>
                 <span className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: VERMELHO }}>{post.categoria}</span>
               </div>
               <CompartilharBarra url={`${SITE_URL}/benx-journal/${slug}`} titulo={post.titulo} />

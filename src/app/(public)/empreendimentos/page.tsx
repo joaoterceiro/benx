@@ -110,7 +110,7 @@ export default async function EmpreendimentosPage({
                         {e.status}
                       </span>
                     )}
-                    <h3 className="mt-3 text-[28px] font-light leading-tight tracking-tight transition-colors duration-300 group-hover:text-[#0a2a66] sm:text-[34px]" style={{ color: "#3a3a3a" }}>
+                    <h3 className="mt-3 text-[clamp(22px,2.1vw,34px)] font-light leading-tight tracking-tight transition-colors duration-300 group-hover:text-[#0a2a66]" style={{ color: "#3a3a3a" }}>
                       {e.nome}
                     </h3>
                     <p className="mt-2 text-[14px] text-[#7a7a7a]">

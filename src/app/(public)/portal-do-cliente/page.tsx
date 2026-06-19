@@ -35,16 +35,17 @@ export default function PortalDoClientePage() {
       {/* BEM-VINDO */}
       <section className={`${COL} py-20`}>
         <Reveal>
-          <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
-            <div>
-              <h2 className="text-[28px] font-light leading-[1.1] tracking-tight sm:text-[40px] lg:whitespace-nowrap" style={{ color: NAVY }}>
-                Bem-vindo ao Portal do Cliente
-              </h2>
-              <p className="mt-6 text-[22px] font-light leading-snug" style={{ color: NAVY }}>
-                O Portal do Cliente é um canal de relacionamento exclusivo para atender as suas necessidades com mais praticidade.
-              </p>
-            </div>
-            <p className="text-[15px] leading-relaxed text-[#5a6577] lg:pt-4">
+          {/* título em largura cheia (uma linha no desktop) */}
+          <h2 className="text-[32px] font-light leading-[1.04] tracking-tight sm:text-[44px] lg:text-[52px]" style={{ color: NAVY }}>
+            Bem-vindo ao Portal do Cliente
+          </h2>
+
+          {/* lead + descrição, duas colunas alinhadas no topo */}
+          <div className="mt-10 grid gap-10 border-t border-[#e3e8ef] pt-10 lg:grid-cols-2 lg:gap-20">
+            <p className="text-[21px] font-light leading-snug sm:text-[26px]" style={{ color: NAVY }}>
+              O Portal do Cliente é um canal de relacionamento exclusivo para atender as suas necessidades com mais praticidade.
+            </p>
+            <p className="text-[15px] leading-relaxed text-[#5a6577] lg:max-w-md">
               Aqui você pode ter acesso às informações financeiras online, emitir a 2ª via dos boletos bancários para pagamento de suas parcelas, acompanhar evolução da obra do seu imóvel e enviar mensagens para a Central de Atendimento.
             </p>
           </div>

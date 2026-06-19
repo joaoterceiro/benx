@@ -8,11 +8,11 @@ const VERMELHO = "#e11d2a";
 
 // Arquitetos em destaque (mesmas fotos da página /mentes-criativas).
 const ARQUITETOS = [
-  { nome: "Jacobsen Arquitetura", papel: "Arquitetura", foto: "/mentes/arq-1.jpg" },
-  { nome: "Lissoni & Partners", papel: "Design de Interiores", foto: "/mentes/arq-2.jpg" },
-  { nome: "Gensler + Zien", papel: "Arquitetura", foto: "/mentes/arq-3.jpg" },
-  { nome: "Triptyque Architecture", papel: "Arquitetura", foto: "/mentes/arq-4.jpg" },
-  { nome: "Enea Landscape", papel: "Paisagismo", foto: "/mentes/arq-5.jpg" },
+  { nome: "Jacobsen Arquitetura", categoria: "Arquitetura", local: "São Paulo, Brasil", bio: "Linhas horizontais, madeira e integração radical com a paisagem.", foto: "/mentes/arq-1.jpg" },
+  { nome: "Lissoni & Partners", categoria: "Design de Interiores", local: "Milão, Itália", bio: "Minimalismo italiano em interiores e mobiliário, por Piero Lissoni.", foto: "/mentes/arq-2.jpg" },
+  { nome: "Gensler + Zien", categoria: "Arquitetura", local: "Projetos globais", bio: "Arquitetura de escala global para projetos corporativos e residenciais.", foto: "/mentes/arq-3.jpg" },
+  { nome: "Triptyque Architecture", categoria: "Arquitetura", local: "São Paulo / Paris", bio: "Arquitetura sustentável franco-brasileira, em diálogo com o trópico.", foto: "/mentes/arq-4.jpg" },
+  { nome: "Enea Landscape", categoria: "Paisagismo", local: "Rapperswil, Suíça", bio: "Jardins esculturais e curadoria de árvores como obra viva.", foto: "/mentes/arq-5.jpg" },
 ];
 
 // Blocos institucionais da home (iguais em todas as vertentes): Parque Global
@@ -44,52 +44,59 @@ export function HomeEditorial() {
         </Reveal>
       </section>
 
-      {/* Arquitetos que inspiram — teaser refinado, CTA para /mentes-criativas */}
-      <section className={`${COL} pb-24`}>
-        <Reveal>
+      {/* Arquitetos que inspiram — vitrine premium, CTA para /mentes-criativas */}
+      <section className="bg-[#f7f8fa]">
+        <Reveal className={`${COL} py-20`}>
           {/* cabeçalho editorial */}
-          <div className="flex flex-col gap-4 border-b border-black/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: VERMELHO }}>Arquitetura & Design</p>
-              <h2 className="mt-3 text-[34px] font-light leading-[1.0] tracking-tight sm:text-[46px] lg:text-[54px]" style={{ color: NAVY }}>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.22em]" style={{ color: VERMELHO }}>Arquitetura &amp; Design</p>
+              <h2 className="mt-4 text-[clamp(34px,4.2vw,58px)] font-medium leading-[1.0] tracking-[-0.025em]" style={{ color: NAVY }}>
                 Arquitetos que inspiram
               </h2>
             </div>
-            <p className="max-w-xs text-[14px] leading-relaxed text-black/50 sm:text-right">
+            <p className="max-w-[280px] text-[15px] leading-relaxed text-black/45 sm:text-right">
               As assinaturas por trás de cada empreendimento Benx.
             </p>
           </div>
 
-          {/* retratos: P&B que ganham cor no hover */}
-          <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-6">
-            {ARQUITETOS.map((a, i) => (
-              <Link key={a.nome} href="/mentes-criativas" className="group block">
-                <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100">
+          <div className="my-10 h-px w-full bg-black/[0.08] sm:my-11" />
+
+          {/* retratos: P&B viram cor + bio sobe no hover */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-5 lg:gap-y-9">
+            {ARQUITETOS.map((a) => (
+              <Link key={a.nome} href="/mentes-criativas" className="group block transition-transform duration-[400ms] ease-out hover:-translate-y-1">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-[2px] bg-[#16181c]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={a.foto}
                     alt={a.nome}
                     loading="lazy"
-                    className="h-full w-full object-cover object-top grayscale transition-all duration-[800ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.05] group-hover:grayscale-0"
+                    className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-all duration-[700ms] ease-[cubic-bezier(.2,0,.2,1)] group-hover:scale-[1.04] group-hover:grayscale-0"
                   />
-                  <span className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5" />
+                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0f1218]/85 via-[#0f1218]/15 to-transparent opacity-0 transition-opacity duration-[450ms] group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-x-[18px] bottom-[18px] translate-y-3 opacity-0 transition-all duration-[450ms] ease-out group-hover:translate-y-0 group-hover:opacity-100">
+                    <span className="text-[12px] font-medium text-white/65">{a.local}</span>
+                    <p className="mt-1.5 text-[14px] leading-[1.45] text-white">{a.bio}</p>
+                  </div>
                 </div>
                 <div className="mt-4">
-                  <p className="text-[11px] font-medium tabular-nums tracking-[0.1em] text-black/35">0{i + 1}</p>
-                  <p className="mt-1 text-[14px] font-medium leading-snug tracking-tight text-[#1a2230]">{a.nome}</p>
-                  <p className="mt-0.5 text-[11px] uppercase tracking-[0.12em] text-black/40">{a.papel}</p>
-                  <span className="mt-2.5 block h-px w-0 transition-all duration-500 ease-out group-hover:w-8" style={{ background: NAVY }} />
+                  <span className="relative inline-block text-[17px] font-medium leading-none tracking-[-0.01em]" style={{ color: NAVY }}>
+                    {a.nome}
+                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 transition-[width] duration-[350ms] ease-out group-hover:w-full" style={{ background: VERMELHO }} />
+                  </span>
+                  <p className="mt-2 text-[12px] uppercase tracking-[0.12em] text-black/40">{a.categoria}</p>
                 </div>
               </Link>
             ))}
           </div>
 
           {/* CTA refinado */}
-          <div className="mt-12 flex justify-center sm:justify-end">
-            <Link href="/mentes-criativas" className="group inline-flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.16em]" style={{ color: NAVY }}>
+          <div className="mt-12 flex justify-center sm:mt-[52px] sm:justify-end">
+            <Link href="/mentes-criativas" className="group inline-flex items-center gap-4 text-[13px] font-bold uppercase tracking-[0.16em]" style={{ color: NAVY }}>
               Conheça os arquitetos
-              <span className="grid h-9 w-9 place-items-center rounded-full border border-[#0A2A66]/25 transition-colors duration-300 group-hover:border-[#0A2A66] group-hover:bg-[#0A2A66]">
-                <ArrowRight size={15} className="text-[#0A2A66] transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white" />
+              <span className="grid h-11 w-11 place-items-center rounded-full border border-black/10 transition-colors duration-300 group-hover:border-[#0A2A66] group-hover:bg-[#0A2A66]">
+                <ArrowRight size={17} className="text-[#0A2A66] transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white" />
               </span>
             </Link>
           </div>

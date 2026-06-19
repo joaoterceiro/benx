@@ -13,6 +13,7 @@ export async function salvarSeloConfig(
   if (!(await getSessao())) return { ok: false, erro: "Não autenticado" };
 
   const pares: [string, string][] = [
+    ["selo_ativo", input.ativo ? "true" : "false"],
     ["selo_posicao", input.posicao],
     ["selo_tamanho", String(input.tamanho)],
     ["selo_margem", String(input.margem)],

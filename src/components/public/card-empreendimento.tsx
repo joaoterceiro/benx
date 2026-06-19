@@ -48,7 +48,7 @@ export function CardEmpreendimento(p: CardProps) {
 
       {/* título embaixo; selo (posições inferiores) empilha ACIMA do título */}
       <div className="absolute inset-x-0 bottom-0 flex flex-col p-6">
-        {p.seloUrl && p.seloConfig && isSeloBottom(p.seloConfig.posicao) && (
+        {p.seloUrl && p.seloConfig && p.seloConfig.ativo && isSeloBottom(p.seloConfig.posicao) && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={p.seloUrl} alt="Selo Prefeitura de São Paulo" className={`h-auto ${seloAlignSelf(p.seloConfig.posicao)}`} style={{ width: `${p.seloConfig.tamanho}%`, marginBottom: `${p.seloConfig.margem}px`, opacity: p.seloConfig.opacidade / 100 }} />
         )}

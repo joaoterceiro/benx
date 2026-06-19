@@ -55,7 +55,7 @@ export default async function HomeVertentePage({
   const PROMO: Record<string, VertenteValue> = {
     benx_iconicos: "benx",
     benx: "vivabenx",
-    vivabenx: "benx_iconicos",
+    vivabenx: "benx",
   };
   const promoValue = PROMO[info.value] ?? "benx";
   const promoInfo = vertentePorValue(promoValue);
@@ -199,6 +199,34 @@ export default async function HomeVertentePage({
                     </Link>
                   ))}
                 </div>
+              </Reveal>
+            </section>
+          )}
+
+          {/* Conheça os empreendimentos Benx (cross-promo para a linha Benx) */}
+          {promoCards.length > 0 && promoInfo && (
+            <section className={`${COL} pb-20`}>
+              <Reveal className="grid items-center gap-10 lg:grid-cols-[1fr_1.5fr]">
+                <div>
+                  <h2 className="text-[34px] font-light leading-[1.05] tracking-tight sm:text-[44px] lg:text-[52px]" style={{ color: "#1577C0" }}>
+                    Conheça os<br />empreendimentos<br /><span className="font-semibold">Benx</span>
+                  </h2>
+                  <Link href={`/${promoInfo.slug}`} className="group mt-6 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-[#1a3a6b]">
+                    Ver empreendimentos <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+                  </Link>
+                </div>
+                <EmpreendimentosStrip
+                  autoplay
+                  cardWidthClass="w-full sm:w-[calc(50%-0.5rem)]"
+                  seloConfig={seloCfg}
+                  cards={promoCards.map((c) => ({
+                    href: `/${promoInfo.slug}/${c.slug}`,
+                    nome: c.nome,
+                    statusLabel: statusObraLabel(c.statusObra),
+                    imagemUrl: c.imagemUrl,
+                    seloUrl: c.seloUrl,
+                  }))}
+                />
               </Reveal>
             </section>
           )}

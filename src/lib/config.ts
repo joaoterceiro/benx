@@ -63,6 +63,7 @@ export async function lerSeloConfig(): Promise<SeloConfig> {
     return Number.isFinite(n) && v !== "" && v != null ? Math.min(max, Math.max(min, n)) : d;
   };
   return {
+    ativo: map["selo_ativo"] !== "false", // ligado por padrão; só desliga com "false" explícito
     posicao: posicoes.includes(map["selo_posicao"] as SeloPosicao) ? (map["selo_posicao"] as SeloPosicao) : SELO_CONFIG_PADRAO.posicao,
     tamanho: num(map["selo_tamanho"], SELO_CONFIG_PADRAO.tamanho, 10, 80),
     margem: num(map["selo_margem"], SELO_CONFIG_PADRAO.margem, 0, 40),

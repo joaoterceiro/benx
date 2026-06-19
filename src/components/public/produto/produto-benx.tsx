@@ -344,6 +344,26 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
         </section>
       )}
 
+      {/* CONHEÇA MAIS SOBRE A BENX */}
+      <section data-reveal className="bg-[#0A2A66]">
+        <div className={`${COL} flex flex-col items-start justify-between gap-8 py-16 sm:flex-row sm:items-center`}>
+          <div className="max-w-xl text-white">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-white/55">A Benx</p>
+            <h2 className="mt-3 text-[30px] font-light leading-[1.1] tracking-tight sm:text-[40px]">Conheça mais sobre a Benx</h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-white/70">
+              Mais de cinco décadas transformando São Paulo, com projetos que unem arquitetura, localização e qualidade de vida.
+            </p>
+          </div>
+          <Link
+            href="/origem-proposito"
+            className="group inline-flex shrink-0 items-center gap-3 border border-white/40 px-8 py-4 text-[12px] font-semibold uppercase tracking-[0.16em] text-white transition-colors duration-300 hover:bg-white hover:text-[#0A2A66]"
+          >
+            Conheça a Benx
+            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </Link>
+        </div>
+      </section>
+
       <SiteFooter variant={marca === "vivabenx" ? "vivabenx" : "padrao"} />
     </div>
   );

@@ -17,6 +17,7 @@ export function seloUrlPorTipo(tipo?: string | null): string | null {
 export type SeloPosicao = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 export interface SeloConfig {
+  ativo: boolean; // liga/desliga a exibição do selo nas cards
   posicao: SeloPosicao;
   tamanho: number; // % da largura da card (10-80)
   margem: number; // px da borda (0-40)
@@ -30,7 +31,7 @@ export const SELO_POSICOES: { value: SeloPosicao; label: string }[] = [
   { value: "bottom-right", label: "Inferior direito" },
 ];
 
-export const SELO_CONFIG_PADRAO: SeloConfig = { posicao: "top-left", tamanho: 38, margem: 12, opacidade: 100 };
+export const SELO_CONFIG_PADRAO: SeloConfig = { ativo: true, posicao: "top-left", tamanho: 38, margem: 12, opacidade: 100 };
 
 // Classes Tailwind do canto, conforme a posição.
 export function seloPosClasses(p: SeloPosicao): string {

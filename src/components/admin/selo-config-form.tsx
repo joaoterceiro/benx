@@ -39,7 +39,26 @@ export function SeloConfigForm({ inicial }: { inicial: SeloConfig }) {
             </p>
           </div>
 
+          {/* Liga / Desliga */}
+          <div className="mt-5 flex items-center justify-between gap-4">
+            <div>
+              <span className="text-[13px] font-medium">Exibir selo</span>
+              <p className="mt-0.5 text-[12px] text-foreground-tertiary">Liga ou desliga a exibição do selo em todas as cards.</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={cfg.ativo}
+              aria-label="Exibir selo"
+              onClick={() => set("ativo", !cfg.ativo)}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${cfg.ativo ? "bg-accent" : "bg-border"}`}
+            >
+              <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${cfg.ativo ? "translate-x-[22px]" : "translate-x-0.5"}`} />
+            </button>
+          </div>
+
           {/* Posição */}
+          <div className={cfg.ativo ? "" : "pointer-events-none opacity-50"}>
           <div className="mt-5">
             <span className="text-[13px] font-medium">Posição na card</span>
             <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -97,6 +116,7 @@ export function SeloConfigForm({ inicial }: { inicial: SeloConfig }) {
               />
             </label>
           </div>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -119,7 +139,7 @@ export function SeloConfigForm({ inicial }: { inicial: SeloConfig }) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/placeholder-card.jpg" alt="" className="h-full w-full object-cover" />
             {/* posições superiores: selo absoluto sobre a foto */}
-            {!isSeloBottom(cfg.posicao) && (
+            {cfg.ativo && !isSeloBottom(cfg.posicao) && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={SELO_PREVIEW}
@@ -131,7 +151,7 @@ export function SeloConfigForm({ inicial }: { inicial: SeloConfig }) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
             {/* posições inferiores: selo empilha ACIMA do título, com margem */}
             <div className="absolute inset-x-0 bottom-0 flex flex-col p-4">
-              {isSeloBottom(cfg.posicao) && (
+              {cfg.ativo && isSeloBottom(cfg.posicao) && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={SELO_PREVIEW}

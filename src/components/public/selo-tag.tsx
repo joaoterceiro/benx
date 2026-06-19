@@ -10,6 +10,9 @@ import { seloPosClasses, type SeloConfig } from "@/lib/selo";
 export function SeloTag({ url, config }: { url: string; config: SeloConfig }) {
   const [expandido, setExpandido] = useState(false);
 
+  // Selo desligado na config do admin: não renderiza nada.
+  if (!config.ativo) return null;
+
   // Reduzido para ~55% do tamanho configurado; expandido amplia bem (até 88% da
   // largura da card) para leitura confortável.
   const larguraReduzida = Math.max(18, Math.round(config.tamanho * 0.55));

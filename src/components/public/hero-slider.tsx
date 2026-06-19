@@ -52,7 +52,7 @@ export function HeroSlider({ slides, seloConfig }: { slides: HeroSlideResolvido[
           ) : <div className="absolute inset-0 bg-neutral-800" />}
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/35" />
           {/* selo de habitação (Viva Benx): canto conforme config; tamanho fixo no hero */}
-          {s.seloUrl && seloConfig && (
+          {s.seloUrl && seloConfig && seloConfig.ativo && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={s.seloUrl}

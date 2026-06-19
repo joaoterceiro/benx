@@ -7,49 +7,180 @@ export const metadata: Metadata = {
   description: "Qualidade transversal, Sistema de Gestão Integrada (SGI) e certificações que reforçam o compromisso da Benx com a excelência.",
 };
 
+// Itens em volta do diagrama "Inovação / Otimização / Excelência".
+const DIAGRAMA = [
+  { titulo: "Qualidade", texto: "Normas, processos e conformidade técnica." },
+  { titulo: "Assistência técnica", texto: "Dados operacionais, pós-obra e manutenção." },
+  { titulo: "Gestão de clientes", texto: "Feedback, jornada e expectativas reais." },
+  { titulo: "Estratégia de personalização", texto: "Atender demandas específicas dos nossos clientes de alto padrão e luxo." },
+];
+
+// Certificações (logo + rótulo) em cards navy.
+const CERTS = [
+  { nome: "AQUA-HQE™", logo: "/esg/aqua.png" },
+  { nome: "LEED", logo: "/esg/imagesd.png" },
+  { nome: "Fitwel", logo: "/esg/Fitwel.png" },
+  { nome: "EDGE", logo: "/esg/edge-1-1dd.png" },
+];
+
+// Logos institucionais (norma / programa / sistema).
+const SELOS = [
+  { src: "/esg/iso-45001.png", alt: "ISO 45001:2018" },
+  { src: "/esg/Group-1000006060.png", alt: "PBQP-H" },
+  { src: "/esg/polit-sgi_ima-02.png", alt: "Sistema de Gestão Integrada (SGI)" },
+];
+
+// Desempenho da Viva Benx (3 frentes com listas).
+const DESEMPENHO = [
+  {
+    titulo: "Redução de consumo de energia",
+    itens: [
+      "Elevadores com chamada inteligente",
+      "Painéis fotovoltaicos para geração de energia",
+      "Sensores de presença nas áreas comuns",
+      "Persiana de enrolar nos dormitórios",
+      "Lâmpadas e luminárias LED",
+    ],
+  },
+  {
+    titulo: "Conforto e segurança",
+    itens: [
+      "Paisagismo ecoeficiente, com espécies nativas e preservação (sempre que possível) das árvores já existentes no terreno",
+      "Portaria única com controle de acesso de pedestres e veículos, integrando segurança e gestão de fluxo",
+    ],
+  },
+  {
+    titulo: "Redução de consumo de água",
+    itens: [
+      "Torneiras, vasos sanitários e chuveiros com dispositivos economizadores",
+      "Infraestrutura para medição individualizada de água",
+      "Captação e uso de água da chuva para torneira externa e irrigação dos jardins",
+    ],
+  },
+];
+
 export default function EsgExcelenciaPage() {
   return (
     <EsgShell ativo="excelencia">
+      {/* INTRO + DIAGRAMA */}
       <section className={`${COL} py-16`}>
-        <Reveal>
-          <span className="inline-block border border-[#e3e8ef] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5b6577]">Excelência nos empreendimentos</span>
-          <div className="mt-6 max-w-3xl space-y-5 text-[15px] leading-relaxed text-[#5a6577]">
-            <p>A Benx atua em toda a cadeia imobiliária, da escolha estratégica do terreno à entrega dos produtos, desenvolvendo empreendimentos residenciais e comerciais com padrão de excelência em cada etapa.</p>
-            <p><strong className="text-[#1a2230]">QUALIDADE</strong> é um valor transversal inegociável na Benx. Está presente desde o desenvolvimento do projeto até o pós-entrega, sempre com foco na experiência do cliente e na durabilidade dos empreendimentos.</p>
+        <Reveal className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <div>
+            <span className="inline-block border border-[#e3e8ef] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5b6577]">
+              Excelência nos empreendimentos
+            </span>
+            <h2 className="mt-6 text-[44px] font-light leading-[1.0] tracking-tight sm:text-[60px]" style={{ color: NAVY }}>
+              Excelência
+            </h2>
+            <div className="mt-6 max-w-xl space-y-5 text-[15px] leading-relaxed text-[#5a6577]">
+              <p>A Benx atua em toda a cadeia imobiliária, da escolha estratégica do terreno à entrega dos produtos, desenvolvendo empreendimentos residenciais e comerciais que vão da habitação econômica ao mercado de luxo.</p>
+              <p><strong className="text-[#1a2230]">QUALIDADE</strong> é um valor transversal inegociável na Benx. Está presente desde o desenvolvimento do projeto até o pós-entrega, sempre com foco na experiência completa do cliente. Esse compromisso é sustentado por certificações em qualidade, sustentabilidade, saúde e bem-estar, além de equipes especializadas em incorporação e construção, estruturadas para atender com precisão diferentes perfis de produtos do Viva Benx, alto padrão e luxo.</p>
+            </div>
+          </div>
+
+          {/* diagrama: anel + itens */}
+          <div className="flex items-center justify-center gap-8 sm:gap-10">
+            <div className="relative grid h-44 w-44 shrink-0 place-items-center rounded-full border-[6px] border-[#dfe4ec] sm:h-52 sm:w-52">
+              <p className="text-center text-[12px] font-semibold uppercase leading-tight tracking-[0.06em] sm:text-[14px]" style={{ color: NAVY }}>
+                Inovação<br />Otimização<br />Excelência
+              </p>
+            </div>
+            <ul className="flex max-w-[260px] flex-col gap-5">
+              {DIAGRAMA.map((d) => (
+                <li key={d.titulo} className="flex gap-3">
+                  <span className="mt-[7px] h-2 w-2 shrink-0 rounded-full" style={{ background: NAVY }} />
+                  <div>
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.08em]" style={{ color: NAVY }}>{d.titulo}</p>
+                    <p className="mt-0.5 text-[13px] leading-snug text-[#5a6577]">{d.texto}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </Reveal>
       </section>
 
-      <section className="bg-[#0a2a66]">
-        <Reveal className={`${COL} py-14`}>
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white/70">Política do SGI</p>
-          <p className="mt-4 max-w-3xl text-[20px] font-light leading-snug text-white sm:text-[24px]">
-            Transformar a vida das pessoas por meio de empreendimentos imobiliários com qualidade, construídos dentro do custo e prazo previstos, atendendo aos requisitos aplicáveis e buscando a melhoria contínua do Sistema de Gestão Integrada.
-          </p>
-        </Reveal>
+      {/* SELOS / NORMAS */}
+      <section className={`${COL} pb-6`}>
+        <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
+          {SELOS.map((s) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={s.alt} src={s.src} alt={s.alt} className="h-20 w-auto object-contain sm:h-24" />
+          ))}
+        </div>
       </section>
 
-      <section className={`${COL} py-16`}>
+      {/* CERTIFICAÇÕES (cards navy) */}
+      <section className={`${COL} py-12`}>
         <Reveal>
-          <h2 className="text-[24px] font-light tracking-tight sm:text-[30px]" style={{ color: NAVY }}>Certificações que reforçam o compromisso com a excelência</h2>
-          <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-6">
-            {["aqua.png", "Fitwel.png", "edge-1-1dd.png", "imagesd.png"].map((f) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={f} src={`/esg/${f}`} alt="Certificação" className="h-14 w-auto object-contain" />
+          <h2 className="text-[20px] font-semibold uppercase tracking-[0.08em] sm:text-[24px]" style={{ color: NAVY }}>
+            Certificações que reforçam o compromisso com a excelência
+          </h2>
+          <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {CERTS.map((c) => (
+              <div key={c.nome} className="flex flex-col items-center gap-4 bg-[#0a2a66] px-5 py-8 text-center">
+                <span className="grid h-16 w-16 place-items-center rounded-md bg-white p-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={c.logo} alt={c.nome} className="h-full w-full object-contain" />
+                </span>
+                <span className="text-[14px] font-semibold uppercase tracking-[0.08em] text-white">{c.nome}</span>
+              </div>
             ))}
           </div>
-          <div className="mt-10 grid gap-8 lg:grid-cols-2">
-            <div className="rounded-sm bg-[#f6f7f9] p-8">
-              <h3 className="text-[18px] font-semibold" style={{ color: NAVY }}>Parque Global: referência nacional em certificações</h3>
-              <p className="mt-3 text-[14px] leading-relaxed text-[#5a6577]">O Parque Global é referência nacional em sustentabilidade, com 15 certificações concluídas ou em andamento, incluindo o LEED for Cities and Communities, atestando o compromisso com práticas ambientais, sociais e de governança de alto padrão.</p>
-            </div>
-            <div className="rounded-sm bg-[#f6f7f9] p-8">
-              <h3 className="text-[18px] font-semibold" style={{ color: NAVY }}>Alto desempenho na habitação popular</h3>
-              <p className="mt-3 text-[14px] leading-relaxed text-[#5a6577]">A Viva Benx rompe a ideia de que habitação econômica não pode ser sustentável, ao unir acessibilidade financeira, qualidade arquitetônica e desempenho construtivo.</p>
-              <p className="mt-3 text-[14px] leading-relaxed text-[#5a6577]">Com a metodologia ECONOMIX, integra soluções de eficiência construtiva e operacional, levando alto desempenho também à moradia popular.</p>
-            </div>
+        </Reveal>
+      </section>
+
+      {/* PARQUE GLOBAL */}
+      <section className={`${COL} py-12`}>
+        <Reveal className="grid items-stretch gap-0 bg-[#f0f1f4] sm:grid-cols-[1fr_1.1fr]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/esg/Biodiverdidade-Parque-Global.png" alt="Parque Global" className="h-full min-h-[240px] w-full object-cover" />
+          <div className="p-8 sm:p-10">
+            <h2 className="text-[22px] font-semibold uppercase leading-tight tracking-[0.04em] sm:text-[26px]" style={{ color: NAVY }}>
+              Parque Global: referência nacional em certificações
+            </h2>
+            <p className="mt-4 text-[14px] leading-relaxed text-[#5a6577]">
+              O Parque Global é referência nacional em sustentabilidade, com 15 certificações concluídas ou em andamento, incluindo o LEED for Cities and Communities e a pré-certificação LEED Ouro. Suas torres residenciais possuem o selo AQUA-HQE, atestando o mais alto nível de qualidade e eficiência ambiental. O projeto também avança na certificação Fitwel, focada em saúde e bem-estar dos moradores.
+            </p>
           </div>
         </Reveal>
+      </section>
+
+      {/* ALTO DESEMPENHO NA HABITAÇÃO POPULAR */}
+      <section className={`${COL} py-12`}>
+        <Reveal className="grid items-center gap-10 sm:grid-cols-[1.6fr_1fr]">
+          <div>
+            <h2 className="text-[22px] font-semibold uppercase tracking-[0.04em] sm:text-[26px]" style={{ color: NAVY }}>
+              Alto desempenho na habitação popular
+            </h2>
+            <div className="mt-5 max-w-2xl space-y-4 text-[14px] leading-relaxed text-[#5a6577]">
+              <p>A Viva Benx rompe a ideia de que habitação econômica não pode ser sustentável, ao unir acessibilidade financeira, qualidade arquitetônica e desempenho ambiental elevado e ao quebrar o paradigma de que moradias populares devem se limitar às periferias.</p>
+              <p>Com a metodologia <strong className="text-[#1a2230]">ECONOMIX</strong>, integra soluções de ecoeficiência que reduzem impactos ambientais e elevam o bem-estar ao longo de todo o ciclo de vida dos empreendimentos.</p>
+            </div>
+          </div>
+          <div className="flex justify-center sm:justify-end">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-vivabenx-cor.svg" alt="Viva Benx" className="h-auto w-48 sm:w-56" />
+          </div>
+        </Reveal>
+      </section>
+
+      {/* TRÊS FRENTES DE DESEMPENHO */}
+      <section className={`${COL} pb-16`}>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {DESEMPENHO.map((d) => (
+            <div key={d.titulo} className="bg-[#f0f1f4] p-7">
+              <h3 className="text-[18px] font-semibold uppercase leading-tight tracking-[0.03em]" style={{ color: NAVY }}>
+                {d.titulo}
+              </h3>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-[13px] leading-relaxed text-[#5a6577] marker:text-[#0a2a66]">
+                {d.itens.map((i) => (
+                  <li key={i}>{i}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </section>
     </EsgShell>
   );

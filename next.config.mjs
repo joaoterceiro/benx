@@ -4,8 +4,8 @@ const nextConfig = {
   // Lint roda em dev (`npm run lint`); não bloqueia o build de produção.
   eslint: { ignoreDuringBuilds: true },
   experimental: {
-    // Uploads via Server Actions (vídeo da splash, mídias). Default é 1MB.
-    serverActions: { bodySizeLimit: "70mb" },
+    // Uploads via Server Actions (vídeo da splash, biblioteca de mídia). Default é 1MB.
+    serverActions: { bodySizeLimit: "200mb" },
   },
   images: {
     // Serve AVIF/WebP automaticamente (next/image).

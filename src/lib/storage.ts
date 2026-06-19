@@ -4,6 +4,7 @@ import {
   DeleteObjectCommand,
   HeadBucketCommand,
   CreateBucketCommand,
+  ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
 import { logError, logWarn } from "@/lib/log-context";
 
@@ -63,6 +64,42 @@ export async function getUrl(chave: string): Promise<string> {
   const base = endpoint.replace(/\/+$/, "");
   const key = chave.split("/").map(encodeURIComponent).join("/");
   return `${base}/${bucket}/${key}`;
+}
+
+export interface MidiaItem {
+  chave: string;
+  url: string;
+  tamanho: number; // bytes
+  atualizadoEm: string; // ISO
+}
+
+// Lista todos os objetos do bucket (biblioteca de mídia do admin). Fail-open:
+// devolve [] se o storage estiver indisponível, para não quebrar a página.
+export async function listarMidias(): Promise<MidiaItem[]> {
+  const base = endpoint.replace(/\/+$/, "");
+  const itens: MidiaItem[] = [];
+  try {
+    let token: string | undefined;
+    do {
+      const r = await s3.send(new ListObjectsV2Command({ Bucket: bucket, ContinuationToken: token, MaxKeys: 1000 }));
+      for (const o of r.Contents ?? []) {
+        if (!o.Key || o.Key.endsWith("/")) continue; // ignora "pastas"
+        const key = o.Key.split("/").map(encodeURIComponent).join("/");
+        itens.push({
+          chave: o.Key,
+          url: `${base}/${bucket}/${key}`,
+          tamanho: o.Size ?? 0,
+          atualizadoEm: o.LastModified?.toISOString() ?? "",
+        });
+      }
+      token = r.IsTruncated ? r.NextContinuationToken : undefined;
+    } while (token);
+  } catch (err) {
+    await logWarn({ err, action: "s3_list" }, "falha ao listar mídias do storage");
+    return [];
+  }
+  itens.sort((a, b) => (a.atualizadoEm < b.atualizadoEm ? 1 : -1));
+  return itens;
 }
 
 export async function deleteMidia(chave: string): Promise<void> {

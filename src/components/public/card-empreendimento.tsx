@@ -52,7 +52,7 @@ export function CardEmpreendimento(p: CardProps) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={p.seloUrl} alt="Selo Prefeitura de São Paulo" className={`h-auto ${seloAlignSelf(p.seloConfig.posicao)}`} style={{ width: `${p.seloConfig.tamanho}%`, marginBottom: `${p.seloConfig.margem}px`, opacity: p.seloConfig.opacidade / 100 }} />
         )}
-        <h3 className="text-[26px] font-bold leading-tight tracking-tight text-white drop-shadow sm:text-[30px]">{p.nome}</h3>
+        <h3 className="text-[clamp(20px,1.9vw,30px)] font-bold leading-tight tracking-tight text-white drop-shadow">{p.nome}</h3>
         {p.cidade ? <p className="mt-1 text-[13px] text-white/75">{p.cidade}</p> : null}
       </div>
     </Link>

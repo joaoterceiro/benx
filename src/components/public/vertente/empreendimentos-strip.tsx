@@ -128,7 +128,7 @@ export function EmpreendimentosStrip({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={c.seloUrl} alt="Selo Prefeitura de São Paulo" className={`h-auto ${seloAlignSelf(seloConfig.posicao)}`} style={{ width: `${seloConfig.tamanho}%`, marginBottom: `${seloConfig.margem}px`, opacity: seloConfig.opacidade / 100 }} />
               )}
-              <span className="text-[26px] font-bold leading-tight tracking-tight text-white drop-shadow sm:text-[30px]">{c.nome}</span>
+              <span className="text-[clamp(20px,1.9vw,30px)] font-bold leading-tight tracking-tight text-white drop-shadow">{c.nome}</span>
             </div>
           </Link>
         ))}

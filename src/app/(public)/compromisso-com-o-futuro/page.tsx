@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Download } from "lucide-react";
-import { SiteHeader } from "@/components/public/site-header";
-import { SiteFooter } from "@/components/public/site-footer";
+import { EsgShell, COL, NAVY } from "@/components/public/esg/esg-shell";
 import { Reveal } from "@/components/public/reveal";
 
 export const metadata: Metadata = {
@@ -10,9 +9,6 @@ export const metadata: Metadata = {
   description:
     "A Benx incorpora o desenvolvimento sustentável à sua governança como princípio ético e inegociável. Conheça nosso Relato de Sustentabilidade.",
 };
-
-const NAVY = "#0a2a66";
-const COL = "mx-auto w-full max-w-site px-6";
 
 const TEMAS = [
   { label: "Excelência dos empreendimentos", href: "/esg/excelencia" },
@@ -35,28 +31,7 @@ const RELATORIOS = [
 
 export default function CompromissoComOFuturoPage() {
   return (
-    <div className="bg-white text-[#1a2230]">
-      {/* HERO */}
-      <header className="relative flex min-h-[88vh] flex-col justify-center overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/compromisso/hero.png" alt="Compromisso com o futuro" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10" />
-
-        <SiteHeader />
-
-        <div className={`relative z-10 ${COL} max-w-3xl`}>
-          <h1 className="text-[44px] font-light leading-[1.05] tracking-tight text-white sm:text-[64px]">
-            Compromisso<br />com o futuro
-          </h1>
-          <p className="mt-5 max-w-xl text-[18px] font-light leading-snug text-white/85 sm:text-[22px]">
-            50 anos transformando São Paulo com inovação, excelência e responsabilidade socioambiental.
-          </p>
-          <p className="mt-8 max-w-2xl text-[14px] leading-relaxed text-white/75">
-            A Benx incorpora o desenvolvimento sustentável à sua governança corporativa como um princípio ético e inegociável. Essa visão orienta nossas decisões, direciona investimentos e fortalece a gestão dos impactos ambientais, sociais e econômicos ao longo de todo o ciclo dos nossos empreendimentos. Trabalhamos para elevar a eficiência no uso de recursos, garantir desempenho econômico sustentável e valorizar as pessoas que constroem a nossa história sempre com o compromisso de gerar impacto positivo para a cidade e para a sociedade.
-          </p>
-        </div>
-      </header>
-
+    <EsgShell ativo="compromisso">
       {/* RELATO + DIRETRIZES */}
       <section className={`${COL} py-20`}>
         <Reveal>
@@ -122,8 +97,6 @@ export default function CompromissoComOFuturoPage() {
           </div>
         </Reveal>
       </section>
-
-      <SiteFooter />
-    </div>
+    </EsgShell>
   );
 }

@@ -37,8 +37,8 @@ export default function PortalDoClientePage() {
         <Reveal>
           <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
             <div>
-              <h2 className="text-[34px] font-light leading-[1.1] tracking-tight sm:text-[44px]" style={{ color: NAVY }}>
-                Bem-vindo<br />ao Portal do Cliente
+              <h2 className="text-[28px] font-light leading-[1.1] tracking-tight sm:text-[40px] lg:whitespace-nowrap" style={{ color: NAVY }}>
+                Bem-vindo ao Portal do Cliente
               </h2>
               <p className="mt-6 text-[22px] font-light leading-snug" style={{ color: NAVY }}>
                 O Portal do Cliente é um canal de relacionamento exclusivo para atender as suas necessidades com mais praticidade.

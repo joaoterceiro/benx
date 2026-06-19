@@ -35,19 +35,34 @@ export function HomeEditorial() {
         </Reveal>
       </section>
 
-      {/* Arquitetos que inspiram */}
+      {/* Arquitetos que inspiram — teaser refinado, CTA para /mentes-criativas */}
       <section className={`${COL} pb-24`}>
-        <Reveal className="grid items-center gap-12 lg:grid-cols-[3fr_2fr]">
-          <ArquitetosGrid />
-          <div className="max-w-lg">
-            <h2 className="text-[32px] font-light leading-tight tracking-tight sm:text-[44px] lg:text-[50px]" style={{ color: NAVY }}>Arquitetos que<br />inspiram.</h2>
-            <p className="mt-6 text-[15px] leading-[1.9] text-black/70 sm:text-[16px]">
-              Na Benx, cada empreendimento começa com uma escolha que vai além da técnica: a escolha de
-              quem assina. Acreditamos que grandes projetos nascem de mentes inquietas, que pensam a
-              cidade com sensibilidade, ousadia e responsabilidade.
+        <Reveal>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <h2 className="text-[32px] font-light leading-[1.02] tracking-tight sm:text-[44px] lg:text-[50px]" style={{ color: NAVY }}>
+              Arquitetos que inspiram
+            </h2>
+            <p className="max-w-xs text-[15px] leading-relaxed text-black/55 sm:text-right">
+              Mentes que assinam cada empreendimento Benx.
             </p>
-            <Link href="#" className="mt-7 inline-block px-7 py-2.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-white transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg" style={{ background: VERMELHO }}>
-              Ler mais
+          </div>
+
+          <div className="mt-10">
+            <ArquitetosGrid />
+          </div>
+
+          <div className="mt-8 flex flex-col items-start gap-6 border-t border-black/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
+            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] font-medium uppercase tracking-[0.14em] text-black/45">
+              {["Jacobsen", "Lissoni & Partners", "Gensler + Zien", "Triptyque", "Enea"].map((nome) => (
+                <li key={nome}>{nome}</li>
+              ))}
+            </ul>
+            <Link
+              href="/mentes-criativas"
+              className="inline-block shrink-0 px-7 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg"
+              style={{ background: VERMELHO }}
+            >
+              Conheça os arquitetos
             </Link>
           </div>
         </Reveal>

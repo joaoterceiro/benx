@@ -32,7 +32,7 @@ export function EsgHero() {
           50 anos transformando São Paulo com inovação, excelência e responsabilidade socioambiental.
         </p>
         <p className="mt-8 max-w-2xl text-[14px] leading-relaxed text-white/75">
-          A Benx incorpora o desenvolvimento sustentável à sua governança corporativa como um princípio ético e inegociável. Essa visão orienta nossas decisões, direciona investimentos e fortalece a gestão dos impactos ambientais, sociais e econômicos ao longo de todo o ciclo dos nossos empreendimentos.
+          A Benx incorpora o desenvolvimento sustentável à sua governança corporativa como um princípio ético e inegociável. Essa visão orienta nossas decisões, direciona investimentos e fortalece a gestão dos impactos ambientais, sociais e econômicos ao longo de todo o ciclo dos nossos empreendimentos. Trabalhamos para elevar a eficiência no uso de recursos, garantir desempenho econômico sustentável e valorizar as pessoas que constroem a nossa história, sempre com o compromisso de gerar impacto positivo para a cidade e para a sociedade.
         </p>
       </div>
     </header>

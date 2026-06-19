@@ -20,7 +20,7 @@ import { CardEmpreendimento } from "@/components/public/card-empreendimento";
 import { HeroSlider } from "@/components/public/hero-slider";
 import { JornalTopo } from "@/components/public/jornal/jornal-topo";
 import { EmpreendimentosStrip } from "@/components/public/vertente/empreendimentos-strip";
-import { HomeEditorial } from "@/components/public/vertente/home-editorial";
+import { ArquitetosSecao, ParqueGlobalSecao } from "@/components/public/vertente/home-editorial";
 import { JornalCarrossel } from "@/components/public/vertente/jornal-carrossel";
 import { Reveal } from "@/components/public/reveal";
 import { SiteFooter } from "@/components/public/site-footer";
@@ -225,7 +225,10 @@ export default async function HomeVertentePage({
       ) : (
         // ── home curada ──
         <>
-          {/* Conheça nossa linha {X}: cross-promo para outra vertente */}
+          {/* 1. Arquitetos que inspiram */}
+          <ArquitetosSecao />
+
+          {/* 2. Conheça nossa linha {X}: cross-promo para outra vertente */}
           {promoCards.length > 0 && promoInfo && (
             <section className={`${COL} py-20`}>
               <Reveal className="grid items-center gap-10 lg:grid-cols-[1fr_1.5fr]">
@@ -253,10 +256,10 @@ export default async function HomeVertentePage({
             </section>
           )}
 
-          {/* Parque Global + Arquitetos */}
-          <HomeEditorial />
+          {/* 3. Parque Global */}
+          <ParqueGlobalSecao />
 
-          {/* Benx Journal (carrossel) */}
+          {/* 4. Benx Journal (carrossel) */}
           {posts.length > 0 && (
             <section className="bg-[#ececec]">
               <Reveal className={`${COL} py-16`}>

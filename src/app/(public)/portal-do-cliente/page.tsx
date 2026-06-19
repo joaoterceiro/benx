@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, LayoutGrid, Phone, Mail, Clock } from "lucide-react";
+import { ArrowRight, Phone, Mail, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/public/site-header";
 import { SiteFooter } from "@/components/public/site-footer";
 import { Reveal } from "@/components/public/reveal";
@@ -15,7 +15,6 @@ const NAVY = "#0a2a66";
 const COL = "mx-auto w-full max-w-site px-6";
 
 const PORTAL_URL = "https://cliente.benx.com.br/Login";
-const OBRA_URL = "https://portalcliente.benx.com.br/acesso";
 
 export default function PortalDoClientePage() {
   return (
@@ -50,58 +49,50 @@ export default function PortalDoClientePage() {
             </p>
           </div>
 
-          {/* CARDS */}
-          <div className="mt-12 grid gap-8 lg:grid-cols-2 lg:items-stretch">
-            {/* card navy: canais */}
-            <div className="flex flex-col justify-center gap-8 bg-[#0a2a66] p-10 sm:flex-row sm:items-center sm:justify-between">
-              <p className="max-w-[230px] text-[22px] font-light leading-snug text-white">
-                Acesse os nossos canais para ter acesso a informações e novidades
-              </p>
-              <div className="flex flex-col gap-3">
-                <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 border border-white/30 px-5 py-3.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-white/10">
-                  <ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-1" />
-                  Portal do Cliente
-                </a>
-                <a href={OBRA_URL} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 border border-white/30 px-5 py-3.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-white/10">
-                  <ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-1" />
-                  Acompanhamento de obra
-                </a>
+          {/* CANAIS — Fale com a gente + acesso ao portal, unificado */}
+          <div className="mt-14 overflow-hidden rounded-2xl border border-[#e3e8ef] shadow-[0_1px_2px_rgba(0,0,0,0.04)] lg:grid lg:grid-cols-2">
+            {/* navy: mensagem + CTA do portal */}
+            <div className="flex flex-col justify-between gap-10 bg-[#0a2a66] p-10 sm:p-12">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6db3e8]">Central de Atendimento</p>
+                <h3 className="mt-3 text-[30px] font-light leading-tight tracking-tight text-white sm:text-[36px]">Fale com a gente</h3>
+                <p className="mt-4 max-w-sm text-[16px] font-light leading-relaxed text-white/75">
+                  Acesse os nossos canais para informações financeiras, 2ª via de boletos, evolução da obra e novidades.
+                </p>
               </div>
+              <a
+                href={PORTAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex w-fit items-center gap-3 bg-white px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#0a2a66] transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                Acessar o Portal do Cliente
+                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              </a>
             </div>
 
-            {/* card branco: central de atendimento */}
-            <div className="border border-[#e3e8ef] bg-white p-10">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1AA0DF]">Central de Atendimento</p>
-              <h3 className="mt-3 text-[26px] font-semibold tracking-tight" style={{ color: NAVY }}>Fale com a gente</h3>
-              <p className="mt-1 text-[14px] text-[#5a6577]">Escolha o canal de sua preferência</p>
-
-              <div className="mt-7 flex flex-col divide-y divide-[#eef1f5]">
-                <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 py-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center border border-[#e3e8ef] text-[#0a2a66]"><LayoutGrid size={18} /></span>
-                  <span>
-                    <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#8a94a6]">Portal do Cliente</span>
-                    <span className="block text-[15px] font-semibold" style={{ color: NAVY }}>Acessar portal</span>
-                  </span>
-                </a>
-                <a href="tel:40038503" className="group flex items-center gap-4 py-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center border border-[#e3e8ef] text-[#0a2a66]"><Phone size={18} /></span>
+            {/* branco: demais canais */}
+            <div className="bg-white p-10 sm:p-12">
+              <p className="text-[14px] text-[#5a6577]">Escolha o canal de sua preferência</p>
+              <div className="mt-5 flex flex-col divide-y divide-[#eef1f5]">
+                <a href="tel:40038503" className="flex items-center gap-4 py-4 transition hover:opacity-80">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-[#f4f7fb] text-[#0a2a66]"><Phone size={18} /></span>
                   <span>
                     <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#8a94a6]">Telefone</span>
-                    <span className="block text-[15px] font-semibold" style={{ color: NAVY }}>4003-8503</span>
+                    <span className="block text-[16px] font-semibold" style={{ color: NAVY }}>4003-8503</span>
                   </span>
                 </a>
-                <a href="mailto:relacionamento@benx.com.br" className="group flex items-center gap-4 py-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center border border-[#e3e8ef] text-[#0a2a66]"><Mail size={18} /></span>
+                <a href="mailto:relacionamento@benx.com.br" className="flex items-center gap-4 py-4 transition hover:opacity-80">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-[#f4f7fb] text-[#0a2a66]"><Mail size={18} /></span>
                   <span>
                     <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#8a94a6]">E-mail</span>
-                    <span className="block text-[15px] font-semibold" style={{ color: NAVY }}>relacionamento@benx.com.br</span>
+                    <span className="block break-all text-[16px] font-semibold" style={{ color: NAVY }}>relacionamento@benx.com.br</span>
                   </span>
                 </a>
               </div>
-
-              <p className="mt-5 flex items-center gap-2 text-[13px] text-[#5a6577]">
+              <p className="mt-6 flex items-center gap-2 text-[13px] text-[#5a6577]">
                 <Clock size={15} className="text-[#8a94a6]" />
-                Segunda a sexta, das <strong className="font-semibold">9h às 18h</strong>
+                Segunda a sexta, das <strong className="font-semibold text-[#1a2230]">9h às 18h</strong>
               </p>
             </div>
           </div>

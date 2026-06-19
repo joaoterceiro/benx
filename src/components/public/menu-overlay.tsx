@@ -70,7 +70,7 @@ export function MenuOverlay({ itens, config }: { itens: MenuItem[]; config: Menu
         </div>
 
         {/* navegação */}
-        <nav className="flex-1 overflow-y-auto py-2">
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden py-2 [scrollbar-color:rgba(255,255,255,0.25)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1.5 hover:[&::-webkit-scrollbar-thumb]:bg-white/35">
           <ul>
             {itens.map((it) => {
               const temFilhos = it.filhos.length > 0;

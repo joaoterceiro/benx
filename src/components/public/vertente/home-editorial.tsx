@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/public/reveal";
 
 const COL = "mx-auto w-full max-w-site px-6";
@@ -7,11 +8,11 @@ const VERMELHO = "#e11d2a";
 
 // Arquitetos em destaque (mesmas fotos da página /mentes-criativas).
 const ARQUITETOS = [
-  { nome: "Jacobsen Arquitetura", foto: "/mentes/arq-1.jpg" },
-  { nome: "Lissoni & Partners", foto: "/mentes/arq-2.jpg" },
-  { nome: "Gensler + Zien", foto: "/mentes/arq-3.jpg" },
-  { nome: "Triptyque Architecture", foto: "/mentes/arq-4.jpg" },
-  { nome: "Enea Landscape", foto: "/mentes/arq-5.jpg" },
+  { nome: "Jacobsen Arquitetura", papel: "Arquitetura", foto: "/mentes/arq-1.jpg" },
+  { nome: "Lissoni & Partners", papel: "Design de Interiores", foto: "/mentes/arq-2.jpg" },
+  { nome: "Gensler + Zien", papel: "Arquitetura", foto: "/mentes/arq-3.jpg" },
+  { nome: "Triptyque Architecture", papel: "Arquitetura", foto: "/mentes/arq-4.jpg" },
+  { nome: "Enea Landscape", papel: "Paisagismo", foto: "/mentes/arq-5.jpg" },
 ];
 
 // Blocos institucionais da home (iguais em todas as vertentes): Parque Global
@@ -46,42 +47,50 @@ export function HomeEditorial() {
       {/* Arquitetos que inspiram — teaser refinado, CTA para /mentes-criativas */}
       <section className={`${COL} pb-24`}>
         <Reveal>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="text-[32px] font-light leading-[1.02] tracking-tight sm:text-[44px] lg:text-[50px]" style={{ color: NAVY }}>
-              Arquitetos que inspiram
-            </h2>
-            <p className="max-w-xs text-[15px] leading-relaxed text-black/55 sm:text-right">
-              Mentes que assinam cada empreendimento Benx.
+          {/* cabeçalho editorial */}
+          <div className="flex flex-col gap-4 border-b border-black/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: VERMELHO }}>Arquitetura & Design</p>
+              <h2 className="mt-3 text-[34px] font-light leading-[1.0] tracking-tight sm:text-[46px] lg:text-[54px]" style={{ color: NAVY }}>
+                Arquitetos que inspiram
+              </h2>
+            </div>
+            <p className="max-w-xs text-[14px] leading-relaxed text-black/50 sm:text-right">
+              As assinaturas por trás de cada empreendimento Benx.
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {ARQUITETOS.map((a) => (
+          {/* retratos: P&B que ganham cor no hover */}
+          <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-6">
+            {ARQUITETOS.map((a, i) => (
               <Link key={a.nome} href="/mentes-criativas" className="group block">
-                <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
+                <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={a.foto}
                     alt={a.nome}
                     loading="lazy"
-                    className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
+                    className="h-full w-full object-cover object-top grayscale transition-all duration-[800ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.05] group-hover:grayscale-0"
                   />
-                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <span className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5" />
                 </div>
-                <p className="mt-3 text-[13px] font-medium leading-tight tracking-tight text-[#1a2230] transition-colors group-hover:text-[#0A2A66] sm:text-[14px]">
-                  {a.nome}
-                </p>
+                <div className="mt-4">
+                  <p className="text-[11px] font-medium tabular-nums tracking-[0.1em] text-black/35">0{i + 1}</p>
+                  <p className="mt-1 text-[14px] font-medium leading-snug tracking-tight text-[#1a2230]">{a.nome}</p>
+                  <p className="mt-0.5 text-[11px] uppercase tracking-[0.12em] text-black/40">{a.papel}</p>
+                  <span className="mt-2.5 block h-px w-0 transition-all duration-500 ease-out group-hover:w-8" style={{ background: NAVY }} />
+                </div>
               </Link>
             ))}
           </div>
 
-          <div className="mt-10 flex justify-center sm:justify-end">
-            <Link
-              href="/mentes-criativas"
-              className="inline-block px-8 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-lg"
-              style={{ background: VERMELHO }}
-            >
+          {/* CTA refinado */}
+          <div className="mt-12 flex justify-center sm:justify-end">
+            <Link href="/mentes-criativas" className="group inline-flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.16em]" style={{ color: NAVY }}>
               Conheça os arquitetos
+              <span className="grid h-9 w-9 place-items-center rounded-full border border-[#0A2A66]/25 transition-colors duration-300 group-hover:border-[#0A2A66] group-hover:bg-[#0A2A66]">
+                <ArrowRight size={15} className="text-[#0A2A66] transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white" />
+              </span>
             </Link>
           </div>
         </Reveal>

@@ -29,7 +29,7 @@ const CANAIS: Canal[] = [
     href: "/portal-do-cliente",
     resumo: "Área exclusiva do cliente: informações financeiras, 2ª via de boletos, evolução da obra e mensagens para a Central de Atendimento.",
     obs: "Atendimento de segunda a sexta, das 9h às 18h.",
-    ctas: [{ label: "Acessar o Portal", href: "https://cliente.benx.com.br/Login" }],
+    ctas: [{ label: "Acessar o Portal", href: "https://portalcliente.benx.com.br/acesso" }],
     contatos: [
       { tipo: "tel", texto: "4003-8503", href: "tel:40038503" },
       { tipo: "mail", texto: "relacionamento@benx.com.br", href: "mailto:relacionamento@benx.com.br" },

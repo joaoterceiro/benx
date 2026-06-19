@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const NAVY = "#0a2a66";
 const COL = "mx-auto w-full max-w-site px-6";
 
-const PORTAL_URL = "https://cliente.benx.com.br/Login";
+const PORTAL_URL = "https://portalcliente.benx.com.br/acesso";
 
 export default function PortalDoClientePage() {
   return (

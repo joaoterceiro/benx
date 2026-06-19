@@ -15,11 +15,11 @@ const CERTS = [
   { nome: "EDGE", logo: "/esg/edge-1-1dd.png" },
 ];
 
-// Logos institucionais (norma / programa / sistema).
+// Logos institucionais (norma / programa / sistema). ISO + PBQP-H vêm juntos no
+// mesmo arquivo; SGI é a "flor" colorida.
 const SELOS = [
-  { src: "/esg/iso-45001.png", alt: "ISO 45001:2018" },
-  { src: "/esg/pbqp-h.png", alt: "PBQP-H" },
-  { src: "/esg/polit-sgi_ima-02.png", alt: "Sistema de Gestão Integrada (SGI)" },
+  { src: "/esg/Group-1000006088.jpg", alt: "ISO 45001:2018 e PBQP-H", classe: "h-16 sm:h-20" },
+  { src: "/esg/polit-sgi_ima-02.png", alt: "Sistema de Gestão Integrada (SGI)", classe: "h-24 sm:h-28" },
 ];
 
 // Desempenho da Viva Benx (3 frentes com listas).
@@ -74,7 +74,7 @@ export default function EsgExcelenciaPage() {
           <div className="flex justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/esg/diagrama-excelencia.png"
+              src="/esg/Group-1000006060.png"
               alt="Inovação, otimização e excelência: qualidade, assistência técnica, gestão de clientes e estratégia de personalização"
               className="h-auto w-full max-w-[540px]"
             />
@@ -87,7 +87,7 @@ export default function EsgExcelenciaPage() {
         <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
           {SELOS.map((s) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={s.alt} src={s.src} alt={s.alt} className="h-20 w-auto object-contain sm:h-24" />
+            <img key={s.alt} src={s.src} alt={s.alt} className={`${s.classe} w-auto object-contain`} />
           ))}
         </div>
       </section>

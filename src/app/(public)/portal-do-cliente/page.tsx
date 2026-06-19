@@ -40,13 +40,10 @@ export default function PortalDoClientePage() {
             Bem-vindo ao Portal do Cliente
           </h2>
 
-          {/* lead + descrição, duas colunas alinhadas no topo */}
-          <div className="mt-10 grid gap-10 border-t border-[#e3e8ef] pt-10 lg:grid-cols-2 lg:gap-20">
-            <p className="text-[21px] font-light leading-snug sm:text-[26px]" style={{ color: NAVY }}>
-              O Portal do Cliente é um canal de relacionamento exclusivo para atender as suas necessidades com mais praticidade.
-            </p>
-            <p className="text-[15px] leading-relaxed text-[#5a6577] lg:max-w-md">
-              Aqui você pode ter acesso às informações financeiras online, emitir a 2ª via dos boletos bancários para pagamento de suas parcelas, acompanhar evolução da obra do seu imóvel e enviar mensagens para a Central de Atendimento.
+          {/* texto unificado, no tamanho do parágrafo descritivo */}
+          <div className="mt-10 border-t border-[#e3e8ef] pt-10">
+            <p className="max-w-3xl text-[15px] leading-relaxed text-[#5a6577]">
+              O Portal do Cliente é um canal de relacionamento exclusivo para atender as suas necessidades com mais praticidade. Aqui você pode ter acesso às informações financeiras online, emitir a 2ª via dos boletos bancários para pagamento de suas parcelas, acompanhar evolução da obra do seu imóvel e enviar mensagens para a Central de Atendimento.
             </p>
           </div>
 

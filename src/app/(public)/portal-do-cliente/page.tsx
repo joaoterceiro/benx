@@ -35,17 +35,10 @@ export default function PortalDoClientePage() {
       {/* BEM-VINDO */}
       <section className={`${COL} py-20`}>
         <Reveal>
-          {/* título em largura cheia (uma linha no desktop) */}
-          <h2 className="text-[32px] font-light leading-[1.04] tracking-tight sm:text-[44px] lg:text-[52px]" style={{ color: NAVY }}>
-            Bem-vindo ao Portal do Cliente
-          </h2>
-
-          {/* texto unificado, no tamanho do parágrafo descritivo */}
-          <div className="mt-10 border-t border-[#e3e8ef] pt-10">
-            <p className="max-w-3xl text-[15px] leading-relaxed text-[#5a6577]">
-              O Portal do Cliente é um canal de relacionamento exclusivo para atender as suas necessidades com mais praticidade. Aqui você pode ter acesso às informações financeiras online, emitir a 2ª via dos boletos bancários para pagamento de suas parcelas, acompanhar evolução da obra do seu imóvel e enviar mensagens para a Central de Atendimento.
-            </p>
-          </div>
+          {/* texto introdutório */}
+          <p className="max-w-3xl text-[15px] leading-relaxed text-[#5a6577]">
+            O Portal do Cliente é um canal de relacionamento exclusivo para atender as suas necessidades com mais praticidade. Aqui você pode ter acesso às informações financeiras online, emitir a 2ª via dos boletos bancários para pagamento de suas parcelas, acompanhar evolução da obra do seu imóvel e enviar mensagens para a Central de Atendimento.
+          </p>
 
           {/* CANAIS — Fale com a gente + acesso ao portal, unificado */}
           <div className="mt-14 overflow-hidden rounded-2xl border border-[#e3e8ef] shadow-[0_1px_2px_rgba(0,0,0,0.04)] lg:grid lg:grid-cols-2">

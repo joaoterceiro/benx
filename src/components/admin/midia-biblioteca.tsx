@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useRef, useState, useTransition } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Upload, Loader2, Copy, Check, Trash2, Download, Film, Music, FileText, File as FileIcon, Search } from "lucide-react";
+import { Upload, Copy, Check, Trash2, Download, Loader2, Film, Music, FileText, File as FileIcon, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useConfirm } from "@/components/admin/confirm-dialog";
-import { uploadBiblioteca, excluirMidiaBiblioteca } from "@/actions/midia";
+import { MidiaUploadModal } from "@/components/admin/midia-upload-modal";
+import { MidiaExcluirModal } from "@/components/admin/midia-excluir-modal";
 import type { MidiaItem } from "@/lib/storage";
 
 type Tipo = "image" | "video" | "audio" | "pdf" | "file";
@@ -34,38 +34,16 @@ function fmtTamanho(n: number): string {
 
 export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
   const router = useRouter();
-  const confirmar = useConfirm();
-  const inputFile = useRef<HTMLInputElement>(null);
-  const [prog, setProg] = useState<{ atual: number; total: number } | null>(null);
   const [q, setQ] = useState("");
   const [copiada, setCopiada] = useState<string | null>(null);
   const [baixando, setBaixando] = useState<string | null>(null);
-  const [excluindo, setExcluindo] = useState<string | null>(null);
-  const [, start] = useTransition();
-  const enviando = prog !== null;
+  const [modalUpload, setModalUpload] = useState(false);
+  const [itemExcluir, setItemExcluir] = useState<MidiaItem | null>(null);
 
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase();
     return t ? itens.filter((i) => i.chave.toLowerCase().includes(t)) : itens;
   }, [itens, q]);
-
-  async function aoEnviar(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
-    if (files.length === 0) return;
-    setProg({ atual: 0, total: files.length });
-    let okCount = 0;
-    for (let i = 0; i < files.length; i++) {
-      setProg({ atual: i + 1, total: files.length });
-      const fd = new FormData();
-      fd.append("arquivo", files[i]);
-      const r = await uploadBiblioteca(fd);
-      if (r.ok) okCount++;
-      else toast.error(`${files[i].name}: ${r.erro}`);
-    }
-    setProg(null);
-    if (inputFile.current) inputFile.current.value = "";
-    if (okCount > 0) { toast.success(`${okCount} arquivo(s) enviado(s).`); router.refresh(); }
-  }
 
   async function copiar(url: string) {
     try {
@@ -92,40 +70,18 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
       a.remove();
       URL.revokeObjectURL(href);
     } catch {
-      // Fallback (ex.: CORS): abre numa nova aba para o usuário salvar.
       window.open(item.url, "_blank", "noopener");
     } finally {
       setBaixando(null);
     }
   }
 
-  async function excluir(item: MidiaItem) {
-    const nome = nomeDe(item.chave);
-    const ok = await confirmar({
-      titulo: `Excluir "${nome}"?`,
-      descricao: "O arquivo será removido permanentemente da biblioteca. Páginas que o usam ficarão sem a mídia.",
-      digitar: false,
-      tom: "perigo",
-      confirmLabel: "Excluir",
-    });
-    if (!ok) return;
-    setExcluindo(item.chave);
-    start(async () => {
-      const r = await excluirMidiaBiblioteca(item.chave);
-      setExcluindo(null);
-      if (r.ok) { toast.success("Mídia excluída."); router.refresh(); }
-      else toast.error(r.erro ?? "Falha ao excluir.");
-    });
-  }
-
   return (
     <div className="flex flex-col gap-4">
       {/* barra: upload + busca */}
       <div className="flex flex-wrap items-center gap-3">
-        <input ref={inputFile} type="file" multiple accept="image/*,video/*,audio/*,application/pdf" onChange={aoEnviar} className="hidden" />
-        <Button variant="primary" onClick={() => inputFile.current?.click()} disabled={enviando}>
-          {enviando ? <Loader2 size={15} className="mr-1.5 animate-spin" /> : <Upload size={15} className="mr-1.5" />}
-          {enviando ? (prog && prog.total > 1 ? `Enviando ${prog.atual}/${prog.total}...` : "Enviando...") : "Adicionar mídia"}
+        <Button variant="primary" onClick={() => setModalUpload(true)}>
+          <Upload size={15} className="mr-1.5" /> Adicionar mídia
         </Button>
         <div className="relative min-w-[220px] flex-1">
           <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-foreground-tertiary" />
@@ -133,16 +89,6 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
         </div>
         <span className="text-[12px] text-foreground-tertiary">{filtrados.length} de {itens.length}</span>
       </div>
-
-      {/* faixa de progresso do upload */}
-      {enviando && prog && (
-        <div className="flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/[0.06] px-3.5 py-2.5">
-          <Loader2 size={15} className="animate-spin text-accent" />
-          <span className="text-[13px] font-medium text-accent">
-            Enviando mídia{prog.total > 1 ? ` (${prog.atual} de ${prog.total})` : ""}… não feche esta página.
-          </span>
-        </div>
-      )}
 
       {filtrados.length === 0 ? (
         <div className="grid place-items-center rounded-xl border border-dashed border-border py-20 text-center">
@@ -159,11 +105,11 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
                   {tipo === "image" ? <Thumb url={item.url} nome={nome} /> : <Preview tipo={tipo} />}
                   <button
                     type="button"
-                    onClick={() => excluir(item)}
+                    onClick={() => setItemExcluir(item)}
                     aria-label="Excluir"
                     className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-md bg-black/55 text-white opacity-0 transition group-hover:opacity-100 hover:bg-error"
                   >
-                    {excluindo === item.chave ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                    <Trash2 size={13} />
                   </button>
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-2.5">
@@ -196,6 +142,9 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
           })}
         </div>
       )}
+
+      <MidiaUploadModal aberto={modalUpload} onFechar={() => setModalUpload(false)} onConcluido={() => router.refresh()} />
+      <MidiaExcluirModal item={itemExcluir} onFechar={() => setItemExcluir(null)} onExcluido={() => { setItemExcluir(null); router.refresh(); }} />
     </div>
   );
 }

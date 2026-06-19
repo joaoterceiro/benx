@@ -1,10 +1,33 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { midias, empreendimentos } from "@/db/schema";
 import { uploadMidia, deleteMidia } from "@/lib/storage";
 import { getSessao } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
 import { logError } from "@/lib/log-context";
+
+// Verifica se a mídia (chave) está vinculada a empreendimento(s), para avisar
+// antes de excluir. Cobre galeria (tabela midias) e imagem principal.
+export async function verificarUsoMidia(
+  chave: string
+): Promise<{ empreendimentos: { nome: string; slug: string }[] }> {
+  if (!(await getSessao())) return { empreendimentos: [] };
+  try {
+    const [naGaleria, comoPrincipal] = await Promise.all([
+      db.query.midias.findMany({ where: eq(midias.chave, chave), with: { empreendimento: { columns: { nome: true, slug: true } } } }),
+      db.query.empreendimentos.findMany({ where: eq(empreendimentos.imagemPrincipal, chave), columns: { nome: true, slug: true } }),
+    ]);
+    const mapa = new Map<string, { nome: string; slug: string }>();
+    for (const m of naGaleria) if (m.empreendimento) mapa.set(m.empreendimento.slug, m.empreendimento);
+    for (const e of comoPrincipal) mapa.set(e.slug, e);
+    return { empreendimentos: [...mapa.values()] };
+  } catch {
+    return { empreendimentos: [] };
+  }
+}
 
 const TIPOS_OK = ["image/", "video/", "audio/", "application/pdf"];
 

@@ -12,7 +12,7 @@ export default async function MidiasPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Mídias</h1>
         <p className="text-sm text-foreground-secondary">
-          {itens.length} {itens.length === 1 ? "arquivo" : "arquivos"} no MinIO. Envie novas mídias (imagem, vídeo, áudio, PDF), busque e copie os links para usar no site.
+          {itens.length} {itens.length === 1 ? "arquivo" : "arquivos"} na biblioteca. Envie novas mídias (imagem, vídeo, áudio, PDF), busque, baixe e copie os links para usar no site.
         </p>
       </div>
       <MidiaBiblioteca itens={itens} />

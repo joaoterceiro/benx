@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Upload, Loader2, Copy, Check, Trash2, Film, Music, FileText, File as FileIcon, Search } from "lucide-react";
+import { Upload, Loader2, Copy, Check, Trash2, Download, Film, Music, FileText, File as FileIcon, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/components/admin/confirm-dialog";
@@ -36,11 +36,13 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
   const router = useRouter();
   const confirmar = useConfirm();
   const inputFile = useRef<HTMLInputElement>(null);
-  const [enviando, setEnviando] = useState(false);
+  const [prog, setProg] = useState<{ atual: number; total: number } | null>(null);
   const [q, setQ] = useState("");
   const [copiada, setCopiada] = useState<string | null>(null);
+  const [baixando, setBaixando] = useState<string | null>(null);
   const [excluindo, setExcluindo] = useState<string | null>(null);
   const [, start] = useTransition();
+  const enviando = prog !== null;
 
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -50,16 +52,17 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
   async function aoEnviar(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;
-    setEnviando(true);
+    setProg({ atual: 0, total: files.length });
     let okCount = 0;
-    for (const file of files) {
+    for (let i = 0; i < files.length; i++) {
+      setProg({ atual: i + 1, total: files.length });
       const fd = new FormData();
-      fd.append("arquivo", file);
+      fd.append("arquivo", files[i]);
       const r = await uploadBiblioteca(fd);
       if (r.ok) okCount++;
-      else toast.error(`${file.name}: ${r.erro}`);
+      else toast.error(`${files[i].name}: ${r.erro}`);
     }
-    setEnviando(false);
+    setProg(null);
     if (inputFile.current) inputFile.current.value = "";
     if (okCount > 0) { toast.success(`${okCount} arquivo(s) enviado(s).`); router.refresh(); }
   }
@@ -74,11 +77,33 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
     }
   }
 
+  async function baixar(item: MidiaItem) {
+    setBaixando(item.chave);
+    try {
+      const res = await fetch(item.url);
+      if (!res.ok) throw new Error("fetch falhou");
+      const blob = await res.blob();
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = href;
+      a.download = nomeDe(item.chave);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(href);
+    } catch {
+      // Fallback (ex.: CORS): abre numa nova aba para o usuário salvar.
+      window.open(item.url, "_blank", "noopener");
+    } finally {
+      setBaixando(null);
+    }
+  }
+
   async function excluir(item: MidiaItem) {
     const nome = nomeDe(item.chave);
     const ok = await confirmar({
       titulo: `Excluir "${nome}"?`,
-      descricao: "O arquivo será removido do storage permanentemente. Páginas que o usam ficarão sem a mídia.",
+      descricao: "O arquivo será removido permanentemente da biblioteca. Páginas que o usam ficarão sem a mídia.",
       digitar: false,
       tom: "perigo",
       confirmLabel: "Excluir",
@@ -100,7 +125,7 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
         <input ref={inputFile} type="file" multiple accept="image/*,video/*,audio/*,application/pdf" onChange={aoEnviar} className="hidden" />
         <Button variant="primary" onClick={() => inputFile.current?.click()} disabled={enviando}>
           {enviando ? <Loader2 size={15} className="mr-1.5 animate-spin" /> : <Upload size={15} className="mr-1.5" />}
-          {enviando ? "Enviando..." : "Adicionar mídia"}
+          {enviando ? (prog && prog.total > 1 ? `Enviando ${prog.atual}/${prog.total}...` : "Enviando...") : "Adicionar mídia"}
         </Button>
         <div className="relative min-w-[220px] flex-1">
           <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-foreground-tertiary" />
@@ -109,9 +134,19 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
         <span className="text-[12px] text-foreground-tertiary">{filtrados.length} de {itens.length}</span>
       </div>
 
+      {/* faixa de progresso do upload */}
+      {enviando && prog && (
+        <div className="flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/[0.06] px-3.5 py-2.5">
+          <Loader2 size={15} className="animate-spin text-accent" />
+          <span className="text-[13px] font-medium text-accent">
+            Enviando mídia{prog.total > 1 ? ` (${prog.atual} de ${prog.total})` : ""}… não feche esta página.
+          </span>
+        </div>
+      )}
+
       {filtrados.length === 0 ? (
         <div className="grid place-items-center rounded-xl border border-dashed border-border py-20 text-center">
-          <p className="text-[14px] text-foreground-secondary">{itens.length === 0 ? "Nenhuma mídia no storage ainda." : "Nenhum arquivo corresponde à busca."}</p>
+          <p className="text-[14px] text-foreground-secondary">{itens.length === 0 ? "Nenhuma mídia na biblioteca ainda." : "Nenhum arquivo corresponde à busca."}</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -121,12 +156,7 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
             return (
               <div key={item.chave} className="group flex flex-col overflow-hidden rounded-lg border border-border bg-surface">
                 <div className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-muted">
-                  {tipo === "image" ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item.url} alt={nome} loading="lazy" className="h-full w-full object-cover" />
-                  ) : (
-                    <Preview tipo={tipo} />
-                  )}
+                  {tipo === "image" ? <Thumb url={item.url} nome={nome} /> : <Preview tipo={tipo} />}
                   <button
                     type="button"
                     onClick={() => excluir(item)}
@@ -141,13 +171,25 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
                     <p className="truncate text-[12px] font-medium" title={nome}>{nome}</p>
                     <p className="text-[11px] text-foreground-tertiary">{fmtTamanho(item.tamanho)} · {tipo}</p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => copiar(item.url)}
-                    className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[12px] font-medium transition hover:bg-muted"
-                  >
-                    {copiada === item.url ? <><Check size={13} className="text-success" /> Copiado</> : <><Copy size={13} /> Copiar link</>}
-                  </button>
+                  <div className="mt-auto flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => copiar(item.url)}
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-[12px] font-medium transition hover:bg-muted"
+                    >
+                      {copiada === item.url ? <><Check size={13} className="text-success" /> Copiado</> : <><Copy size={13} /> Copiar</>}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => baixar(item)}
+                      disabled={baixando === item.chave}
+                      aria-label="Baixar arquivo"
+                      title="Baixar"
+                      className="grid h-[30px] w-[34px] shrink-0 place-items-center rounded-md border border-border transition hover:bg-muted disabled:opacity-50"
+                    >
+                      {baixando === item.chave ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -155,6 +197,25 @@ export function MidiaBiblioteca({ itens }: { itens: MidiaItem[] }) {
         </div>
       )}
     </div>
+  );
+}
+
+// Miniatura de imagem com skeleton (pulsar) até carregar.
+function Thumb({ url, nome }: { url: string; nome: string }) {
+  const [carregada, setCarregada] = useState(false);
+  return (
+    <>
+      {!carregada && <div className="absolute inset-0 animate-pulse bg-foreground/[0.08]" />}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={url}
+        alt={nome}
+        loading="lazy"
+        onLoad={() => setCarregada(true)}
+        onError={() => setCarregada(true)}
+        className={`h-full w-full object-cover transition-opacity duration-300 ${carregada ? "opacity-100" : "opacity-0"}`}
+      />
+    </>
   );
 }
 

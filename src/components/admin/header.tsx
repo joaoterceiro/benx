@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { LayoutDashboard, Building2, Newspaper, Settings, LogOut, ChevronDown, UserCog } from "lucide-react";
+import { LayoutDashboard, Building2, Newspaper, Settings, LogOut, ChevronDown, UserCog, Images } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sair } from "@/actions/auth";
 import { AdminSearch } from "@/components/admin/admin-search";
@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/empreendimentos", label: "Empreendimentos", icon: Building2 },
   { href: "/admin/jornal", label: "Benx Jornal", icon: Newspaper },
   { href: "/admin/configuracoes", label: "Configurações", icon: Settings },
+  { href: "/admin/midias", label: "Mídia", icon: Images },
 ] as const;
 
 function iniciais(nome: string): string {

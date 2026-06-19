@@ -44,7 +44,7 @@ export function EsgShell({ ativo, children }: { ativo: EsgKey; children: React.R
   return (
     <div className="bg-white text-[#1a2230]">
       <EsgHero />
-      <nav className="bg-[#0a2a66]">
+      <nav style={{ background: "linear-gradient(90deg, #05142f 0%, #163a76 50%, #05142f 100%)" }}>
         <div className={`${COL} flex flex-wrap items-center justify-center gap-x-2 gap-y-1 py-1`}>
           {ESG_SECOES.map((s) => {
             const on = s.key === ativo;

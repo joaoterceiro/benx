@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { Upload, X, Loader2, Check, AlertCircle, Trash2, ImageDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { comprimirImagem, ehImagemComprimivel, type NivelCompressao } from "@/lib/comprimir-imagem";
@@ -33,10 +32,10 @@ const NIVEIS: { value: NivelCompressao; label: string; nota: string }[] = [
 
 function enviarComProgresso(file: File, onProg: (pct: number) => void): Promise<{ ok: boolean; erro?: string }> {
   return new Promise((resolve) => {
-    const fd = new FormData();
-    fd.append("arquivo", file);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/admin/midias/upload");
+    xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+    xhr.setRequestHeader("X-Arquivo-Nome", encodeURIComponent(file.name));
     xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProg(Math.round((e.loaded / e.total) * 100)); };
     xhr.onload = () => {
       try {
@@ -47,19 +46,17 @@ function enviarComProgresso(file: File, onProg: (pct: number) => void): Promise<
       }
     };
     xhr.onerror = () => resolve({ ok: false, erro: "Falha de rede" });
-    xhr.send(fd);
+    xhr.send(file);
   });
 }
 
 export function MidiaUploadModal({ aberto, onFechar, onConcluido }: { aberto: boolean; onFechar: () => void; onConcluido: () => void }) {
-  const [montado, setMontado] = useState(false);
   const [itens, setItens] = useState<Item[]>([]);
   const [nivel, setNivel] = useState<NivelCompressao>("otimizada");
   const [enviando, setEnviando] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const inputFile = useRef<HTMLInputElement>(null);
 
-  useEffect(() => setMontado(true), []);
   useEffect(() => {
     if (!aberto) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && !enviando) onFechar(); };
@@ -100,12 +97,12 @@ export function MidiaUploadModal({ aberto, onFechar, onConcluido }: { aberto: bo
     if (sucesso > 0) onConcluido();
   }
 
-  if (!aberto || !montado) return null;
+  if (!aberto) return null;
 
   const pendentes = itens.filter((i) => i.status === "pendente" || i.status === "erro").length;
   const concluidos = itens.filter((i) => i.status === "ok").length;
 
-  return createPortal(
+  return (
     <div
       className="fixed inset-0 z-[2147483600] grid place-items-center p-4"
       style={{ background: "rgba(5,8,15,.6)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
@@ -204,8 +201,7 @@ export function MidiaUploadModal({ aberto, onFechar, onConcluido }: { aberto: bo
           </div>
         </div>
       </div>
-    </div>,
-    document.body,
+    </div>
   );
 }
 

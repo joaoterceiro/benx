@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import Link from "next/link";
 import { AlertTriangle, X, Loader2, Copy, Check, Building2 } from "lucide-react";
 import { toast } from "sonner";
@@ -13,14 +12,11 @@ function nomeDe(chave: string): string {
 }
 
 export function MidiaExcluirModal({ item, onFechar, onExcluido }: { item: MidiaItem | null; onFechar: () => void; onExcluido: () => void }) {
-  const [montado, setMontado] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [usos, setUsos] = useState<{ nome: string; slug: string }[]>([]);
   const [texto, setTexto] = useState("");
   const [copiado, setCopiado] = useState(false);
   const [excluindo, setExcluindo] = useState(false);
-
-  useEffect(() => setMontado(true), []);
 
   // Carrega os vínculos sempre que abre para um item.
   useEffect(() => {
@@ -43,7 +39,7 @@ export function MidiaExcluirModal({ item, onFechar, onExcluido }: { item: MidiaI
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = anterior; };
   }, [item, excluindo, onFechar]);
 
-  if (!item || !montado) return null;
+  if (!item) return null;
 
   const nome = nomeDe(item.chave);
   const confere = texto.trim() === nome;
@@ -67,7 +63,7 @@ export function MidiaExcluirModal({ item, onFechar, onExcluido }: { item: MidiaI
     else toast.error(r.erro ?? "Falha ao excluir.");
   }
 
-  return createPortal(
+  return (
     <div
       className="fixed inset-0 z-[2147483600] grid place-items-center p-4"
       style={{ background: "rgba(5,8,15,.6)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
@@ -160,7 +156,6 @@ export function MidiaExcluirModal({ item, onFechar, onExcluido }: { item: MidiaI
           </button>
         </div>
       </div>
-    </div>,
-    document.body,
+    </div>
   );
 }

@@ -330,9 +330,9 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
                   ) : null}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-black/15" />
                   {r.statusLabel && (
-                    <span className="absolute right-5 top-5 whitespace-nowrap bg-black/60 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-white sm:text-[13px]">{r.statusLabel}</span>
+                    <span className="absolute right-[clamp(10px,1.4vw,20px)] top-[clamp(10px,1.4vw,20px)] whitespace-nowrap bg-black/60 px-[clamp(10px,1.1vw,16px)] py-[clamp(4px,0.5vw,8px)] text-[clamp(9px,0.8vw,12px)] font-semibold uppercase tracking-[0.12em] text-white">{r.statusLabel}</span>
                   )}
-                  <h3 className="absolute bottom-6 left-6 right-6 text-[24px] font-bold leading-tight text-white sm:text-[28px]">{r.nome}</h3>
+                  <h3 className="absolute bottom-6 left-6 right-6 text-[clamp(18px,1.7vw,28px)] font-bold leading-tight text-white">{r.nome}</h3>
                 </Link>
               ))}
             </Carrossel>

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { postPublicadoPorSlug, postsRelacionados } from "@/db/queries";
 import { sanitizarHtml } from "@/lib/sanitize";
+import { SITE_URL } from "@/lib/site";
 import { JornalTopo } from "@/components/public/jornal/jornal-topo";
+import { CompartilharBarra } from "@/components/public/jornal/compartilhar-barra";
 import { SiteFooter } from "@/components/public/site-footer";
 
 export const dynamic = "force-dynamic";
@@ -82,16 +84,12 @@ export default async function MateriaPage({ params }: { params: Promise<{ slug: 
               </span>
             )}
             <h1 className="font-serif text-[30px] leading-[1.18] text-[#1a1a1a] sm:text-[40px]">{post.titulo}</h1>
-            <div className="mt-8 flex items-center justify-between gap-4 border-t border-black/10 pt-5">
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-black/10 pt-5">
               <div className="flex flex-col gap-1">
                 <span className="text-[12px] italic text-black/45">{dataBR(post.dataPublicacao)}</span>
                 <span className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: VERMELHO }}>{post.categoria}</span>
               </div>
-              {post.fonteUrl && (
-                <a href={post.fonteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white transition hover:brightness-110" style={{ background: NAVY }}>
-                  Ler na íntegra <ArrowRight size={15} />
-                </a>
-              )}
+              <CompartilharBarra url={`${SITE_URL}/benx-journal/${slug}`} titulo={post.titulo} />
             </div>
           </div>
         </div>
@@ -117,11 +115,9 @@ export default async function MateriaPage({ params }: { params: Promise<{ slug: 
                 {paragrafos.length > 0 ? paragrafos.map((p, i) => <p key={i}>{p}</p>) : <p className="text-black/40">Sem conteúdo.</p>}
               </div>
             )}
-            {post.fonteUrl && (
-              <a href={post.fonteUrl} target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 border px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] transition hover:bg-black/[0.03]" style={{ borderColor: NAVY, color: NAVY }}>
-                Leia o artigo na íntegra <ExternalLink size={14} />
-              </a>
-            )}
+            <div className="mt-10 border-t border-black/10 pt-6">
+              <CompartilharBarra url={`${SITE_URL}/benx-journal/${slug}`} titulo={post.titulo} />
+            </div>
           </div>
 
           {/* sidebar */}

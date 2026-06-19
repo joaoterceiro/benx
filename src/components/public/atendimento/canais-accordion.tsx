@@ -24,8 +24,10 @@ export function CanaisAccordion({ canais }: { canais: Canal[] }) {
   const [aberto, setAberto] = useState<number | null>(null);
 
   return (
-    <div className="mt-12 border-t border-black/10">
-      {canais.map((c, i) => {
+    <div className="mt-10">
+      <p className="mb-4 text-[13px] text-[#8a94a6]">Toque em um canal para abrir as informações e os contatos.</p>
+      <div className="border-t border-black/10">
+        {canais.map((c, i) => {
         const on = aberto === i;
         return (
           <div key={c.label} className="border-b border-black/10">
@@ -33,16 +35,21 @@ export function CanaisAccordion({ canais }: { canais: Canal[] }) {
               type="button"
               onClick={() => setAberto(on ? null : i)}
               aria-expanded={on}
-              className="flex w-full items-center justify-between gap-4 py-6 text-left text-[20px] font-normal tracking-tight transition-colors hover:opacity-80 sm:text-[22px]"
+              className={`group flex w-full items-center justify-between gap-4 px-3 py-5 text-left text-[20px] font-normal tracking-tight transition-colors sm:text-[22px] ${on ? "bg-[#0a2a66]/[0.03]" : "hover:bg-black/[0.02]"}`}
               style={{ color: NAVY }}
             >
-              {c.label}
-              <ChevronDown size={22} strokeWidth={1.6} className={`shrink-0 transition-transform duration-300 ${on ? "rotate-180" : ""}`} style={{ color: `${NAVY}99` }} />
+              <span className="flex items-center gap-3">
+                {c.label}
+                {!on && <span className="hidden text-[12px] font-normal normal-case tracking-normal text-[#a0a8b5] transition-opacity group-hover:text-[#6b7689] sm:inline">ver detalhes</span>}
+              </span>
+              <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-colors duration-300 ${on ? "border-transparent bg-[#0a2a66] text-white" : "border-[#0a2a66]/25 text-[#0a2a66] group-hover:border-[#0a2a66]/60 group-hover:bg-[#0a2a66]/[0.06]"}`}>
+                <ChevronDown size={18} strokeWidth={2.2} className={`transition-transform duration-300 ${on ? "rotate-180" : ""}`} />
+              </span>
             </button>
 
             <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${on ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
               <div className="overflow-hidden">
-                <div className="max-w-2xl pb-7">
+                <div className="max-w-2xl px-3 pb-7">
                   <p className="text-[15px] leading-relaxed text-[#5a6577]">{c.resumo}</p>
                   {c.obs && <p className="mt-2 text-[13px] text-[#8a94a6]">{c.obs}</p>}
 
@@ -87,6 +94,7 @@ export function CanaisAccordion({ canais }: { canais: Canal[] }) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }

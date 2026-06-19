@@ -15,7 +15,7 @@ const SECOES = [
   { href: "/admin/configuracoes/slider", label: "Hero Slider", icon: GalleryHorizontalEnd },
   { href: "/admin/configuracoes/home-cards", label: "Cards da Home", icon: ListOrdered },
   { href: "/admin/jornal", label: "Blog", icon: Newspaper },
-  { href: "/admin/midia", label: "Mídia", icon: Images },
+  { href: "/admin/midias", label: "Mídia", icon: Images },
   { href: "/admin/configuracoes/selo", label: "Selo de Habitação", icon: Stamp },
   { href: "/admin/configuracoes/info-habitacao", label: "Info HIS/HMP", icon: FileText },
   { href: "/admin/configuracoes/footer", label: "Footer", icon: PanelBottom },

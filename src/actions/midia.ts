@@ -25,7 +25,7 @@ export async function uploadBiblioteca(
     const chave = `biblioteca/${stamp}-${base}.${ext}`;
     const buffer = Buffer.from(await file.arrayBuffer());
     await uploadMidia(chave, buffer, file.type || undefined);
-    revalidatePath("/admin/midia");
+    revalidatePath("/admin/midias");
     return { ok: true, chave };
   } catch (err) {
     await logError({ err, action: "midia" }, "Falha no upload da biblioteca");
@@ -41,7 +41,7 @@ export async function excluirMidiaBiblioteca(chave: string): Promise<{ ok: boole
   if (!chave) return { ok: false, erro: "Chave inválida" };
   try {
     await deleteMidia(chave);
-    revalidatePath("/admin/midia");
+    revalidatePath("/admin/midias");
     return { ok: true };
   } catch (err) {
     await logError({ err, action: "midia" }, "Falha ao excluir mídia");

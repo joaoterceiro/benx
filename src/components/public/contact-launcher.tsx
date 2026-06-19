@@ -68,27 +68,18 @@ export function ContactLauncher({
         aria-label={aberto ? "Fechar atendimento" : "Abrir canais de atendimento"}
         aria-expanded={aberto}
         aria-haspopup="dialog"
-        className="group fixed bottom-5 right-5 z-[60] flex items-center gap-3 bg-[#0a2a66] py-2 pl-2 pr-5 text-white shadow-[0_10px_30px_rgba(10,42,102,0.45)] ring-1 ring-white/10 transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#0a4dcc]"
+        className="group fixed bottom-5 right-5 z-[60] grid h-14 w-14 place-items-center rounded-full bg-[#0a2a66] text-white shadow-[0_10px_30px_rgba(10,42,102,0.45)] ring-1 ring-white/10 transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#0a4dcc]"
       >
-        <span className="grid h-11 w-11 place-items-center bg-white/10 transition-transform group-hover:scale-105">
-          {aberto ? (
-            <X size={22} />
-          ) : (
-            <svg width="24" height="24" viewBox="0 0 256 256" aria-hidden>
-              <circle cx="128" cy="128" r="12" fill="currentColor" />
-              <circle cx="84" cy="128" r="12" fill="currentColor" />
-              <circle cx="172" cy="128" r="12" fill="currentColor" />
-              <path d="M79.93,211.11a96,96,0,1,0-35-35h0L32.42,213.46a8,8,0,0,0,10.12,10.12l37.39-12.47Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16" />
-            </svg>
-          )}
-        </span>
-        <span className="flex flex-col items-start leading-tight">
-          <span className="text-[14px] font-semibold">Atendimento</span>
-          <span className="flex items-center gap-1.5 text-[11px] font-medium text-white/75">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
-            Fale com a gente
-          </span>
-        </span>
+        {aberto ? (
+          <X size={24} className="transition-transform group-hover:scale-105" />
+        ) : (
+          <svg width="26" height="26" viewBox="0 0 256 256" aria-hidden className="transition-transform group-hover:scale-105">
+            <circle cx="128" cy="128" r="12" fill="currentColor" />
+            <circle cx="84" cy="128" r="12" fill="currentColor" />
+            <circle cx="172" cy="128" r="12" fill="currentColor" />
+            <path d="M79.93,211.11a96,96,0,1,0-35-35h0L32.42,213.46a8,8,0,0,0,10.12,10.12l37.39-12.47Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16" />
+          </svg>
+        )}
       </button>
 
       {montado &&

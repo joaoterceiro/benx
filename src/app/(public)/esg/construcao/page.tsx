@@ -27,7 +27,9 @@ const GRUPOS = [
   {
     titulo: "Ciclo de vida e redução de impactos",
     itens: [
-      { t: "Gerenciamento responsável de resíduos", d: "Destinação correta e redução dos resíduos gerados na construção." },
+      { t: "Gerenciamento responsável de resíduos", d: "Focamos na redução, segregação na origem e destinação correta para reciclagem." },
+      { t: "Compromisso climático", d: "Participação na Aliança GEE da Abrainc e inventários anuais de emissões de GEE." },
+      { t: "Conformidade ambiental", d: "Sistemas de gestão certificado ISO 14001 e monitoramento rigoroso para mitigar os impactos ambientais e à comunidade." },
     ],
   },
 ];
@@ -38,9 +40,8 @@ export default function EsgConstrucaoPage() {
       <section className={`${COL} py-16`}>
         <Reveal>
           <span className="inline-block border border-[#e3e8ef] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5b6577]">Construção sustentável</span>
-          <div className="mt-6 max-w-3xl space-y-4 text-[15px] leading-relaxed text-[#5a6577]">
-            <p>Acreditamos que a construção civil tem um papel decisivo no desenvolvimento sustentável das cidades, e esse princípio orienta a nossa atuação desde a fundação.</p>
-            <p>Cada empreendimento é concebido como parte do tecido urbano, integrando responsabilidade ambiental, social e econômica em todo o ciclo, da concepção à entrega.</p>
+          <div className="mt-6 max-w-3xl text-[15px] leading-relaxed text-[#5a6577]">
+            <p>Acreditamos que a construção civil tem um papel decisivo no desenvolvimento sustentável das cidades, e esse princípio orienta a nossa atuação desde a fundação. Trabalhamos para gerar benefícios urbanos reais, requalificando áreas degradadas, valorizando o espaço público e contribuindo para uma cidade mais conectada e funcional. Ao mesmo tempo, reconhecemos os impactos ambientais e sociais inerentes às obras e adotamos medidas eficazes para mitigá-los com responsabilidade.</p>
           </div>
 
           <div className="mt-12 flex flex-col gap-12">
@@ -57,12 +58,6 @@ export default function EsgConstrucaoPage() {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="mt-12 flex items-center gap-4 border-t border-black/10 pt-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/esg/iso-45001.png" alt="ISO 45001" className="h-16 w-auto object-contain" />
-            <p className="text-[13px] leading-relaxed text-[#5a6577]">Processos de obra com gestão de saúde e segurança certificada pela norma <strong className="text-[#1a2230]">ISO 45001</strong>.</p>
           </div>
         </Reveal>
       </section>

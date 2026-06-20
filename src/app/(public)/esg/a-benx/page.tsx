@@ -98,6 +98,10 @@ export default function EsgABenxPage() {
               <p className="mt-3 text-[14px] leading-relaxed text-[#5a6577]">Expertise em tecnologias, inovações construtivas e gestão de obras.</p>
             </div>
           </div>
+          <div className="mx-auto mt-10 max-w-3xl text-center">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[#3a3f47]">Competências somadas</p>
+            <p className="mt-2 text-[24px] font-light tracking-tight sm:text-[30px]" style={{ color: NAVY }}>Cadeia de valor completa</p>
+          </div>
         </Reveal>
       </section>
     </EsgShell>

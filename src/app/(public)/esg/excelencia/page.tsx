@@ -82,13 +82,19 @@ export default function EsgExcelenciaPage() {
         </Reveal>
       </section>
 
-      {/* SELOS / NORMAS */}
+      {/* SELOS / NORMAS + POLÍTICA DO SGI */}
       <section className={`${COL} pb-6`}>
         <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
           {SELOS.map((s) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={s.alt} src={s.src} alt={s.alt} className={`${s.classe} w-auto object-contain`} />
           ))}
+        </div>
+        <div className="mx-auto mt-10 max-w-3xl text-center">
+          <h3 className="text-[18px] font-semibold uppercase tracking-[0.08em] sm:text-[20px]" style={{ color: NAVY }}>Política do SGI</h3>
+          <p className="mt-4 text-[14px] leading-relaxed text-[#5a6577]">
+            Transformar a vida das pessoas por meio de empreendimentos imobiliários com qualidade, construídos dentro do custo e prazo previsto, atendendo aos requisitos legais, normativos e às expectativas dos clientes. Promovemos a melhoria contínua dos processos, com responsabilidade socioambiental, segurança no trabalho e respeito às partes interessadas.
+          </p>
         </div>
       </section>
 

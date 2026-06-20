@@ -23,8 +23,8 @@ export default function EsgGentePage() {
             <div>
               <span className="inline-block border border-[#e3e8ef] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5b6577]">Gente e gestão de stakeholders</span>
               <div className="mt-6 space-y-5 text-[15px] leading-relaxed text-[#5a6577]">
-                <p>A Benx reconhece que a valorização das pessoas e a gestão de stakeholders são essenciais para a geração de valor sustentável, com práticas consolidadas de desenvolvimento, cuidado e relacionamento.</p>
-                <p>A diversidade e a inclusão permeiam toda a jornada profissional, enquanto o relacionamento com colaboradores, clientes, fornecedores, corretores e investidores é conduzido com ética, transparência e diálogo.</p>
+                <p>A Benx reconhece que a valorização das pessoas e a gestão de stakeholders são essenciais para a geração de valor sustentável. Com práticas consolidadas, metas definidas e um ambiente ético, inclusivo e colaborativo, a empresa promove comunicação transparente, desenvolvimento contínuo de talentos e rigor em saúde e segurança ocupacional.</p>
+                <p>A diversidade e a inclusão permeiam toda a jornada profissional, enquanto o relacionamento com colaboradores, clientes, fornecedores, corretores e investidores é guiado por diálogo constante e responsabilidade, sempre alinhado ao compromisso da companhia com a transformação urbana, a requalificação de áreas e a valorização do espaço público, contribuindo para melhorias que impactam positivamente a vida na cidade.</p>
               </div>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}

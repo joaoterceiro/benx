@@ -28,7 +28,7 @@ export default function EsgGentePage() {
               </div>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/esg/Biodiverdidade-Parque-Global.png" alt="Parque Global" className="aspect-[4/3] w-full rounded-sm object-cover" />
+            <img src="/esg/gente-pessoas.webp" alt="Gente e gestão de stakeholders" className="aspect-[4/3] w-full rounded-sm object-cover" />
           </div>
         </Reveal>
       </section>

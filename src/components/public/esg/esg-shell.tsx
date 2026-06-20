@@ -21,7 +21,7 @@ export function EsgHero() {
   return (
     <header className="relative flex min-h-[72vh] flex-col justify-center overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/compromisso/hero.png" alt="Compromisso com o futuro" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+      <img src="/esg/hero-banner.webp" alt="Compromisso com o futuro" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10" />
       <SiteHeader />
       <div className={`relative z-10 ${COL} max-w-3xl`}>

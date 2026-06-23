@@ -69,8 +69,9 @@ export default async function EditarEmpreendimentoPage({
   );
   const pontos = (emp.detalhesLocalizacao ?? []).map((p) => ({
     uid: randomUUID(),
-    nome: p.titulo,
-    distancia: p.distancia ?? "",
+    // dados migrados do WP podem trazer titulo/distancia como objeto: coage p/ string
+    nome: typeof p.titulo === "string" ? p.titulo : "",
+    distancia: typeof p.distancia === "string" ? p.distancia : "",
   }));
   const plantas = await Promise.all(
     plantasDb.map(async (p) => ({

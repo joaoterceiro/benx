@@ -190,8 +190,8 @@ export function CadastroEmpreendimento({
   }, [form, galeriaFachada]);
   const errosPorTab: Record<string, boolean> = {
     basico: ["nome", "linhaProduto"].some((k) => erros[k]),
-    midias: ["galeriaFachada"].some((k) => erros[k]),
-    localizacao: ["cep", "linkMaps"].some((k) => erros[k]),
+    midias: false,
+    localizacao: false,
   };
   const algumTocado = tocado.nome || tocado.linhaProduto || tocado.cep || tocado.linkMaps || tocado.galeriaFachada || salvoUmaVez;
   const tabCompleta: Record<string, boolean> = {
@@ -254,13 +254,11 @@ export function CadastroEmpreendimento({
   async function salvar() {
     setTocado((t) => ({ ...t, nome: true, linhaProduto: true }));
     setErroGeral(null);
-    if (Object.keys(erros).length) {
-      if (errosPorTab.basico) setTab("basico");
-      else if (errosPorTab.midias) setTab("midias");
-      else if (errosPorTab.localizacao) setTab("localizacao");
-      const msg = erros.galeriaFachada
-        ? "Adicione no mínimo 3 imagens na galeria de Fachada para salvar."
-        : "Revise os campos obrigatórios destacados antes de salvar.";
+    // Só Nome e Linha do produto bloqueiam o salvar (essenciais para o registro
+    // e a URL). CEP/links/galeria são recomendações que não impedem salvar.
+    if (erros.nome || erros.linhaProduto) {
+      setTab("basico");
+      const msg = "Preencha o nome e a linha do produto para salvar.";
       setErroGeral(msg);
       toast.error(msg);
       window.scrollTo({ top: 0, behavior: "smooth" });

@@ -120,17 +120,17 @@ export default function OrigemPropositoPage() {
       </section>
 
       {/* NÚMEROS */}
-      <section className="bg-[#0a2a66]">
-        <Reveal className={`${COL} py-20`}>
-          <p className="text-center text-[12px] font-semibold uppercase tracking-[0.2em] text-[#6db3e8]">A Benx em números</p>
-          <div className="mx-auto mt-12 grid max-w-4xl grid-cols-1 sm:grid-cols-2 sm:divide-x sm:divide-white/15">
+      <section className={`${COL} py-16`}>
+        <Reveal>
+          <p className="text-center text-[12px] font-semibold uppercase tracking-[0.2em] text-[#9aa3b2]">A Benx em números</p>
+          <div className="mx-auto mt-10 grid max-w-4xl grid-cols-1 sm:grid-cols-2 sm:divide-x sm:divide-[#e3e8ef]">
             {[
               { n: "+150", l: "empreendimentos" },
               { n: "+5,5 mi", l: "de m² construídos" },
             ].map((s) => (
               <div key={s.l} className="flex flex-col items-center px-6 py-4 text-center">
-                <p className="text-[68px] font-light leading-none tracking-tight text-white sm:text-[104px]">{s.n}</p>
-                <p className="mt-5 text-[13px] font-medium uppercase tracking-[0.16em] text-white/60">{s.l}</p>
+                <p className="text-[64px] font-bold leading-none tracking-tight sm:text-[96px]" style={{ color: NAVY }}>{s.n}</p>
+                <p className="mt-4 text-[13px] font-medium uppercase tracking-[0.16em] text-[#7a8190]">{s.l}</p>
               </div>
             ))}
           </div>

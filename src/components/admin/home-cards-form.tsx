@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { ArrowUp, ArrowDown, X, Plus, Search, Shuffle, LayoutGrid } from "lucide-react";
 import { salvarDestaquesHome } from "@/actions/home-cards";
 import { statusObraLabel } from "@/lib/labels";
+import { CROSS_PROMO } from "@/lib/ecossistema";
 
 type Item = { id: string; nome: string; ordemHome: number; statusObra: string };
 type Grupo = { value: string; label: string; slug: string; items: Item[] };
@@ -41,6 +42,10 @@ export function HomeCardsForm({
   configs: Record<string, StripConfig>;
   promos: Record<string, string[]>;
 }) {
+  // A faixa "Conheça nossa linha" de cada home promove OUTRA linha (cross-promo).
+  const byValue = new Map(grupos.map((g) => [g.value, g]));
+  const promoAlvo = (v: string): Grupo | undefined => byValue.get(CROSS_PROMO[v as keyof typeof CROSS_PROMO]);
+
   const [pins, setPins] = useState<Record<string, string[]>>(() => {
     const o: Record<string, string[]> = {};
     grupos.forEach((g) => {
@@ -51,7 +56,8 @@ export function HomeCardsForm({
   const [promoPins, setPromoPins] = useState<Record<string, string[]>>(() => {
     const o: Record<string, string[]> = {};
     grupos.forEach((g) => {
-      const validos = new Set(g.items.map((i) => i.id));
+      // os ids salvos são da linha PROMOVIDA, não da própria linha do grupo
+      const validos = new Set((promoAlvo(g.value)?.items ?? []).map((i) => i.id));
       o[g.value] = (promos[g.value] ?? []).filter((id) => validos.has(id));
     });
     return o;
@@ -84,18 +90,23 @@ export function HomeCardsForm({
         </p>
       </div>
 
-      {grupos.map((g) => (
-        <GrupoHome
-          key={g.value}
-          grupo={g}
-          pins={pins[g.value] ?? []}
-          setPins={(ids) => setPins((p) => ({ ...p, [g.value]: ids }))}
-          promo={promoPins[g.value] ?? []}
-          setPromo={(ids) => setPromoPins((p) => ({ ...p, [g.value]: ids }))}
-          cfg={cfgs[g.value]}
-          setCfg={(c) => setCfgs((p) => ({ ...p, [g.value]: c }))}
-        />
-      ))}
+      {grupos.map((g) => {
+        const alvo = promoAlvo(g.value);
+        return (
+          <GrupoHome
+            key={g.value}
+            grupo={g}
+            pins={pins[g.value] ?? []}
+            setPins={(ids) => setPins((p) => ({ ...p, [g.value]: ids }))}
+            promo={promoPins[g.value] ?? []}
+            setPromo={(ids) => setPromoPins((p) => ({ ...p, [g.value]: ids }))}
+            promoItens={alvo?.items ?? []}
+            promoLabel={alvo?.label ?? ""}
+            cfg={cfgs[g.value]}
+            setCfg={(c) => setCfgs((p) => ({ ...p, [g.value]: c }))}
+          />
+        );
+      })}
 
       <div className="sticky bottom-0 flex items-center gap-3 border-t border-border bg-background/90 py-3 backdrop-blur">
         <Button variant="primary" onClick={salvar} disabled={pending}>{pending ? "Salvando..." : "Salvar configurações"}</Button>
@@ -105,13 +116,15 @@ export function HomeCardsForm({
 }
 
 function GrupoHome({
-  grupo, pins, setPins, promo, setPromo, cfg, setCfg,
+  grupo, pins, setPins, promo, setPromo, promoItens, promoLabel, cfg, setCfg,
 }: {
   grupo: Grupo;
   pins: string[];
   setPins: (ids: string[]) => void;
   promo: string[];
   setPromo: (ids: string[]) => void;
+  promoItens: Item[];
+  promoLabel: string;
   cfg: StripConfig;
   setCfg: (c: StripConfig) => void;
 }) {
@@ -186,21 +199,22 @@ function GrupoHome({
         )}
       </div>
 
-      {/* Faixa "Conheça nossa linha <label>" (cross-promo nas outras homes) */}
+      {/* Faixa "Conheça nossa linha <promoLabel>" exibida NESTA home, promovendo
+          a linha cross-promovida (ex.: na home Benx aparece a linha VivaBenx). */}
       <div className="mt-6 border-t border-border pt-5">
         <p className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-foreground-tertiary">
-          <LayoutGrid size={13} /> Faixa &ldquo;Conheça nossa linha {grupo.label}&rdquo;
+          <LayoutGrid size={13} /> Faixa &ldquo;Conheça nossa linha {promoLabel}&rdquo;
         </p>
         <p className="mt-1 text-[12px] text-foreground-tertiary">
-          Sequência dos empreendimentos que aparecem nessa faixa (exibida nas <strong>outras</strong> homes). Se vazio, usa a faixa &ldquo;Primeiros a aparecer&rdquo; acima.
+          Empreendimentos da linha <strong>{promoLabel}</strong> que aparecem nessa faixa na home <strong>{grupo.label}</strong>. Se vazio, usa a ordem padrão da linha {promoLabel}.
         </p>
         <Picker
-          itens={grupo.items}
+          itens={promoItens}
           ids={promo}
           setIds={setPromo}
-          placeholder="Buscar empreendimento para a faixa..."
+          placeholder={`Buscar empreendimento ${promoLabel} para a faixa...`}
           rotuloAdd="Adicionar"
-          vazio="Nenhum selecionado — usa a ordem da faixa principal."
+          vazio={`Nenhum selecionado — usa a ordem padrão da linha ${promoLabel}.`}
           semTopo
         />
       </div>

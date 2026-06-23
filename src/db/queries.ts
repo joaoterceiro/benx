@@ -420,13 +420,14 @@ export async function cardsVertente(value: VertenteValue): Promise<CardVertente[
   );
 }
 
-// Cards da faixa "Conheça nossa linha <value>" (cross-promo nas outras homes).
-// Usa a seleção/ordem dedicada (home_promo_<value>) se houver; senão, cai na
-// faixa normal da linha (cardsVertente).
-export async function cardsPromo(value: VertenteValue): Promise<CardVertente[]> {
-  const ids = await lerPromoIds(value);
-  if (ids.length === 0) return cardsVertente(value);
-  const linhaId = await linhaIdPorValue(value);
+// Cards da faixa "Conheça nossa linha <promoValue>" exibida na home de
+// <sourceValue>. A seleção/ordem é configurada POR PÁGINA DE ORIGEM
+// (home_promo_<sourceValue>), mas os empreendimentos são da LINHA PROMOVIDA
+// (promoValue). Se vazio, cai na ordem padrão da linha promovida.
+export async function cardsPromo(sourceValue: VertenteValue, promoValue: VertenteValue): Promise<CardVertente[]> {
+  const ids = await lerPromoIds(sourceValue);
+  if (ids.length === 0) return cardsVertente(promoValue);
+  const linhaId = await linhaIdPorValue(promoValue);
   if (!linhaId) return [];
   const rows = await db.query.empreendimentos.findMany({
     where: and(
@@ -447,7 +448,7 @@ export async function cardsPromo(value: VertenteValue): Promise<CardVertente[]> 
       cidade: e.cidade?.nome ?? "",
       imagemUrl: e.imagemPrincipal ? await getUrl(e.imagemPrincipal) : null,
       logotipoUrl: e.logotipo ? await getUrl(e.logotipo) : null,
-      seloUrl: value === "vivabenx" ? seloUrlPorTipo(e.tipoHabitacao) : null,
+      seloUrl: promoValue === "vivabenx" ? seloUrlPorTipo(e.tipoHabitacao) : null,
     }))
   );
 }

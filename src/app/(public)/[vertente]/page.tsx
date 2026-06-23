@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { vertentePorSlug, vertentePorValue, type VertenteValue } from "@/lib/ecossistema";
+import { vertentePorSlug, vertentePorValue, CROSS_PROMO, type VertenteValue } from "@/lib/ecossistema";
 import {
   buscarEmpreendimentos,
   listarStatusObra,
@@ -52,19 +52,14 @@ export default async function HomeVertentePage({
     pagina: sp.page ? Number(sp.page) : 1,
   };
 
-  // "Conheça nossa linha {X}": cada home cruza para outra vertente.
-  const PROMO: Record<string, VertenteValue> = {
-    benx_iconicos: "benx",
-    benx: "vivabenx",
-    vivabenx: "benx",
-  };
-  const promoValue = PROMO[info.value] ?? "benx";
+  // "Conheça nossa linha {X}": cada home cruza para outra vertente (CROSS_PROMO).
+  const promoValue: VertenteValue = CROSS_PROMO[info.value] ?? "benx";
   const promoInfo = vertentePorValue(promoValue);
 
   const [slides, cards, promoCards, bairros, statusPresentes, busca, posts, stripCfg, seloCfg] = await Promise.all([
     slidesDaVertente(info.value),
     cardsVertente(info.value),
-    cardsPromo(promoValue),
+    cardsPromo(info.value, promoValue),
     bairrosDaVertente(info.value),
     listarStatusObra(info.value),
     temFiltro ? buscarEmpreendimentos(info.value, filtros) : Promise.resolve(null),

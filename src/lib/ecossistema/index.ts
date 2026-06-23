@@ -58,6 +58,20 @@ export function listarVertentes(): Vertente[] {
   return [...VERTENTES].sort((a, b) => a.ordem - b.ordem);
 }
 
+// Cross-promo: a home de cada vertente mostra a seção "Conheça nossa linha {X}"
+// promovendo OUTRA linha. Ex.: na home Benx aparece a linha VivaBenx.
+export const CROSS_PROMO: Record<VertenteValue, VertenteValue> = {
+  benx_iconicos: "benx",
+  benx: "vivabenx",
+  vivabenx: "benx",
+};
+
+/** Vertente promovida na seção "Conheça nossa linha" da home desta vertente. */
+export function vertentePromovida(value: string): Vertente | undefined {
+  const alvo = CROSS_PROMO[value as VertenteValue];
+  return alvo ? vertentePorValue(alvo) : undefined;
+}
+
 /** Resolve vertente pelo slug de rota (ex.: "unicos"). */
 export function vertentePorSlug(slug: string): Vertente | undefined {
   return VERTENTES.find((v) => v.slug === slug);

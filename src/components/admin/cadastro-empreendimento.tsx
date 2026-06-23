@@ -43,7 +43,7 @@ const UFS = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","P
 // ── Tipos ─────────────────────────────────────────────────────────────────
 export interface Img { key: string; url: string; uploading?: boolean; progresso?: number }
 interface Area { uid: string; nome: string; descricao: string; imagem: Img | null }
-interface Ponto { uid: string; nome: string; distancia: string }
+interface Ponto { uid: string; nome: string; imagem: Img | null }
 interface Cert { uid: string; nome: string; imagem: Img | null }
 interface Planta { uid: string; nome: string; metragem: string; dormitorios: string; suites: string; vagas: string; recursos: string; imagem: Img | null }
 
@@ -63,7 +63,7 @@ export interface CadastroInicial {
 const uid = () => crypto.randomUUID();
 const novaPlanta = (): Planta => ({ uid: uid(), nome: "", metragem: "", dormitorios: "", suites: "", vagas: "", recursos: "", imagem: null });
 const novaArea = (): Area => ({ uid: uid(), nome: "", descricao: "", imagem: null });
-const novoPonto = (): Ponto => ({ uid: uid(), nome: "", distancia: "" });
+const novoPonto = (): Ponto => ({ uid: uid(), nome: "", imagem: null });
 const novaCert = (): Cert => ({ uid: uid(), nome: "", imagem: null });
 const slugify = (s: string) => s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const statusLabel = (v: string) => STATUS_OBRA.find((s) => s.value === v)?.label ?? humanizar(v);
@@ -239,7 +239,7 @@ export function CadastroEmpreendimento({
       diferenciais: linhas(v("diferenciais")),
       areasComuns: areasComuns.filter((a) => a.nome.trim()).map((a) => ({ nome: a.nome, descricao: a.descricao || undefined, imagem: a.imagem?.key })),
       certificacoes: certificacoes.filter((c) => c.nome.trim()).map((c) => ({ nome: c.nome, imagem: c.imagem?.key })),
-      detalhesLocalizacao: pontos.filter((p) => p.nome.trim()).map((p) => ({ titulo: p.nome, distancia: p.distancia || undefined })),
+      detalhesLocalizacao: pontos.filter((p) => p.nome.trim()).map((p) => ({ titulo: p.nome, imagem: p.imagem?.key })),
       tagsCard: [],
       relacionados,
       plantas: plantas.filter((p) => p.nome.trim()).map((p) => ({
@@ -498,8 +498,8 @@ export function CadastroEmpreendimento({
                 <Grupo titulo="Pontos de interesse próximos">
                   {pontos.map((p) => (
                     <div key={p.uid} className="bx-ponto">
-                      <input className="bx-inp" value={p.nome} onChange={(e) => setPonto(p.uid, "nome", e.target.value)} placeholder="Shopping JK Iguatemi" />
-                      <input className="bx-inp" value={p.distancia} onChange={(e) => setPonto(p.uid, "distancia", e.target.value)} placeholder="4.400 m" />
+                      <input className="bx-inp" value={p.nome} onChange={(e) => setPonto(p.uid, "nome", e.target.value)} placeholder="Shopping JK Iguatemi: 9 Min" />
+                      <UploadSingle valor={p.imagem} onChange={(img) => setPonto(p.uid, "imagem", img)} ratio="4 / 3" proporcao="4:3" />
                       {pontos.length > 1 && <button onClick={() => removePonto(p.uid)} className="bx-ponto-x" title="Remover">×</button>}
                     </div>
                   ))}

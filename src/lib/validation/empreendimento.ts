@@ -21,6 +21,7 @@ const certificacao = z.object({
 const detalheLocalizacao = z.object({
   titulo: z.string().min(1),
   distancia: z.string().optional(),
+  imagem: z.string().optional(),
 });
 const areaComum = z.object({
   nome: z.string().min(1),

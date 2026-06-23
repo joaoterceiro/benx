@@ -9,6 +9,7 @@ import {
   empreendimentosPorSlugs,
 } from "@/db/queries";
 import { getUrl } from "@/lib/storage";
+import { chaveImagemPonto } from "@/lib/pontos";
 import { statusObraLabel, tipoHabitacaoLabel } from "@/lib/labels";
 import { seloUrlPorTipo } from "@/lib/selo";
 import { lerInfoHabitacao } from "@/lib/config";
@@ -156,7 +157,13 @@ export default async function EmpreendimentoPage({
       localizacao: {
         endereco: e.enderecoParcial || e.enderecoCompleto || "",
         regiao: [e.bairro?.nome, e.cidade ? `${e.cidade.nome}${e.cidade.estado ? `/${e.cidade.estado}` : ""}` : ""].filter(Boolean).join(" "),
-        pontos: (e.detalhesLocalizacao ?? []).map((p) => ({ titulo: p.titulo, distancia: p.distancia ?? "" })),
+        pontos: await Promise.all(
+          (e.detalhesLocalizacao ?? []).map(async (p) => {
+            const chave = chaveImagemPonto(p);
+            const imagemUrl = chave ? (chave.startsWith("http") ? chave : await getUrl(chave)) : null;
+            return { titulo: p.titulo, imagemUrl };
+          })
+        ),
         uber: e.linkUber || `https://m.uber.com/ul/?action=setPickup&dropoff[formatted_address]=${encEnd}`,
         maps: e.linkMaps || `https://www.google.com/maps/search/?api=1&query=${encEnd}`,
         waze: e.linkWaze || `https://waze.com/ul?q=${encEnd}&navigate=yes`,

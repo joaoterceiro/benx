@@ -13,6 +13,7 @@ import {
   listarEmpreendimentosResumo,
 } from "@/db/queries";
 import { getUrl } from "@/lib/storage";
+import { chaveImagemPonto } from "@/lib/pontos";
 
 const s = (x: unknown) => (x === null || x === undefined ? "" : String(x));
 const n = (x: unknown) => (x === null || x === undefined ? 0 : Number(x));
@@ -67,12 +68,18 @@ export default async function EditarEmpreendimentoPage({
       imagem: await imgDeChave(c.imagem),
     }))
   );
-  const pontos = (emp.detalhesLocalizacao ?? []).map((p) => ({
-    uid: randomUUID(),
-    // dados migrados do WP podem trazer titulo/distancia como objeto: coage p/ string
-    nome: typeof p.titulo === "string" ? p.titulo : "",
-    distancia: typeof p.distancia === "string" ? p.distancia : "",
-  }));
+  const pontos = await Promise.all(
+    (emp.detalhesLocalizacao ?? []).map(async (p) => {
+      // titulo coagido a string; imagem aceita chave MinIO, URL ou objeto legado do WP
+      const chave = chaveImagemPonto(p);
+      const url = chave ? (chave.startsWith("http") ? chave : await getUrl(chave)) : null;
+      return {
+        uid: randomUUID(),
+        nome: typeof p.titulo === "string" ? p.titulo : "",
+        imagem: chave && url ? { key: chave, url } : null,
+      };
+    })
+  );
   const plantas = await Promise.all(
     plantasDb.map(async (p) => ({
       uid: randomUUID(),

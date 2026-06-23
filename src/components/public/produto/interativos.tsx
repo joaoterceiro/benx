@@ -267,7 +267,7 @@ export function GaleriaCarrossel({ imagens, cols, aspect = "16 / 10" }: { imagen
 }
 
 // ── Carrossel de pontos próximos (Localização) ────────────────────────────
-export function PontosCarrossel({ pontos }: { pontos: { titulo: string; distancia: string }[] }) {
+export function PontosCarrossel({ pontos }: { pontos: { titulo: string; imagemUrl?: string | null }[] }) {
   const n = pontos.length;
   const [i, setI] = useState(0);
   const sobre = useRef(false);
@@ -283,8 +283,14 @@ export function PontosCarrossel({ pontos }: { pontos: { titulo: string; distanci
         <div className="flex h-full transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]" style={{ transform: `translateX(-${i * 100}%)` }}>
           {pontos.map((p, k) => (
             <div key={k} className="relative h-full w-full shrink-0">
+              {p.imagemUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={p.imagemUrl} alt={p.titulo} className="h-full w-full object-cover" />
+              ) : (
+                <div className="grid h-full w-full place-items-center bg-[#1a1a1a] text-[13px] text-white/30">Sem imagem</div>
+              )}
               <div className="absolute bottom-0 left-0 right-0 bg-black/65 px-5 py-3.5 text-center text-[14px] font-medium text-white">
-                {p.titulo}{p.distancia ? ` – ${p.distancia}` : ""}
+                {p.titulo}
               </div>
             </div>
           ))}

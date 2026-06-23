@@ -38,7 +38,7 @@ export interface ProdutoBenxDados {
   /** Vídeo principal (YouTube/Vimeo) exibido na seção de destaque. */
   videoPrincipal?: string | null;
   videoThumb?: string | null;
-  localizacao: { endereco: string; regiao: string; pontos: { titulo: string; distancia: string }[]; uber: string; maps: string; waze: string; standDeVendas?: string };
+  localizacao: { endereco: string; regiao: string; pontos: { titulo: string; imagemUrl?: string | null }[]; uber: string; maps: string; waze: string; standDeVendas?: string };
   contato: { empreendimentoId: string; origem: string };
   relacionados: { href: string; nome: string; statusLabel: string; urlImagem: string | null }[];
   /** Marca/tema da página. Default "benx". */

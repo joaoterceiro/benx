@@ -155,7 +155,7 @@ export const empreendimentos = pgTable("empreendimentos", {
     .$type<{ nome: string; descricao?: string; imagem?: string }[]>()
     .default([]),
   certificacoes: jsonb("certificacoes").$type<{ nome: string; imagem?: string }[]>().default([]),
-  detalhesLocalizacao: jsonb("detalhes_localizacao").$type<{ titulo: string; distancia?: string }[]>().default([]),
+  detalhesLocalizacao: jsonb("detalhes_localizacao").$type<{ titulo: string; distancia?: string; imagem?: string }[]>().default([]),
   tagsCard: jsonb("tags_card").$type<string[]>().default([]),
   // Empreendimentos relacionados (slugs de outros empreendimentos).
   relacionados: jsonb("relacionados").$type<string[]>().default([]),

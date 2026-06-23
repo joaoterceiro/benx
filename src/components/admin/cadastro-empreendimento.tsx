@@ -185,7 +185,6 @@ export function CadastroEmpreendimento({
     if (!v("linhaProduto")) e.linhaProduto = "Selecione a vertente Benx.";
     if (v("cep") && !/^\d{5}-?\d{3}$/.test(v("cep"))) e.cep = "Use o formato 00000-000.";
     if (v("linkMaps") && !/^https?:\/\//.test(v("linkMaps"))) e.linkMaps = "Inclua https:// no link.";
-    if (galeriaFachada.length < 3) e.galeriaFachada = "Adicione no mínimo 3 imagens na Fachada.";
     return e;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, galeriaFachada]);
@@ -397,7 +396,7 @@ export function CadastroEmpreendimento({
                   <Campo label="Logotipo" hint="Logo em PNG com fundo transparente."><UploadSingle valor={logotipo} onChange={setLogotipo} alto contain formato="PNG transparente" proporcao="livre" /></Campo>
                 </div>
                 <Grupo titulo="Galerias">
-                  <Campo label="Fachada (carrossel)" required hint="Mínimo 3 imagens (obrigatório), 3 a 6 recomendadas." erro={(tocado.galeriaFachada || salvoUmaVez) && erros.galeriaFachada}><UploadMulti itens={galeriaFachada} onChange={(v) => { setGaleriaFachada(v); tocar("galeriaFachada"); }} proporcao="16:9" /></Campo>
+                  <Campo label="Fachada (carrossel)" hint="3 a 6 imagens recomendadas para o carrossel." erro={(tocado.galeriaFachada || salvoUmaVez) && erros.galeriaFachada}><UploadMulti itens={galeriaFachada} onChange={(v) => { setGaleriaFachada(v); tocar("galeriaFachada"); }} proporcao="16:9" /></Campo>
                 </Grupo>
                 <Grupo titulo="Vídeos e tours">
                   <div className="bx-grid-2">

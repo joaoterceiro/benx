@@ -43,7 +43,7 @@ export function Header({ usuario }: { usuario: { nome: string; papel: "admin" | 
 
   return (
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-4">
-      <div className="mx-auto flex max-w-site items-center gap-3 px-3 py-2">
+      <div className="mx-auto flex max-w-site items-center gap-3 rounded-2xl border border-white/10 bg-[#121317]/95 px-3 py-2 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl">
         {/* Marca */}
         <Link href="/admin/dashboard" className="flex shrink-0 items-center gap-2.5 pl-1 pr-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}

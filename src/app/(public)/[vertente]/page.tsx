@@ -7,6 +7,7 @@ import {
   listarStatusObra,
   slidesDaVertente,
   cardsVertente,
+  cardsPromo,
   bairrosDaVertente,
   listarPostsPublicos,
   type FiltrosBusca,
@@ -63,7 +64,7 @@ export default async function HomeVertentePage({
   const [slides, cards, promoCards, bairros, statusPresentes, busca, posts, stripCfg, seloCfg] = await Promise.all([
     slidesDaVertente(info.value),
     cardsVertente(info.value),
-    cardsVertente(promoValue),
+    cardsPromo(promoValue),
     bairrosDaVertente(info.value),
     listarStatusObra(info.value),
     temFiltro ? buscarEmpreendimentos(info.value, filtros) : Promise.resolve(null),

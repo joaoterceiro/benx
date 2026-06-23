@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { empreendimentos, configuracoes } from "@/db/schema";
 import { linhaIdPorValue } from "@/db/queries";
-import { chaveStrip, type ModoStrip, type StripCols } from "@/lib/strip-config";
+import { chaveStrip, chavePromo, type ModoStrip, type StripCols } from "@/lib/strip-config";
 import { getSessao } from "@/lib/auth";
 import { logError } from "@/lib/log-context";
 
@@ -16,6 +16,7 @@ export interface DestaquesHomeInput {
     cols: StripCols; // cards por breakpoint
     modo: ModoStrip; // ordenação do restante
     tags: string[]; // sequência de tags (status)
+    promos: string[]; // faixa "Conheça nossa linha": IDs em ordem (vazio = herda a faixa normal)
   }[];
 }
 
@@ -23,7 +24,7 @@ export async function salvarDestaquesHome(input: DestaquesHomeInput): Promise<{ 
   if (!(await getSessao())) return { ok: false, erro: "Não autenticado" };
 
   try {
-    for (const { value, ids, cols, modo, tags } of input.vertentes) {
+    for (const { value, ids, cols, modo, tags, promos } of input.vertentes) {
       const linhaId = await linhaIdPorValue(value);
       if (!linhaId) continue;
       // fixados: zera a linha e marca 1..N
@@ -37,6 +38,12 @@ export async function salvarDestaquesHome(input: DestaquesHomeInput): Promise<{ 
         .insert(configuracoes)
         .values({ chave: chaveStrip(value), valor })
         .onConflictDoUpdate({ target: configuracoes.chave, set: { valor, atualizadoEm: new Date() } });
+      // faixa "Conheça nossa linha" (cross-promo): IDs em ordem
+      const valorPromo = JSON.stringify({ ids: promos });
+      await db
+        .insert(configuracoes)
+        .values({ chave: chavePromo(value), valor: valorPromo })
+        .onConflictDoUpdate({ target: configuracoes.chave, set: { valor: valorPromo, atualizadoEm: new Date() } });
     }
     revalidatePath("/", "layout");
     return { ok: true };

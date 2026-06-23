@@ -16,7 +16,7 @@ import {
 import { cacheGet, cacheSet } from "@/lib/cache";
 import { getUrl } from "@/lib/storage";
 import { vertentePorValue, listarVertentes, type VertenteValue } from "@/lib/ecossistema";
-import { lerStripConfig, type StripConfig } from "@/lib/strip-config";
+import { lerStripConfig, lerPromoIds, type StripConfig } from "@/lib/strip-config";
 import { statusObraLabel, tipoHabitacaoLabel } from "@/lib/labels";
 import { seloUrlPorTipo } from "@/lib/selo";
 import type {
@@ -408,6 +408,38 @@ export async function cardsVertente(value: VertenteValue): Promise<CardVertente[
   });
   return Promise.all(
     rows.map(async (e) => ({
+      slug: e.slug,
+      nome: e.nome,
+      statusObra: e.statusObra,
+      bairro: e.bairro?.nome ?? "",
+      cidade: e.cidade?.nome ?? "",
+      imagemUrl: e.imagemPrincipal ? await getUrl(e.imagemPrincipal) : null,
+      logotipoUrl: e.logotipo ? await getUrl(e.logotipo) : null,
+      seloUrl: value === "vivabenx" ? seloUrlPorTipo(e.tipoHabitacao) : null,
+    }))
+  );
+}
+
+// Cards da faixa "Conheça nossa linha <value>" (cross-promo nas outras homes).
+// Usa a seleção/ordem dedicada (home_promo_<value>) se houver; senão, cai na
+// faixa normal da linha (cardsVertente).
+export async function cardsPromo(value: VertenteValue): Promise<CardVertente[]> {
+  const ids = await lerPromoIds(value);
+  if (ids.length === 0) return cardsVertente(value);
+  const linhaId = await linhaIdPorValue(value);
+  if (!linhaId) return [];
+  const rows = await db.query.empreendimentos.findMany({
+    where: and(
+      eq(empreendimentos.linhaProdutoId, linhaId),
+      eq(empreendimentos.visivel, true),
+      inArray(empreendimentos.id, ids),
+    ),
+    with: { cidade: true, bairro: true },
+  });
+  const byId = new Map(rows.map((e) => [e.id, e]));
+  const ordenados = ids.map((id) => byId.get(id)).filter(Boolean) as typeof rows;
+  return Promise.all(
+    ordenados.map(async (e) => ({
       slug: e.slug,
       nome: e.nome,
       statusObra: e.statusObra,

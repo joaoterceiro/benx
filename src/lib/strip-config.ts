@@ -62,3 +62,37 @@ export async function lerTodosStripConfig(): Promise<Record<string, StripConfig>
   await Promise.all(listarVertentes().map(async (v) => { out[v.value] = await lerStripConfig(v.value); }));
   return out;
 }
+
+// ── Faixa "Conheça nossa linha" (cross-promo) ────────────────────────────────
+// Lista ordenada de IDs de empreendimentos exibidos na seção "Conheça nossa
+// linha <linha>" das outras homes. Guardada como JSON { ids } em
+// configuracoes na chave home_promo_<value>. Vazia = usa a ordem da faixa
+// normal da linha (cardsVertente).
+export function chavePromo(value: string): string {
+  return `home_promo_${value}`;
+}
+
+export function parsePromoIds(raw: string | null | undefined): string[] {
+  if (!raw) return [];
+  try {
+    const o = JSON.parse(raw) as { ids?: unknown };
+    return Array.isArray(o?.ids) ? (o.ids as unknown[]).filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function lerPromoIds(value: string): Promise<string[]> {
+  const [row] = await db
+    .select({ valor: configuracoes.valor })
+    .from(configuracoes)
+    .where(eq(configuracoes.chave, chavePromo(value)))
+    .limit(1);
+  return parsePromoIds(row?.valor);
+}
+
+export async function lerTodosPromoIds(): Promise<Record<string, string[]>> {
+  const out: Record<string, string[]> = {};
+  await Promise.all(listarVertentes().map(async (v) => { out[v.value] = await lerPromoIds(v.value); }));
+  return out;
+}

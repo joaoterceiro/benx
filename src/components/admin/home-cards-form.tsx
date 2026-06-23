@@ -4,7 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { ArrowUp, ArrowDown, X, Plus, Search, Shuffle } from "lucide-react";
+import { ArrowUp, ArrowDown, X, Plus, Search, Shuffle, LayoutGrid } from "lucide-react";
 import { salvarDestaquesHome } from "@/actions/home-cards";
 import { statusObraLabel } from "@/lib/labels";
 
@@ -32,11 +32,27 @@ const clampNum = (s: string): number => {
   return Number.isFinite(n) ? Math.min(6, Math.max(1, n)) : 1;
 };
 
-export function HomeCardsForm({ grupos, configs }: { grupos: Grupo[]; configs: Record<string, StripConfig> }) {
+export function HomeCardsForm({
+  grupos,
+  configs,
+  promos,
+}: {
+  grupos: Grupo[];
+  configs: Record<string, StripConfig>;
+  promos: Record<string, string[]>;
+}) {
   const [pins, setPins] = useState<Record<string, string[]>>(() => {
     const o: Record<string, string[]> = {};
     grupos.forEach((g) => {
       o[g.value] = g.items.filter((i) => i.ordemHome > 0).sort((a, b) => a.ordemHome - b.ordemHome).map((i) => i.id);
+    });
+    return o;
+  });
+  const [promoPins, setPromoPins] = useState<Record<string, string[]>>(() => {
+    const o: Record<string, string[]> = {};
+    grupos.forEach((g) => {
+      const validos = new Set(g.items.map((i) => i.id));
+      o[g.value] = (promos[g.value] ?? []).filter((id) => validos.has(id));
     });
     return o;
   });
@@ -50,6 +66,7 @@ export function HomeCardsForm({ grupos, configs }: { grupos: Grupo[]; configs: R
       cols: cfgs[g.value].cols,
       modo: cfgs[g.value].modo,
       tags: cfgs[g.value].tags,
+      promos: promoPins[g.value] ?? [],
     }));
     start(async () => {
       const r = await salvarDestaquesHome({ vertentes });
@@ -63,7 +80,7 @@ export function HomeCardsForm({ grupos, configs }: { grupos: Grupo[]; configs: R
       <div>
         <h1 className="text-[18px] font-semibold">Cards da Home</h1>
         <p className="mt-0.5 text-[13px] text-foreground-secondary">
-          Por home: fixe os primeiros empreendimentos, defina quantos cards aparecem por tela e como o restante é ordenado.
+          Por home: fixe os primeiros empreendimentos, defina quantos cards aparecem por tela, como o restante é ordenado e a sequência da faixa &ldquo;Conheça nossa linha&rdquo;.
         </p>
       </div>
 
@@ -73,6 +90,8 @@ export function HomeCardsForm({ grupos, configs }: { grupos: Grupo[]; configs: R
           grupo={g}
           pins={pins[g.value] ?? []}
           setPins={(ids) => setPins((p) => ({ ...p, [g.value]: ids }))}
+          promo={promoPins[g.value] ?? []}
+          setPromo={(ids) => setPromoPins((p) => ({ ...p, [g.value]: ids }))}
           cfg={cfgs[g.value]}
           setCfg={(c) => setCfgs((p) => ({ ...p, [g.value]: c }))}
         />
@@ -86,33 +105,18 @@ export function HomeCardsForm({ grupos, configs }: { grupos: Grupo[]; configs: R
 }
 
 function GrupoHome({
-  grupo, pins, setPins, cfg, setCfg,
+  grupo, pins, setPins, promo, setPromo, cfg, setCfg,
 }: {
   grupo: Grupo;
   pins: string[];
   setPins: (ids: string[]) => void;
+  promo: string[];
+  setPromo: (ids: string[]) => void;
   cfg: StripConfig;
   setCfg: (c: StripConfig) => void;
 }) {
-  const [busca, setBusca] = useState("");
-  const byId = useMemo(() => new Map(grupo.items.map((i) => [i.id, i])), [grupo.items]);
-
-  const fixados = pins.map((id) => byId.get(id)).filter(Boolean) as Item[];
-  const disponiveis = grupo.items.filter((i) => !pins.includes(i.id));
-  const resultados = busca.trim()
-    ? disponiveis.filter((i) => i.nome.toLowerCase().includes(busca.trim().toLowerCase())).slice(0, 8)
-    : [];
   const modoInfo = MODOS.find((m) => m.v === cfg.modo) ?? MODOS[0];
 
-  const add = (id: string) => { setPins([...pins, id]); setBusca(""); };
-  const remove = (id: string) => setPins(pins.filter((x) => x !== id));
-  const move = (idx: number, dir: -1 | 1) => {
-    const alvo = idx + dir;
-    if (alvo < 0 || alvo >= pins.length) return;
-    const next = [...pins];
-    [next[idx], next[alvo]] = [next[alvo], next[idx]];
-    setPins(next);
-  };
   const setCol = (k: keyof StripCols, v: number) => setCfg({ ...cfg, cols: { ...cfg.cols, [k]: v } });
   const moveTag = (idx: number, dir: -1 | 1) => {
     const alvo = idx + dir;
@@ -129,48 +133,16 @@ function GrupoHome({
         <p className="mt-0.5 text-[13px] text-foreground-secondary">/{grupo.slug} · {grupo.items.length} empreendimentos</p>
       </div>
 
-      {/* Fixados */}
-      <div className="mt-4">
-        <p className="text-[12px] font-semibold uppercase tracking-wide text-foreground-tertiary">Primeiros a aparecer ({fixados.length})</p>
-        {fixados.length === 0 ? (
-          <p className="mt-2 text-[13px] text-foreground-tertiary">Nenhum fixado.</p>
-        ) : (
-          <ul className="mt-2 flex flex-col divide-y divide-border">
-            {fixados.map((i, idx) => (
-              <li key={i.id} className="flex items-center gap-3 py-2.5">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-muted text-[12px] font-semibold">{idx + 1}</span>
-                <span className="flex-1 text-[14px] font-medium">{i.nome}</span>
-                <span className="hidden text-[12px] text-foreground-tertiary sm:inline">{statusObraLabel(i.statusObra)}</span>
-                <div className="flex items-center gap-1">
-                  <IconBtn label="Subir" onClick={() => move(idx, -1)} disabled={idx === 0}><ArrowUp size={15} /></IconBtn>
-                  <IconBtn label="Descer" onClick={() => move(idx, 1)} disabled={idx === fixados.length - 1}><ArrowDown size={15} /></IconBtn>
-                  <IconBtn label="Remover" onClick={() => remove(i.id)}><X size={15} /></IconBtn>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* Busca para fixar */}
-      <div className="mt-4">
-        <div className="relative">
-          <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-foreground-tertiary" />
-          <Input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar empreendimento para fixar..." className="pl-9" />
-        </div>
-        {resultados.length > 0 && (
-          <ul className="mt-2 flex flex-col divide-y divide-border rounded-lg border border-border">
-            {resultados.map((i) => (
-              <li key={i.id} className="flex items-center gap-3 px-3 py-2">
-                <span className="flex-1 text-[14px]">{i.nome}</span>
-                <span className="hidden text-[12px] text-foreground-tertiary sm:inline">{statusObraLabel(i.statusObra)}</span>
-                <Button variant="outline" size="sm" onClick={() => add(i.id)}><Plus size={14} /> Fixar</Button>
-              </li>
-            ))}
-          </ul>
-        )}
-        {busca.trim() && resultados.length === 0 && <p className="mt-2 text-[13px] text-foreground-tertiary">Nenhum resultado.</p>}
-      </div>
+      {/* Fixados na faixa principal */}
+      <Picker
+        titulo={`Primeiros a aparecer (${pins.length})`}
+        itens={grupo.items}
+        ids={pins}
+        setIds={setPins}
+        placeholder="Buscar empreendimento para fixar..."
+        rotuloAdd="Fixar"
+        vazio="Nenhum fixado."
+      />
 
       {/* Layout: cards por tela */}
       <div className="mt-6 border-t border-border pt-5">
@@ -212,6 +184,101 @@ function GrupoHome({
             </ul>
           </div>
         )}
+      </div>
+
+      {/* Faixa "Conheça nossa linha <label>" (cross-promo nas outras homes) */}
+      <div className="mt-6 border-t border-border pt-5">
+        <p className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-foreground-tertiary">
+          <LayoutGrid size={13} /> Faixa &ldquo;Conheça nossa linha {grupo.label}&rdquo;
+        </p>
+        <p className="mt-1 text-[12px] text-foreground-tertiary">
+          Sequência dos empreendimentos que aparecem nessa faixa (exibida nas <strong>outras</strong> homes). Se vazio, usa a faixa &ldquo;Primeiros a aparecer&rdquo; acima.
+        </p>
+        <Picker
+          itens={grupo.items}
+          ids={promo}
+          setIds={setPromo}
+          placeholder="Buscar empreendimento para a faixa..."
+          rotuloAdd="Adicionar"
+          vazio="Nenhum selecionado — usa a ordem da faixa principal."
+          semTopo
+        />
+      </div>
+    </div>
+  );
+}
+
+// Lista ordenável de empreendimentos com busca (reusada em fixados e na faixa promo).
+function Picker({
+  titulo, itens, ids, setIds, placeholder, rotuloAdd, vazio, semTopo,
+}: {
+  titulo?: string;
+  itens: Item[];
+  ids: string[];
+  setIds: (ids: string[]) => void;
+  placeholder: string;
+  rotuloAdd: string;
+  vazio: string;
+  semTopo?: boolean;
+}) {
+  const [busca, setBusca] = useState("");
+  const byId = useMemo(() => new Map(itens.map((i) => [i.id, i])), [itens]);
+
+  const selecionados = ids.map((id) => byId.get(id)).filter(Boolean) as Item[];
+  const disponiveis = itens.filter((i) => !ids.includes(i.id));
+  const resultados = busca.trim()
+    ? disponiveis.filter((i) => i.nome.toLowerCase().includes(busca.trim().toLowerCase())).slice(0, 8)
+    : [];
+
+  const add = (id: string) => { setIds([...ids, id]); setBusca(""); };
+  const remove = (id: string) => setIds(ids.filter((x) => x !== id));
+  const move = (idx: number, dir: -1 | 1) => {
+    const alvo = idx + dir;
+    if (alvo < 0 || alvo >= ids.length) return;
+    const next = [...ids];
+    [next[idx], next[alvo]] = [next[alvo], next[idx]];
+    setIds(next);
+  };
+
+  return (
+    <div className={semTopo ? "mt-3" : "mt-4"}>
+      {titulo && <p className="text-[12px] font-semibold uppercase tracking-wide text-foreground-tertiary">{titulo}</p>}
+      {selecionados.length === 0 ? (
+        <p className="mt-2 text-[13px] text-foreground-tertiary">{vazio}</p>
+      ) : (
+        <ul className="mt-2 flex flex-col divide-y divide-border">
+          {selecionados.map((i, idx) => (
+            <li key={i.id} className="flex items-center gap-3 py-2.5">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-muted text-[12px] font-semibold">{idx + 1}</span>
+              <span className="flex-1 text-[14px] font-medium">{i.nome}</span>
+              <span className="hidden text-[12px] text-foreground-tertiary sm:inline">{statusObraLabel(i.statusObra)}</span>
+              <div className="flex items-center gap-1">
+                <IconBtn label="Subir" onClick={() => move(idx, -1)} disabled={idx === 0}><ArrowUp size={15} /></IconBtn>
+                <IconBtn label="Descer" onClick={() => move(idx, 1)} disabled={idx === selecionados.length - 1}><ArrowDown size={15} /></IconBtn>
+                <IconBtn label="Remover" onClick={() => remove(i.id)}><X size={15} /></IconBtn>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="mt-3">
+        <div className="relative">
+          <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-foreground-tertiary" />
+          <Input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={placeholder} className="pl-9" />
+        </div>
+        {resultados.length > 0 && (
+          <ul className="mt-2 flex flex-col divide-y divide-border rounded-lg border border-border">
+            {resultados.map((i) => (
+              <li key={i.id} className="flex items-center gap-3 px-3 py-2">
+                <span className="flex-1 text-[14px]">{i.nome}</span>
+                <span className="hidden text-[12px] text-foreground-tertiary sm:inline">{statusObraLabel(i.statusObra)}</span>
+                <Button variant="outline" size="sm" onClick={() => add(i.id)}><Plus size={14} /> {rotuloAdd}</Button>
+              </li>
+            ))}
+          </ul>
+        )}
+        {busca.trim() && resultados.length === 0 && <p className="mt-2 text-[13px] text-foreground-tertiary">Nenhum resultado.</p>}
       </div>
     </div>
   );

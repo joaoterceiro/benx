@@ -55,11 +55,14 @@ export default async function HomeVertentePage({
   // "Conheça nossa linha {X}": cada home cruza para outra vertente (CROSS_PROMO).
   const promoValue: VertenteValue = CROSS_PROMO[info.value] ?? "benx";
   const promoInfo = vertentePorValue(promoValue);
+  // Faixa extra exclusiva da /benx: cross-promo da linha Icônicos (acima da VivaBenx).
+  const iconicosInfo = info.value === "benx" ? vertentePorValue("benx_iconicos") : undefined;
 
-  const [slides, cards, promoCards, bairros, statusPresentes, busca, posts, stripCfg, seloCfg] = await Promise.all([
+  const [slides, cards, promoCards, iconicosCards, bairros, statusPresentes, busca, posts, stripCfg, seloCfg] = await Promise.all([
     slidesDaVertente(info.value),
     cardsVertente(info.value),
     cardsPromo(info.value, promoValue),
+    iconicosInfo ? cardsVertente("benx_iconicos") : Promise.resolve([]),
     bairrosDaVertente(info.value),
     listarStatusObra(info.value),
     temFiltro ? buscarEmpreendimentos(info.value, filtros) : Promise.resolve(null),
@@ -251,6 +254,34 @@ export default async function HomeVertentePage({
         <>
           {/* 1. Arquitetos que inspiram */}
           <ArquitetosSecao />
+
+          {/* 1b. Conheça mais a Benx Icônicos (só na /benx, espelhada: texto à direita) */}
+          {iconicosInfo && iconicosCards.length > 0 && (
+            <section className={`${COL} pt-12`}>
+              <Reveal className="grid items-center gap-10 lg:grid-cols-[1.5fr_1fr]">
+                <div className="lg:order-2 lg:text-right">
+                  <h2 className="text-[34px] font-light leading-[1.05] tracking-tight text-[#0A2A66] sm:text-[52px] lg:text-[60px]">
+                    Conheça<br />mais a<br /><span className="font-semibold">{iconicosInfo.label}</span>
+                  </h2>
+                  <Link href={`/${iconicosInfo.slug}`} className="group mt-6 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-[#0A2A66]">
+                    Ver empreendimentos <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+                  </Link>
+                </div>
+                <EmpreendimentosStrip
+                  autoplay
+                  cardWidthClass="w-full sm:w-[calc(50%-0.5rem)]"
+                  seloConfig={seloCfg}
+                  cards={iconicosCards.map((c) => ({
+                    href: `/${iconicosInfo.slug}/${c.slug}`,
+                    nome: c.nome,
+                    statusLabel: statusObraLabel(c.statusObra),
+                    imagemUrl: c.imagemUrl,
+                    seloUrl: c.seloUrl,
+                  }))}
+                />
+              </Reveal>
+            </section>
+          )}
 
           {/* 2. Conheça nossa linha {X}: cross-promo para outra vertente */}
           {promoCards.length > 0 && promoInfo && (

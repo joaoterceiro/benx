@@ -24,6 +24,7 @@ export function Splash({ config }: { config: SplashConfig }) {
           return (
             <span key={i} className="benx-splash__cell">
               {i > 0 ? <span className="benx-splash__divider" /> : null}
+              <span className="benx-splash__btnwrap">
               <Link href={btn.href || "#"} className="benx-splash__button">
                 {logoSrc ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -38,6 +39,15 @@ export function Splash({ config }: { config: SplashConfig }) {
                   </span>
                 ) : null}
               </Link>
+              {btn.href === "/iconicos" && (
+                <span className="benx-splash__extra">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/splash/arborea-icon.png" alt="Arbórea" className="benx-splash__extra-logo" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/splash/280artblvd-icon.png" alt="280 Art Boulevard" className="benx-splash__extra-logo" />
+                </span>
+              )}
+              </span>
             </span>
           );
         })}
@@ -76,11 +86,15 @@ const CSS = `
 .benx-splash__button { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s ease-out; padding: 0 3.5rem; text-decoration: none; }
 .benx-splash__button:hover { transform: scale(1.25); }
 .benx-splash__logo { height: 2.5rem; width: auto; object-fit: contain; }
+.benx-splash__btnwrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+.benx-splash__extra { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 1.25rem; }
+.benx-splash__extra-logo { height: 26px; width: auto; object-fit: contain; }
 .benx-splash__label { color: hsl(0,0%,100%); font-size: 0.56rem; line-height: 1.35; font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; margin-top: 0.75rem; }
 .benx-splash__subtitle { color: hsla(0,0%,100%,0.6); font-size: 0.75rem; line-height: 1.4; font-weight: 300; letter-spacing: 0.025em; text-align: center; margin-top: 2.25rem; max-width: 200px; }
 @media (max-width: 639px) {
   .benx-splash__content { flex-direction: column; }
   .benx-splash__cell { flex-direction: column; }
+  .benx-splash__extra { position: static; transform: none; left: auto; margin: 1.25rem 0 0; }
   .benx-splash__divider { width: 4rem; height: 2px; background: linear-gradient(to right, transparent, hsla(0,0%,100%,0.25), transparent); }
 }
 `;

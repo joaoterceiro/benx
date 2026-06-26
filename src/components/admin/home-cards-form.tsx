@@ -86,7 +86,7 @@ export function HomeCardsForm({
       <div>
         <h1 className="text-[18px] font-semibold">Cards da Home</h1>
         <p className="mt-0.5 text-[13px] text-foreground-secondary">
-          Por home: fixe os primeiros empreendimentos, defina quantos cards aparecem por tela, como o restante é ordenado e a sequência da faixa &ldquo;Conheça nossa linha&rdquo;.
+          Por home: fixe os primeiros empreendimentos, defina quantos cards aparecem por tela, como o restante é ordenado e a sequência da faixa &ldquo;Conheça mais a&rdquo;.
         </p>
       </div>
 
@@ -203,7 +203,7 @@ function GrupoHome({
           a linha cross-promovida (ex.: na home Benx aparece a linha VivaBenx). */}
       <div className="mt-6 border-t border-border pt-5">
         <p className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-foreground-tertiary">
-          <LayoutGrid size={13} /> Faixa &ldquo;Conheça nossa linha {promoLabel}&rdquo;
+          <LayoutGrid size={13} /> Faixa &ldquo;Conheça mais a {promoLabel}&rdquo;
         </p>
         <p className="mt-1 text-[12px] text-foreground-tertiary">
           Empreendimentos da linha <strong>{promoLabel}</strong> que aparecem nessa faixa na home <strong>{grupo.label}</strong>. Se vazio, usa a ordem padrão da linha {promoLabel}.

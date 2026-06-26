@@ -32,6 +32,7 @@ export interface ProdutoBenxDados {
   areasNomes: string[];
   areasImagens: string[];
   diferenciais: string[];
+  certificacoes: { nome: string; imagemUrl: string | null }[];
   plantas: PlantaItem[];
   tourUrl?: string;
   videoUrl?: string;
@@ -228,6 +229,26 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {/* CERTIFICAÇÕES */}
+      {d.certificacoes.length > 0 && (
+        <section id="certificacoes" data-reveal className={`${COL} scroll-mt-[140px] py-16`}>
+          <Heading center>Certificações</Heading>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-10">
+            {d.certificacoes.map((c, i) => (
+              <div key={i} className="flex flex-col items-center gap-3">
+                {c.imagemUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.imagemUrl} alt={c.nome} className="h-20 w-auto max-w-[200px] object-contain" />
+                ) : (
+                  <span className="text-[18px] font-semibold" style={{ color: tema.titulo }}>{c.nome}</span>
+                )}
+                {c.imagemUrl && c.nome && <span className="text-[13px] text-[#666]">{c.nome}</span>}
+              </div>
+            ))}
+          </div>
         </section>
       )}
 

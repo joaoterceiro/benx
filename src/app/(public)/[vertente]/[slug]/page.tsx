@@ -149,6 +149,12 @@ export default async function EmpreendimentoPage({
       areasNomes,
       areasImagens,
       diferenciais: e.diferenciais ?? [],
+      certificacoes: await Promise.all(
+        (e.certificacoes ?? []).map(async (c) => ({
+          nome: c.nome,
+          imagemUrl: c.imagem ? await getUrl(c.imagem) : null,
+        }))
+      ),
       plantas: plantasBenx,
       tourUrl: e.urlTourVirtual || undefined,
       videoUrl: e.vistasDoAndar || undefined, // botão "Vistas do Andar" (o vídeo principal tem seção própria)

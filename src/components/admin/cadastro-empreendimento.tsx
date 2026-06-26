@@ -33,6 +33,7 @@ const TABS = [
   { id: "basico", label: "Básico", desc: "Identificação e situação do empreendimento" },
   { id: "midias", label: "Mídias", desc: "Imagens, galerias e vídeos da página" },
   { id: "caracteristicas", label: "Características", desc: "Números, diferenciais, áreas comuns e texto legal" },
+  { id: "certificacoes", label: "Certificações", desc: "Selos e certificações do empreendimento" },
   { id: "localizacao", label: "Localização", desc: "Endereço, mapa e ponto de venda" },
   { id: "obra", label: "Obra", desc: "Andamento físico e registro fotográfico" },
   { id: "plantas", label: "Plantas", desc: "Tipologias disponíveis" },
@@ -445,8 +446,18 @@ export function CadastroEmpreendimento({
                   ))}
                   <button onClick={addArea} className="bx-add">+ Adicionar área comum</button>
                 </Grupo>
+                <Grupo titulo="Texto legal">
+                  <Campo label="Texto legal do empreendimento" hint="Disclaimer jurídico exibido no rodapé da página.">
+                    <textarea className="bx-inp" rows={4} value={v("textoLegal")} onChange={(e) => set("textoLegal", e.target.value)} placeholder="Imagens meramente ilustrativas. Empreendimento registrado sob nº ..." />
+                  </Campo>
+                </Grupo>
+              </div>
+            )}
+
+            {tab === "certificacoes" && (
+              <div className="bx-stack">
                 <Grupo titulo="Certificações">
-                  {certificacoes.length === 0 && <p className="bx-help">Nenhuma certificação. Adicione selos como LEED, AQUA, etc.</p>}
+                  {certificacoes.length === 0 && <p className="bx-help">Nenhuma certificação. Adicione selos como LEED, AQUA, EDGE, etc.</p>}
                   {certificacoes.map((c, i) => (
                     <div key={c.uid} className="bx-item">
                       <div className="bx-item-head">
@@ -454,17 +465,12 @@ export function CadastroEmpreendimento({
                         <BotaoRemover onConfirm={() => removeCert(c.uid)} />
                       </div>
                       <div className="bx-grid-planta">
-                        <Campo label="Nome"><input className="bx-inp" value={c.nome} onChange={(e) => setCert(c.uid, "nome", e.target.value)} placeholder="LEED Gold" /></Campo>
-                        <Campo label="Selo"><UploadSingle valor={c.imagem} onChange={(img) => setCert(c.uid, "imagem", img)} alto contain formato="PNG transparente" proporcao="livre" /></Campo>
+                        <Campo label="Nome"><input className="bx-inp" value={c.nome} onChange={(e) => setCert(c.uid, "nome", e.target.value)} placeholder="EDGE" /></Campo>
+                        <Campo label="Selo (imagem)"><UploadSingle valor={c.imagem} onChange={(img) => setCert(c.uid, "imagem", img)} alto contain formato="PNG transparente" proporcao="livre" /></Campo>
                       </div>
                     </div>
                   ))}
                   <button onClick={addCert} className="bx-add">+ Adicionar certificação</button>
-                </Grupo>
-                <Grupo titulo="Texto legal">
-                  <Campo label="Texto legal do empreendimento" hint="Disclaimer jurídico exibido no rodapé da página.">
-                    <textarea className="bx-inp" rows={4} value={v("textoLegal")} onChange={(e) => set("textoLegal", e.target.value)} placeholder="Imagens meramente ilustrativas. Empreendimento registrado sob nº ..." />
-                  </Campo>
                 </Grupo>
               </div>
             )}

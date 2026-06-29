@@ -209,7 +209,7 @@ export default async function HomeVertentePage({
               <Reveal className="grid items-center gap-10 lg:grid-cols-[1fr_1.5fr]">
                 <div>
                   <h2 className="text-[34px] font-light leading-[1.05] tracking-tight sm:text-[44px] lg:text-[52px]" style={{ color: "#1577C0" }}>
-                    Conheça os<br />empreendimentos<br /><span className="font-semibold">Benx</span>
+                    Conheça<br />mais a<br /><span className="font-semibold">{promoInfo.label}</span>
                   </h2>
                   <Link href={`/${promoInfo.slug}`} className="group mt-6 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-[#1a3a6b]">
                     Ver empreendimentos <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1.5" />

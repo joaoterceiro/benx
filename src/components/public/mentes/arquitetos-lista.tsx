@@ -46,7 +46,7 @@ export function ArquitetosLista({ arquitetos }: { arquitetos: Arquiteto[] }) {
       <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="overflow-hidden bg-[#e9edf3]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={a.foto} alt={umaLinha(a.nome)} className="aspect-[4/3] w-full object-cover" />
+          <img src={a.foto} alt={umaLinha(a.nome)} className="aspect-[4/3] w-full object-cover object-top" />
         </div>
         <div className="lg:pt-2">
           <h3 className="text-[34px] font-bold leading-[1.04] tracking-tight sm:text-[46px]" style={{ color: NAVY }}>

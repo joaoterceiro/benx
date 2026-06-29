@@ -2,11 +2,11 @@
 
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, Loader2, Trash2, Pencil, Plus, X } from "lucide-react";
+import { Upload, Loader2, Trash2, Pencil, Plus, X, ArrowUp, ArrowDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { salvarSlide, removerSlide, uploadSlideMidia, type SlideInput } from "@/actions/slider";
+import { salvarSlide, removerSlide, reordenarSlides, uploadSlideMidia, type SlideInput } from "@/actions/slider";
 import type { SlideAdmin, OpcaoSlideEmpreendimento } from "@/db/queries";
 
 interface LocalOpt { value: string; label: string }
@@ -98,6 +98,19 @@ export function SliderManager({ slides, locais, empreendimentos }: { slides: Sli
   function remover(id: string, titulo: string) {
     if (!window.confirm(`Remover o slide "${titulo}"?`)) return;
     start(async () => { await removerSlide(id); router.refresh(); toast.success("Slide removido."); });
+  }
+
+  // Reordena dentro de uma home: troca o slide com o vizinho e grava a nova ordem.
+  function mover(grupoIds: string[], i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= grupoIds.length) return;
+    const next = [...grupoIds];
+    [next[i], next[j]] = [next[j], next[i]];
+    start(async () => {
+      const r = await reordenarSlides(next);
+      if (r.ok) router.refresh();
+      else toast.error(r.erro ?? "Falha ao reordenar.");
+    });
   }
 
   const rotulo = (v: string) => locais.find((l) => l.value === v)?.label ?? v;
@@ -302,29 +315,45 @@ export function SliderManager({ slides, locais, empreendimentos }: { slides: Sli
         </div>
       )}
 
-      {/* lista */}
-      <div className="flex flex-col gap-3">
+      {/* lista agrupada por home: ↑↓ reordena dentro de cada home */}
+      <div className="flex flex-col gap-8">
         {slides.length === 0 && <p className="rounded-xl border border-border bg-surface p-8 text-center text-[13px] text-foreground-tertiary">Nenhum slide. Clique em &quot;Novo slide&quot;.</p>}
-        {slides.map((s) => (
-          <div key={s.id} className="flex items-center gap-4 rounded-xl border border-border bg-surface p-3 shadow-xs">
-            <div className="h-16 w-28 shrink-0 overflow-hidden rounded-md bg-muted">
-              {s.imagemPreview ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={s.imagemPreview} alt="" className="h-full w-full object-cover" />
-              ) : null}
+        {locais.map((local) => {
+          const grupo = slides.filter((s) => s.locais.includes(local.value)).sort((a, b) => a.ordem - b.ordem);
+          if (grupo.length === 0) return null;
+          const grupoIds = grupo.map((s) => s.id);
+          return (
+            <div key={local.value} className="flex flex-col gap-2">
+              <h3 className="text-[12px] font-semibold uppercase tracking-[0.06em] text-foreground-tertiary">
+                {local.label} · {grupo.length} slide{grupo.length > 1 ? "s" : ""}
+              </h3>
+              {grupo.map((s, i) => (
+                <div key={s.id} className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3 shadow-xs">
+                  <div className="flex flex-col gap-0.5">
+                    <button type="button" aria-label="Subir" onClick={() => mover(grupoIds, i, -1)} disabled={i === 0 || pending} className="grid h-6 w-7 place-items-center rounded border border-border text-foreground-tertiary transition hover:bg-muted hover:text-foreground disabled:opacity-30"><ArrowUp size={13} /></button>
+                    <button type="button" aria-label="Descer" onClick={() => mover(grupoIds, i, 1)} disabled={i === grupo.length - 1 || pending} className="grid h-6 w-7 place-items-center rounded border border-border text-foreground-tertiary transition hover:bg-muted hover:text-foreground disabled:opacity-30"><ArrowDown size={13} /></button>
+                  </div>
+                  <div className="h-16 w-28 shrink-0 overflow-hidden rounded-md bg-muted">
+                    {s.imagemPreview ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={s.imagemPreview} alt="" className="h-full w-full object-cover" />
+                    ) : null}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[14px] font-medium">{s.titulo}</p>
+                    <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                      {s.locais.filter((l) => l !== local.value).map((l) => <span key={l} className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-foreground-secondary">+ {rotulo(l)}</span>)}
+                      {!s.ativo && <span className="rounded-full bg-error/10 px-2 py-0.5 text-[11px] text-error">inativo</span>}
+                      <span className="text-[11px] text-foreground-tertiary">ordem {i + 1}</span>
+                    </div>
+                  </div>
+                  <button type="button" onClick={() => editar(s)} className="grid h-8 w-8 place-items-center rounded-md text-foreground-tertiary hover:bg-muted hover:text-foreground"><Pencil size={15} /></button>
+                  <button type="button" onClick={() => remover(s.id, s.titulo)} disabled={pending} className="grid h-8 w-8 place-items-center rounded-md text-foreground-tertiary hover:bg-error/10 hover:text-error disabled:opacity-40"><Trash2 size={15} /></button>
+                </div>
+              ))}
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[14px] font-medium">{s.titulo}</p>
-              <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                {s.locais.map((l) => <span key={l} className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-foreground-secondary">{rotulo(l)}</span>)}
-                {!s.ativo && <span className="rounded-full bg-error/10 px-2 py-0.5 text-[11px] text-error">inativo</span>}
-                <span className="text-[11px] text-foreground-tertiary">ordem {s.ordem}</span>
-              </div>
-            </div>
-            <button type="button" onClick={() => editar(s)} className="grid h-8 w-8 place-items-center rounded-md text-foreground-tertiary hover:bg-muted hover:text-foreground"><Pencil size={15} /></button>
-            <button type="button" onClick={() => remover(s.id, s.titulo)} disabled={pending} className="grid h-8 w-8 place-items-center rounded-md text-foreground-tertiary hover:bg-error/10 hover:text-error disabled:opacity-40"><Trash2 size={15} /></button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

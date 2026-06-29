@@ -56,6 +56,21 @@ export async function salvarSlide(input: SlideInput): Promise<Resultado> {
   }
 }
 
+// Reordena uma lista de slides (de uma home): grava ordem = posição (1..N).
+export async function reordenarSlides(ids: string[]): Promise<Resultado> {
+  if (!(await getSessao())) return { ok: false, erro: "Não autenticado" };
+  try {
+    for (let i = 0; i < ids.length; i++) {
+      await db.update(heroSlides).set({ ordem: i + 1, atualizadoEm: new Date() }).where(eq(heroSlides.id, ids[i]));
+    }
+    revalidatePath("/", "layout");
+    return { ok: true };
+  } catch (err) {
+    await logError({ err, action: "slider" }, "Falha ao reordenar slides");
+    return { ok: false, erro: "Falha ao reordenar" };
+  }
+}
+
 export async function removerSlide(id: string): Promise<Resultado> {
   if (!(await getSessao())) return { ok: false, erro: "Não autenticado" };
   try {

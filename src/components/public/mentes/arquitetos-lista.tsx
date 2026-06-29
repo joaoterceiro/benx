@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const NAVY = "#0a2a66";
 
@@ -15,13 +15,22 @@ const umaLinha = (s: string) => s.replace(/\n/g, " ");
 
 // Showcase de arquitetos em abas: nomes no topo (ativa em navy com underline);
 // abaixo, foto à esquerda e nome/descrição/empreendimento à direita.
-export function ArquitetosLista({ arquitetos }: { arquitetos: Arquiteto[] }) {
+// Avança sozinho (autoplay) em loop, pausando ao passar o mouse.
+export function ArquitetosLista({ arquitetos, intervalMs = 7000 }: { arquitetos: Arquiteto[]; intervalMs?: number }) {
   const [ativo, setAtivo] = useState(0);
+  const [pausado, setPausado] = useState(false);
+
+  useEffect(() => {
+    if (pausado || arquitetos.length <= 1) return;
+    const id = setInterval(() => setAtivo((i) => (i + 1) % arquitetos.length), intervalMs);
+    return () => clearInterval(id);
+  }, [pausado, arquitetos.length, intervalMs]);
+
   const a = arquitetos[ativo];
   if (!a) return null;
 
   return (
-    <div>
+    <div onMouseEnter={() => setPausado(true)} onMouseLeave={() => setPausado(false)}>
       {/* Abas com os nomes */}
       <div className="flex flex-wrap items-center gap-x-8 gap-y-2 border-b border-black/10 sm:gap-x-12">
         {arquitetos.map((arq, i) => {
@@ -36,7 +45,20 @@ export function ArquitetosLista({ arquitetos }: { arquitetos: Arquiteto[] }) {
               style={on ? { color: NAVY } : undefined}
             >
               {umaLinha(arq.nome)}
-              {on && <span className="absolute inset-x-0 -bottom-px h-[2px]" style={{ background: NAVY }} />}
+              {on && (
+                <>
+                  <span className="absolute inset-x-0 -bottom-px h-[2px]" style={{ background: "rgba(10,42,102,0.15)" }} />
+                  <span
+                    key={ativo}
+                    className="absolute left-0 -bottom-px h-[2px]"
+                    style={{
+                      background: NAVY,
+                      animation: `arq-progress ${intervalMs}ms linear forwards`,
+                      animationPlayState: pausado ? "paused" : "running",
+                    }}
+                  />
+                </>
+              )}
             </button>
           );
         })}

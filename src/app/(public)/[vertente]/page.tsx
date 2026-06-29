@@ -82,6 +82,7 @@ export default async function HomeVertentePage({
     statusLabel: statusObraLabel(c.statusObra),
     imagemUrl: c.imagemUrl,
     seloUrl: c.seloUrl,
+    bairro: info.value === "benx" ? c.bairro : undefined,
   }));
 
   return (
@@ -224,6 +225,7 @@ export default async function HomeVertentePage({
                     statusLabel: statusObraLabel(c.statusObra),
                     imagemUrl: c.imagemUrl,
                     seloUrl: c.seloUrl,
+                    bairro: promoValue === "benx" ? c.bairro : undefined,
                   }))}
                 />
               </Reveal>
@@ -305,6 +307,7 @@ export default async function HomeVertentePage({
                     statusLabel: statusObraLabel(c.statusObra),
                     imagemUrl: c.imagemUrl,
                     seloUrl: c.seloUrl,
+                    bairro: promoValue === "benx" ? c.bairro : undefined,
                   }))}
                 />
               </Reveal>

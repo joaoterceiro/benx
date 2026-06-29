@@ -12,6 +12,8 @@ export interface StripCard {
   statusLabel: string;
   imagemUrl: string | null;
   seloUrl?: string | null;
+  /** Bairro exibido no card (usado só na linha Benx). */
+  bairro?: string;
 }
 
 export interface StripCols { mobile: number; tablet: number; desktop: number; wide: number }
@@ -129,6 +131,9 @@ export function EmpreendimentosStrip({
                 <img src={c.seloUrl} alt="Selo Prefeitura de São Paulo" className={`h-auto ${seloAlignSelf(seloConfig.posicao)}`} style={{ width: `${seloConfig.tamanho}%`, marginBottom: `${seloConfig.margem}px`, opacity: seloConfig.opacidade / 100 }} />
               )}
               <span className="text-[clamp(20px,1.9vw,30px)] font-bold leading-tight tracking-tight text-white drop-shadow">{c.nome}</span>
+              {c.bairro && (
+                <span className="mt-1 text-[clamp(11px,0.9vw,14px)] font-medium text-white/85 drop-shadow">{c.bairro}</span>
+              )}
             </div>
           </Link>
         ))}

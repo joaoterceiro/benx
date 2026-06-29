@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 const NAVY = "#0a2a66";
 
@@ -11,72 +11,49 @@ export interface Arquiteto {
   foto: string;
 }
 
-// Lista interativa de arquitetos: nomes à esquerda, detalhe + foto à direita.
-// Avança sozinha em loop (tempo de leitura), pausando ao passar o mouse.
-export function ArquitetosLista({ arquitetos, intervalMs = 7000 }: { arquitetos: Arquiteto[]; intervalMs?: number }) {
+const umaLinha = (s: string) => s.replace(/\n/g, " ");
+
+// Showcase de arquitetos em abas: nomes no topo (ativa em navy com underline);
+// abaixo, foto à esquerda e nome/descrição/empreendimento à direita.
+export function ArquitetosLista({ arquitetos }: { arquitetos: Arquiteto[] }) {
   const [ativo, setAtivo] = useState(0);
-  const [pausado, setPausado] = useState(false);
-
-  useEffect(() => {
-    if (pausado || arquitetos.length <= 1) return;
-    const id = setInterval(() => setAtivo((i) => (i + 1) % arquitetos.length), intervalMs);
-    return () => clearInterval(id);
-  }, [pausado, arquitetos.length, intervalMs]);
-
-  const selecionar = (i: number) => setAtivo(i);
-
   const a = arquitetos[ativo];
   if (!a) return null;
 
   return (
-    <div
-      onMouseEnter={() => setPausado(true)}
-      onMouseLeave={() => setPausado(false)}
-      className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.6fr] lg:gap-16"
-    >
-      {/* lista de nomes */}
-      <div className="flex flex-col">
+    <div>
+      {/* Abas com os nomes */}
+      <div className="flex flex-wrap items-center gap-x-8 gap-y-2 border-b border-black/10 sm:gap-x-12">
         {arquitetos.map((arq, i) => {
           const on = i === ativo;
           return (
-            <div key={arq.nome} className="relative border-b border-black/10">
-              <button
-                type="button"
-                onClick={() => selecionar(i)}
-                className="w-full py-5 text-left text-[20px] font-normal tracking-tight transition-colors sm:text-[24px]"
-                style={{ color: on ? NAVY : "#aab2c0" }}
-              >
-                {arq.nome}
-              </button>
-              {/* progress bar do autoplay no item ativo */}
-              {on && (
-                <span
-                  key={ativo}
-                  className="absolute -bottom-px left-0 h-[2px]"
-                  style={{
-                    background: NAVY,
-                    animation: `arq-progress ${intervalMs}ms linear forwards`,
-                    animationPlayState: pausado ? "paused" : "running",
-                  }}
-                />
-              )}
-            </div>
+            <button
+              key={arq.nome}
+              type="button"
+              onClick={() => setAtivo(i)}
+              aria-pressed={on}
+              className={`relative -mb-px whitespace-nowrap pb-4 text-[15px] font-medium tracking-tight transition-colors sm:text-[17px] ${on ? "" : "text-[#aab2c0] hover:text-[#5a6577]"}`}
+              style={on ? { color: NAVY } : undefined}
+            >
+              {umaLinha(arq.nome)}
+              {on && <span className="absolute inset-x-0 -bottom-px h-[2px]" style={{ background: NAVY }} />}
+            </button>
           );
         })}
       </div>
 
-      {/* detalhe */}
-      <div className="grid gap-8 sm:grid-cols-[1.2fr_1fr] sm:items-start">
-        <div>
-          <h3 className="whitespace-pre-line text-[28px] font-normal leading-[1.1] tracking-tight sm:text-[34px]" style={{ color: NAVY }}>
-            {a.nome}
-          </h3>
-          <p className="mt-5 whitespace-pre-line text-[14px] leading-relaxed text-[#5a6577]">{a.descricao}</p>
-          {a.projeto && <p className="mt-5 text-[14px] leading-relaxed text-[#8a94a6]">{a.projeto}</p>}
-        </div>
+      {/* Conteúdo: foto à esquerda, texto à direita */}
+      <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="overflow-hidden bg-[#e9edf3]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={a.foto} alt={a.nome} className="h-full w-full object-cover" />
+          <img src={a.foto} alt={umaLinha(a.nome)} className="aspect-[4/3] w-full object-cover" />
+        </div>
+        <div className="lg:pt-2">
+          <h3 className="text-[34px] font-bold leading-[1.04] tracking-tight sm:text-[46px]" style={{ color: NAVY }}>
+            {umaLinha(a.nome)}
+          </h3>
+          <p className="mt-6 whitespace-pre-line text-[15px] leading-relaxed text-[#5a6577]">{a.descricao}</p>
+          {a.projeto && <p className="mt-3 text-[15px] leading-relaxed text-[#5a6577]">{a.projeto}</p>}
         </div>
       </div>
     </div>

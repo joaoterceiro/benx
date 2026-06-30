@@ -1,19 +1,25 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/public/reveal";
+import { Carrossel } from "@/components/public/produto/interativos";
+import { lerArquitetosResolvidos } from "@/lib/mentes";
 
 const COL = "mx-auto w-full max-w-site px-6";
 const NAVY = "#0A2A66";
 const VERMELHO = "#e11d2a";
 
-// Arquitetos em destaque (mesmas fotos da página /mentes-criativas).
-const ARQUITETOS = [
-  { nome: "Jacobsen Arquitetura", categoria: "Arquitetura", local: "São Paulo, Brasil", bio: "Linhas horizontais, madeira e integração radical com a paisagem.", foto: "/mentes/arq-1.jpg" },
-  { nome: "Lissoni & Partners", categoria: "Design de Interiores", local: "Milão, Itália", bio: "Minimalismo italiano em interiores e mobiliário, por Piero Lissoni.", foto: "/mentes/arq-2.jpg" },
-  { nome: "Gensler + Zien", categoria: "Arquitetura", local: "Projetos globais", bio: "Arquitetura de escala global para projetos corporativos e residenciais.", foto: "/mentes/arq-3.jpg" },
-  { nome: "Triptyque Architecture", categoria: "Arquitetura", local: "São Paulo / Paris", bio: "Arquitetura sustentável franco-brasileira, em diálogo com o trópico.", foto: "/mentes/arq-4.jpg" },
-  { nome: "Enea Landscape", categoria: "Paisagismo", local: "Rapperswil, Suíça", bio: "Jardins esculturais e curadoria de árvores como obra viva.", foto: "/mentes/arq-5.jpg" },
-];
+// Categoria (disciplina) derivada do texto "Projetista de X do empreendimento ...".
+function categoriaDe(projeto: string): string {
+  const m = projeto.match(/Projetista de\s+(.+?)\s+do empreendimento/i);
+  return (m?.[1] ?? "").trim();
+}
+// Resumo curto da bio (primeira frase) para o hover.
+function resumoBio(descricao: string): string {
+  const limpo = descricao.replace(/\s+/g, " ").trim();
+  const ponto = limpo.indexOf(". ");
+  const frase = ponto > 40 ? limpo.slice(0, ponto + 1) : limpo;
+  return frase.length > 160 ? `${frase.slice(0, 157).trimEnd()}…` : frase;
+}
 
 // Seção institucional: Parque Global.
 export function ParqueGlobalSecao() {
@@ -43,8 +49,12 @@ export function ParqueGlobalSecao() {
   );
 }
 
-// Seção institucional: Arquitetos que inspiram (vitrine premium, CTA /mentes-criativas).
-export function ArquitetosSecao() {
+// Seção institucional: Arquitetos que inspiram (vitrine premium em carrossel,
+// dinâmica via admin, CTA /mentes-criativas).
+export async function ArquitetosSecao() {
+  const arquitetos = await lerArquitetosResolvidos();
+  if (arquitetos.length === 0) return null;
+
   return (
       <section className="bg-[#f7f8fa]">
         <Reveal className={`${COL} pt-20 pb-14`}>
@@ -63,34 +73,36 @@ export function ArquitetosSecao() {
 
           <div className="my-10 h-px w-full bg-black/[0.08] sm:my-11" />
 
-          {/* retratos: P&B viram cor + bio sobe no hover */}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-5 lg:gap-y-9">
-            {ARQUITETOS.map((a) => (
-              <Link key={a.nome} href="/mentes-criativas" className="group block transition-transform duration-[400ms] ease-out hover:-translate-y-1">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-[2px] bg-[#16181c]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={a.foto}
-                    alt={a.nome}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[700ms] ease-[cubic-bezier(.2,0,.2,1)] group-hover:scale-[1.04]"
-                  />
-                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0f1218]/85 via-[#0f1218]/15 to-transparent opacity-0 transition-opacity duration-[450ms] group-hover:opacity-100" />
-                  <div className="pointer-events-none absolute inset-x-[18px] bottom-[18px] translate-y-3 opacity-0 transition-all duration-[450ms] ease-out group-hover:translate-y-0 group-hover:opacity-100">
-                    <span className="text-[12px] font-medium text-white/65">{a.local}</span>
-                    <p className="mt-1.5 text-[14px] leading-[1.45] text-white">{a.bio}</p>
+          {/* carrossel de retratos: P&B viram cor + bio sobe no hover */}
+          <Carrossel>
+            {arquitetos.map((a) => {
+              const categoria = categoriaDe(a.projeto);
+              return (
+                <Link key={a.nome} href="/mentes-criativas" className="group block w-[60%] shrink-0 snap-start sm:w-[40%] lg:w-[23%]">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[2px] bg-[#16181c]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={a.foto}
+                      alt={a.nome}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[700ms] ease-[cubic-bezier(.2,0,.2,1)] group-hover:scale-[1.04]"
+                    />
+                    <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0f1218]/85 via-[#0f1218]/15 to-transparent opacity-0 transition-opacity duration-[450ms] group-hover:opacity-100" />
+                    <div className="pointer-events-none absolute inset-x-[18px] bottom-[18px] translate-y-3 opacity-0 transition-all duration-[450ms] ease-out group-hover:translate-y-0 group-hover:opacity-100">
+                      <p className="text-[14px] leading-[1.45] text-white">{resumoBio(a.descricao)}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="mt-4">
-                  <span className="relative inline-block text-[17px] font-medium leading-none tracking-[-0.01em]" style={{ color: NAVY }}>
-                    {a.nome}
-                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 transition-[width] duration-[350ms] ease-out group-hover:w-full" style={{ background: VERMELHO }} />
-                  </span>
-                  <p className="mt-2 text-[12px] uppercase tracking-[0.12em] text-black/40">{a.categoria}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+                  <div className="mt-4">
+                    <span className="relative inline-block text-[17px] font-medium leading-none tracking-[-0.01em]" style={{ color: NAVY }}>
+                      {a.nome}
+                      <span className="absolute -bottom-1 left-0 h-0.5 w-0 transition-[width] duration-[350ms] ease-out group-hover:w-full" style={{ background: VERMELHO }} />
+                    </span>
+                    {categoria && <p className="mt-2 text-[12px] uppercase tracking-[0.12em] text-black/40">{categoria}</p>}
+                  </div>
+                </Link>
+              );
+            })}
+          </Carrossel>
 
           {/* CTA refinado */}
           <div className="mt-12 flex justify-center sm:mt-[52px] sm:justify-end">

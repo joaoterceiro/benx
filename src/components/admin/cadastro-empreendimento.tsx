@@ -7,7 +7,7 @@ import { salvarEmpreendimento, type SalvarPayload } from "@/actions/empreendimen
 import { enviarImagemComProgresso } from "@/lib/upload-client";
 import { humanizar } from "@/lib/labels";
 import { toast } from "sonner";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ArrowUp, ArrowDown } from "lucide-react";
 
 // ════════════════════════════════════════════════════════════════════════
 // Cadastro de Empreendimento — porte fiel do protótipo, integrado ao backend.
@@ -146,6 +146,14 @@ export function CadastroEmpreendimento({
   const setPlanta = (u: string, c: keyof Planta, val: unknown) => setPlantas((ps) => ps.map((p) => (p.uid === u ? { ...p, [c]: val } : p)));
   const addPlanta = () => setPlantas((ps) => [...ps, novaPlanta()]);
   const removePlanta = (u: string) => setPlantas((ps) => (ps.length > 1 ? ps.filter((p) => p.uid !== u) : ps));
+  const moverPlanta = (i: number, dir: -1 | 1) =>
+    setPlantas((ps) => {
+      const j = i + dir;
+      if (j < 0 || j >= ps.length) return ps;
+      const n = [...ps];
+      [n[i], n[j]] = [n[j], n[i]];
+      return n;
+    });
   const setArea = (u: string, c: keyof Area, val: unknown) => setAreasComuns((as) => as.map((a) => (a.uid === u ? { ...a, [c]: val } : a)));
   const addArea = () => setAreasComuns((as) => [...as, novaArea()]);
   const removeArea = (u: string) => setAreasComuns((as) => (as.length > 1 ? as.filter((a) => a.uid !== u) : as));
@@ -535,7 +543,15 @@ export function CadastroEmpreendimento({
                   <div key={p.uid} className="bx-item">
                     <div className="bx-item-head">
                       <span className="bx-micro">Planta {i + 1}{p.nome.trim() ? ` · ${p.nome}` : ""}</span>
-                      {plantas.length > 1 && <BotaoRemover onConfirm={() => removePlanta(p.uid)} />}
+                      <div className="bx-item-acoes">
+                        {plantas.length > 1 && (
+                          <span className="bx-reorder">
+                            <button type="button" className="bx-reorder-btn" onClick={() => moverPlanta(i, -1)} disabled={i === 0} aria-label="Subir planta" title="Subir"><ArrowUp size={14} /></button>
+                            <button type="button" className="bx-reorder-btn" onClick={() => moverPlanta(i, 1)} disabled={i === plantas.length - 1} aria-label="Descer planta" title="Descer"><ArrowDown size={14} /></button>
+                          </span>
+                        )}
+                        {plantas.length > 1 && <BotaoRemover onConfirm={() => removePlanta(p.uid)} />}
+                      </div>
                     </div>
                     <div className="bx-grid-planta">
                       <div className="bx-stack-sm">

@@ -93,6 +93,11 @@ textarea.bx-inp{resize:vertical;line-height:1.5}
 .bx-remove{flex-shrink:0;font-size:12px;color:var(--text-tertiary);background:none;border:none;cursor:pointer;border-radius:6px;padding:3px 7px;transition:color .15s var(--ease),background .15s var(--ease)}
 .bx-remove:hover{color:var(--error)}
 .bx-remove.is-armed{color:#fff;background:var(--error);font-weight:500}
+.bx-item-acoes{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.bx-reorder{display:inline-flex;align-items:center;gap:3px}
+.bx-reorder-btn{display:grid;place-items:center;width:24px;height:24px;color:var(--text-tertiary);background:var(--bg-surface);border:1px solid var(--border-default);border-radius:6px;cursor:pointer;transition:color .15s var(--ease),border-color .15s var(--ease)}
+.bx-reorder-btn:hover:not(:disabled){color:var(--text-primary);border-color:var(--text-tertiary)}
+.bx-reorder-btn:disabled{opacity:.3;cursor:not-allowed}
 .bx-ponto{display:grid;grid-template-columns:1fr 120px auto;gap:8px;align-items:center}
 .bx-ponto-x{width:34px;height:34px;flex-shrink:0;border:1px solid var(--border-default);background:var(--bg-surface);border-radius:9px;color:var(--text-tertiary);font-size:16px;cursor:pointer;transition:color .15s var(--ease),border-color .15s var(--ease)}
 .bx-ponto-x:hover{color:var(--error);border-color:var(--error)}

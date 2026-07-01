@@ -6,7 +6,7 @@ import sanitizeHtml from "sanitize-html";
 // não confiáveis. Cobre tanto conteúdo do editor quanto o importado do WP.
 const OPCOES: sanitizeHtml.IOptions = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-    "img", "h1", "h2", "figure", "figcaption", "iframe", "span",
+    "img", "h1", "h2", "figure", "figcaption", "iframe", "span", "u", "s",
   ]),
   allowedAttributes: {
     a: ["href", "name", "target", "rel"],
@@ -29,6 +29,9 @@ const OPCOES: sanitizeHtml.IOptions = {
       "color": [/^#[0-9a-fA-F]{3,8}$/, /^rgb\(/, /^rgba\(/],
       "background-color": [/^#[0-9a-fA-F]{3,8}$/, /^rgb\(/, /^rgba\(/],
       "font-weight": [/^\d+$|^bold$|^normal$/],
+      "font-size": [/^\d+(\.\d+)?(px|em|rem|%)$/, /^(xx-small|x-small|small|medium|large|x-large|xx-large|smaller|larger)$/],
+      "font-style": [/^italic$|^normal$/],
+      "text-decoration": [/^underline$|^line-through$|^none$/],
     },
   },
 };

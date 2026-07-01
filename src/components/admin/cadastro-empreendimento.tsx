@@ -8,6 +8,7 @@ import { enviarImagemComProgresso } from "@/lib/upload-client";
 import { humanizar } from "@/lib/labels";
 import { toast } from "sonner";
 import { AlertTriangle, ArrowUp, ArrowDown } from "lucide-react";
+import { RichText } from "./rich-text";
 
 // ════════════════════════════════════════════════════════════════════════
 // Cadastro de Empreendimento — porte fiel do protótipo, integrado ao backend.
@@ -384,8 +385,8 @@ export function CadastroEmpreendimento({
                   </div>
                 </Grupo>
                 <Grupo titulo="O projeto">
-                  <Campo label="Descrição do projeto" hint="Texto de apresentação exibido na seção 'O Projeto'.">
-                    <textarea className="bx-inp" rows={4} value={v("oProjeto")} onChange={(e) => set("oProjeto", e.target.value)} placeholder="Projeto idealizado com foco em sofisticação e flexibilidade." />
+                  <Campo label="Descrição do projeto" hint="Texto de apresentação exibido na seção 'O Projeto'. Use a barra para negrito, tamanhos, listas e links.">
+                    <RichText value={v("oProjeto")} onChange={(html) => set("oProjeto", html)} placeholder="Projeto idealizado com foco em sofisticação e flexibilidade." />
                   </Campo>
                   <div className="bx-grid-3">
                     <Campo label="Arquitetura"><input className="bx-inp" value={v("arquitetura")} onChange={(e) => set("arquitetura", e.target.value)} placeholder="Jonas Birger Arquitetura" /></Campo>

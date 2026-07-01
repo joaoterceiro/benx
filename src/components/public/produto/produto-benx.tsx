@@ -135,7 +135,7 @@ export function ProdutoBenx({ dados: d }: { dados: ProdutoBenxDados }) {
         <div className="grid gap-x-12 gap-y-5 sm:grid-cols-2 sm:items-center">
           <Heading>O Projeto</Heading>
           {d.oProjeto && (
-            <p className="whitespace-pre-line text-[17px] leading-[1.7] sm:text-[19px]" style={{ color: "#3a4760" }}>{d.oProjeto}</p>
+            <div className="rt-conteudo text-[17px] leading-[1.7] sm:text-[19px]" style={{ color: "#3a4760" }} dangerouslySetInnerHTML={{ __html: d.oProjeto }} />
           )}
         </div>
 

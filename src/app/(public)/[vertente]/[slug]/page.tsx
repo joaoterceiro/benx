@@ -10,6 +10,7 @@ import {
 } from "@/db/queries";
 import { getUrl } from "@/lib/storage";
 import { chaveImagemPonto } from "@/lib/pontos";
+import { sanitizarHtml } from "@/lib/sanitize";
 import { statusObraLabel, tipoHabitacaoLabel } from "@/lib/labels";
 import { seloUrlPorTipo } from "@/lib/selo";
 import { lerInfoHabitacao } from "@/lib/config";
@@ -139,7 +140,7 @@ export default async function EmpreendimentoPage({
       nome: e.nome,
       subtitulo: limpar(e.subtitulo),
       statusLabel: statusObraLabel(e.statusObra),
-      oProjeto: limpar(e.oProjeto),
+      oProjeto: e.oProjeto ? sanitizarHtml(e.oProjeto) : "",
       textoLegal: limpar(e.textoLegal),
       specs,
       heroUrl: urlImagem ?? fachada[0]?.url ?? null,
@@ -236,7 +237,7 @@ export default async function EmpreendimentoPage({
       {e.oProjeto ? (
         <section className="mt-8">
           <h2 className="text-lg font-semibold tracking-tight">O projeto</h2>
-          <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-foreground-secondary">{e.oProjeto}</p>
+          <div className="rt-conteudo mt-2 text-sm leading-relaxed text-foreground-secondary" dangerouslySetInnerHTML={{ __html: sanitizarHtml(e.oProjeto) }} />
         </section>
       ) : null}
 

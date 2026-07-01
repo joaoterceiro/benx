@@ -16,10 +16,17 @@ export function RichText({ value, onChange, placeholder }: { value: string; onCh
   const emit = () => onChange(ref.current?.innerHTML ?? "");
   const exec = (cmd: string, arg?: string) => {
     ref.current?.focus();
-    document.execCommand(cmd, false, arg);
+    try {
+      // Modo CSS: gera <span style="..."> (compatível com o sanitizador) em vez de <font>.
+      document.execCommand("styleWithCSS", false, "true");
+      document.execCommand(cmd, false, arg);
+    } catch {
+      /* execCommand indisponível: ignora */
+    }
     emit();
   };
   const bloco = (tag: string) => exec("formatBlock", tag);
+  const tamanho = (n: string) => { if (n) exec("fontSize", n); };
   const link = () => {
     const url = window.prompt("URL do link:");
     if (url) exec("createLink", url);
@@ -42,6 +49,21 @@ export function RichText({ value, onChange, placeholder }: { value: string; onCh
         <Btn onClick={() => bloco("h2")} title="Título"><Heading2 size={15} /></Btn>
         <Btn onClick={() => bloco("h3")} title="Subtítulo"><Heading3 size={15} /></Btn>
         <Btn onClick={() => bloco("blockquote")} title="Citação"><Quote size={15} /></Btn>
+        <span className="mx-1 h-5 w-px bg-border" />
+        <select
+          title="Tamanho do texto"
+          defaultValue=""
+          onMouseDown={(e) => e.preventDefault()}
+          onChange={(e) => { tamanho(e.target.value); e.currentTarget.selectedIndex = 0; }}
+          className="h-8 rounded border border-border bg-surface px-1.5 text-[12px] text-foreground-secondary outline-none transition hover:text-foreground"
+        >
+          <option value="" disabled>Tamanho</option>
+          <option value="2">Pequeno</option>
+          <option value="3">Normal</option>
+          <option value="4">Médio</option>
+          <option value="5">Grande</option>
+          <option value="6">Enorme</option>
+        </select>
         <span className="mx-1 h-5 w-px bg-border" />
         <Btn onClick={() => exec("insertUnorderedList")} title="Lista"><List size={15} /></Btn>
         <Btn onClick={() => exec("insertOrderedList")} title="Lista numerada"><ListOrdered size={15} /></Btn>
